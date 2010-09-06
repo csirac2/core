@@ -1,0 +1,69 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1"  version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ Wiki Groups
+This is a list of all known groups that can be used to define [[%SYSTEMWEB%.AccessControl][AccessControl]] in <nop>%WIKITOOLNAME%.
+
+%TWISTY{
+  link="<img src='%ICONURLPATH{"persons"}%' /> %MAKETEXT{"Create a new group"}%"
+  mode="div"
+}%
+
+<sticky>
+<form action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="POST">
+<input type="hidden" name="action" value="addUserToGroup"/>
+<input type="hidden" name="create" value="1"/>
+<div class="foswikiFormSteps">
+  <div class="foswikiFormStep ">
+    <h3>%MAKETEXT{"Group name"}%</h3>
+    <input type="text" name="groupname" size="30" class="foswikiInputField"/> 
+    <div class="foswikiFormDescription">
+      *Note:* 
+      A group name must be a [[%SYSTEMWEB%.WikiWord][WikiWord]] and *must* end in =...Group=. 
+      New topics are based on [[GroupTemplate]]
+    </div>
+  </div>
+  <div class="foswikiFormStep">
+    <h3>%MAKETEXT{"Members"}%</h3>
+    <input type="text" name="username" value="" size="60" class="foswikiInputField" />
+    <div class="foswikiFormDescription">Comma separated list. You will be added to the group automatically to allow you to continue to manage the new group.</div>
+  </div>
+  <div class="foswikiFormStep">
+    <input class="foswikiSubmit" type="submit" value="%MAKETEXT{"Create group"}%"/>
+  </div>
+  <div class="foswikiFormStep foswikiLast">
+    <div class="foswikiFormDescription foswikiHelp">
+*IMPORTANT NOTE:* Think twice before restricting write access to a web or a topic, because an open system where everybody can contribute is the essence of [[%SYSTEMWEB%.WikiCulture][WikiCulture]]. Experience shows that unrestricted write access works very well because:
+   * There is enough peer pressure to post only appropriate content.
+   * Content does not get lost because topics are under revision control.
+   * A topic revision can be undone by a member of the [[%USERSWEB%.AdminGroup][AdminGroup]] if necesssary.
+
+*Related topics:* [[%SYSTEMWEB%.AccessControl][AccessControl]], [[%WEBPREFSTOPIC%]], [[%WIKIUSERSTOPIC%]], [[%SYSTEMWEB%.WikiCulture][WikiCulture]]
+    </div>
+  </div>
+</div>
+</form></sticky> %ENDTWISTY%
+
+%GROUPINFO{
+   header="<table class='foswikiTable' style='width:99%'>
+             <tr>
+               <th>%MAKETEXT{"Group"}%</th>
+               <th>%MAKETEXT{"Members"}%**</th>
+             </tr>$n" 
+   format="<tr>
+     <td valign='top'> $percntIF{\"not istopic '$name'\" then=\"<nop>\" else=\"%USERSWEB%.\"}$percnt$name</td>
+     <td valign='top'> 
+       $percntINCLUDE{\"%USERSWEB%.GroupViewTemplate\"
+         section=\"rendergroup\"
+         groupname=\"$name\"
+         allowschange=\"$allowschange\"
+       }$percnt 
+     </td>
+   </tr>"
+   footer="</table>"
+   separator="$n"
+}%
+<sticky><div class='foswikiGrayText'>** Nested groups are expanded.</div></sticky>
+
+
+
+

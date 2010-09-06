@@ -1,0 +1,362 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="FormattedSearch"}%
+---+!! Search Pattern Cookbook
+
+The Search function is very powerful. Searches using a RegularExpression play an important part of tapping Foswiki's full potential. Unfortunately RegularExpressions can be incredibly obscure to the uninitiated. 
+
+Most people not familiar (enough) with Regular Expressions mostly cut and paste (and maybe tweak) from existing examples. This page intends to collect lots of examples together.
+
+%TOC{ depth="2" }%
+
+<!-- ============================== -->
+#SearchTables
+---++ Pattern 1: Extract values from a table
+
+---+++ Problem definition
+
+Suppose there is a topic with a table defining entries in a [[data form]]. I.e. they define select menu items in a form definition. They are then formatted like:
+
+<verbatim class="tml">
+| *Name*  | *Type* | *Tooltip message* |
+| option1 | option |                   |
+| option2 | option |                   |
+| option3 | option |                   |
+</verbatim>
+
+How to extract the 'name' values, i.e. 'option1', 'option2' and 'option3' and put them in a HTML form select input?
+
+---+++ Solution 1
+The following search pattern can be employed:
+
+<verbatim class="tml">
+<form>
+    <select>
+        %SEARCH{
+            "^\|[^\|]*\| *option *\|"
+            topic="%TOPIC%"
+            type="regex"
+            multiple="on"
+            nonoise="on"
+            format="<option>$pattern(^\| *(.*?) *\|.*)</option>"
+        }%
+    </select>
+</form>
+</verbatim>
+
+which is, in effect:
+<form>
+    <select>
+        %SEARCH{
+            "^\|[^\|]*\| *option *\|"
+            topic="%TOPIC%"
+            type="regex"
+            multiple="on"
+            nonoise="on"
+            format="<option>$pattern(^\| *(.*?) *\|.*)</option>"
+        }%
+    </select>
+</form>
+
+---+++ Solution 2
+If your table has this format:
+<verbatim class="tml">
+| *Country*      |
+|                |
+| Afghanistan    |
+| Aland Islands  |
+| Albania        |
+| Algeria        |
+| American Samoa |
+| Andorra        |
+</verbatim>
+
+You need to skip the header row. Use this search:
+<verbatim class="tml">
+<select>
+    %SEARCH{
+        "^\|[^\*\|]*\|"
+        topic="CountryList"
+        type="regex"
+        multiple="on"
+        nonoise="on"
+        format="<option>$pattern(^\| *(.*?) *\|.*)</option>"
+    }%
+</select>
+</verbatim>
+
+Which renders as:
+<select>
+    %SEARCH{
+        "^\|[^\*\|]*\|"
+        topic="CountryList"
+        type="regex"
+        multiple="on"
+        nonoise="on"
+        format="<option>$pattern(^\| *(.*?) *\|.*)</option>"
+    }%
+</select>
+
+<!-- ============================== -->
+#SearchFormClassification
+---++ Pattern 2: List generated from form classification
+
+---+++ Problem
+
+Imagine a form-based topic classification, i.e. every page has a form with several fields. How to:
+   1. create a search to display all topics where one form field is set to a certain value
+   1. create a search to filter the list above based on the values of a second form field
+
+---+++ Test case
+
+In practice: %BR%
+Image a form with two fields:
+   * !TopicClassification = One, Two or Three
+   * !TopicStatus = Test or Final
+
+We will:
+   1. List all topics where the !TopicClassification field is set to 'Two'
+   2. Enable the user to filter this list based on the values of !TopicStatus
+
+---+++ Solution
+
+<verbatim class="tml">
+%SEARCH{
+    "TopicClassification='%URLPARAM{type}%'"
+    type="query"
+    nonoise="on"
+    sort="topic"
+    format="   * $topic - <font face='arial,helvetica' size='1'> 
+    _last modified by_ $wikiusername _on_ $date </font> %BR% &nbsp;&nbsp;&nbsp; 
+    <font face='arial,helvetica' size='1'> $formfield(TopicStatus) </font>" 
+}%
+</verbatim>
+
+The filtering select dialogue is created as in Pattern 1:
+
+<verbatim class="tml">
+%STARTSIDEBAR%
+*Filter:* %BR%
+<form name="selectType" action="%SCRIPTURLPATH{"view"}%/%WEB%/" >
+    <select name="type" size="1" onchange="document.location=this.value;"> 
+        %SEARCH{
+            "^\|[^\|]*\| *option *\|"
+            topic="TopicClassification"
+            type="regex" 
+            nonoise="on"
+            format="<option value='%BASETOPIC%?type=$pattern(^\| *(.*?) *\|.*)'>
+                $pattern(^\| *(.*?) *\|.*)</option>"
+        }% 
+        <option value='%BASETOPIC%'>All pages</option>
+    </select>
+</form>
+%STOPSIDEBAR% 
+</verbatim>
+
+This will create similar functionality as Foswiki:Extensions.TopicClassificationAddOn
+
+
+<!-- ============================== -->
+#SearchTopicParent
+---++ Pattern 3: Extract the parent of a given topic
+
+---+++ Problem
+
+How to get to the parent of the current topic to display on the page?
+
+---+++ Solution 1: Using QUERY
+
+Use the QUERY macro:
+
+=%<nop>QUERY{ "parent.name" }%=
+
+---+++ Test case
+
+%QUERY{ "parent.name" }%
+
+
+<!-- ============================== -->
+#SearchTopicChildren
+---++ Pattern 4: Show all Children of a given topic
+
+---+++ Problem
+
+How to get to the list of all children of the current topic to display on the page?
+
+---+++ Solution
+
+The parent information is stored in the topic meta data. Do a SEARCH to find all topic parent meta data pointing to the current topic:
+
+<verbatim class="tml">
+Children:
+%SEARCH{
+    "parent.name='%TOPIC%'"
+    type="query"
+    nonoise="on"
+    format="[[$topic]]"
+    separator=", "
+}%
+</verbatim>
+
+*Note:* Replace =%<nop>TOPIC%= with =%<nop>BASETOPIC%= if you put this SEARCH into the skin or a sidebar.
+
+See also HierarchicalNavigation for an elaborate example.
+
+<!-- ============================== -->
+#SearchPublicWebsList
+---++ Pattern 5: Search and display the home topics of public webs in a list
+
+---+++ Problem
+
+How to find and display public webs in a drop down list box.
+
+---+++ Solution
+
+<verbatim class="tml">
+<form>
+    <select name="topic">
+        <option value="%TOPIC%">Select...</option>
+            %SEARCH{
+                "%HOMETOPIC%"
+                scope="topic"
+                web="all"
+                topic="%HOMETOPIC%"
+                format="<option value='$web.$topic'>$web</option>"
+                separator=" "
+            }%
+    </select>
+    <input type="submit" class="foswikiSubmit" value="Go" />
+</form>
+</verbatim>
+
+---+++ Test case
+
+Public webs can be found with the %<nop>WEBLIST% macro.
+
+<form>
+    <select name="topic">
+        <option value="%TOPIC%">Select...</option>
+            %SEARCH{
+                "%HOMETOPIC%"
+                scope="topic"
+                web="all"
+                topic="%HOMETOPIC%"
+                format="<option value='$web.$topic'>$web</option>"
+                separator=" "
+            }%
+        </select>
+    <input type="submit" class="foswikiSubmit" value="Go" />
+</form>
+
+
+<!-- ============================== -->
+#SearchBulletList
+---++ Pattern 6: Create a select box with values from a bullet list
+
+---+++ Problem
+
+We have a topic with a bullet list with category names. In another topic we want to offer these values in a select box dropdown.
+
+For example, !CategoryList has:
+   * Clients
+   * People
+   * Rooms
+   * Buildings
+
+---+++ Solution
+
+The following search pattern can be employed:
+
+<verbatim class="tml">
+<select name="type">
+    <option>Select category...</option>
+    %SEARCH{
+        "   *\s*.*?"
+        topic="CategoryList"
+        type="regex"
+        multiple="on"
+        casesensitive="on"
+        nonoise="on"
+        format="<option>$pattern(.*   \*\s*([^\n]*).*)</option>"
+    }%
+</select>
+</verbatim>
+
+To render the bullet list as a comma-separated list, use the =separator= parameter:
+<verbatim class="tml">
+%SEARCH{
+    "   *\s*.*?"
+    topic="CategoryList"
+    type="regex"
+    multiple="on"
+    casesensitive="on"
+    nonoise="on"
+    separator=","
+    format="$pattern(.*   \*\s*([^\n]*).*)"
+}%
+</verbatim>
+
+<!-- ============================== -->
+#MovedTopics
+---++ Pattern 7: Search all topics that have been moved
+
+---+++ Problem
+
+How would I go about listing all moved topics ?
+
+---+++ Solution
+
+Search for the 'moved' meta data. Type this: 
+
+<verbatim class="tml">
+Moved topics: %SEARCH{
+    "moved.from=~'\w+'"
+    web="all"
+    type="query"
+    separator=", "
+    format="$web.$topic"
+    nonoise="on"
+}%
+</verbatim>
+---+++ Test case
+Moved topics: %SEARCH{
+    "moved.from=~'\w+'"
+    web="all"
+    type="query"
+    separator=", "
+    format="$web.$topic"
+    nonoise="on"
+}%
+
+---++ Pattern 8: Extract level-1 headings
+
+---+++ How do I go about extracting the first occurance of a level-1 heading?
+
+---+++ Solution
+Use the =$pattern()= token. Type this:
+%STARTSECTION{"Headings"}%
+<verbatim class="tml">
+%SEARCH{
+    "^---[+][^+][^\r\n]+[\r\n]"
+    type="regex"
+    nonoise="on"
+    header="Headings:"
+    limit="5"
+    format="   * [[$topic][$pattern([\r\n\-+!]+([^\r\n]*?)[\r\n].*)]]"
+    footer="Found $ntopics topics with level-1 headings"
+}%</verbatim>
+
+---+++ Test case
+%SEARCH{
+    "^---[+][^+][^\r\n]+[\r\n]"
+    type="regex"
+    nonoise="on"
+    header="Headings:"
+    limit="5"
+    format="   * [[$topic][$pattern([\r\n\-+!]+([^\r\n]*?)[\r\n].*)]]"
+    footer="Found $ntopics topics with level-1 headings"
+}%
+%ENDSECTION{"Headings"}%
+
+---
+*Related Topics:* UserDocumentationCategory, SearchHelp, [[Macros]], FormattedSearch, RegularExpression
+<!-- %JQREQUIRE{"chili"}% -->

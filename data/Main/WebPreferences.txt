@@ -1,0 +1,42 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! <nop>%WEB% Web Preferences
+
+%TOC%
+
+---++ Appearance
+
+   * Set WEBBGCOLOR = #FFEFA6
+      * web-specific background color, <span style='background-color: %WEBBGCOLOR%'> current color </span>
+   * Set SITEMAPLIST = on
+   * Set WEBSUMMARY = %MAKETEXT{"Welcome to [_1] ... meet people on this site" args="<nop>%WIKITOOLNAME%"}% 
+
+---++ Wiki application settings
+
+   * WebTopicEditTemplate
+      * default template for new topics in this web, if this topic does not exist,  [[%SYSTEMWEB%.WebTopicEditTemplate][site-level default template]] will be used
+
+   * Set WEBFORMS = %SYSTEMWEB%.UserForm
+      * Comma separated list of forms that can be attached to topics in this web. See [[%SYSTEMWEB%.DataForms][DataForms]] for more information.
+
+---++ Access control
+
+Users or groups who are allowed to view, change and rename topics in the <nop>%WEB% web.
+Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
+If you intend to lock down the %USERSWEB% to only allow registration, you need to add the built in =RegistrationAgent= to the =ALLOWWEBCHANGE= setting.
+
+   * Set DENYWEBVIEW = 
+   * Set ALLOWWEBVIEW = 
+   * Set DENYWEBCHANGE = 
+   * Set ALLOWWEBCHANGE = 
+   * Set DENYWEBRENAME = 
+   * Set ALLOWWEBRENAME = 
+
+Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., [[%USERSWEB%.AdminGroup][AdminGroup]])
+
+   * Set ALLOWTOPICCHANGE = %USERSWEB%.AdminGroup
+   * Set ALLOWTOPICRENAME = %USERSWEB%.AdminGroup
+
+---
+
+%INCLUDE{%SYSTEMWEB%.WebPreferencesHelp}%

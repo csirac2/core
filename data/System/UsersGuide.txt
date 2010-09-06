@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ User's Guide
+
+_Some documentation topics selected specially for users_
+
+   * *Quick Start*
+      * [[UserRegistration][User Registration]]: Sign up so you can edit pages and select options
+      * [[Wiki Syntax]]: Easy to learn rules for editing text     
+      * [[Good Style]]: Working tips for an open collaboration environment
+      * [[Topics and Webs]]:An introduction to topics and webs
+      * [[Frequently Asked Questions]]: some common answers
+      * [[http://foswiki.org/Support][Getting help]]
+
+   * *References*
+      * [[Glossary Of Terms]]
+      * [[Macros]]: How to easily embed text, graphics, dynamic content
+      * [[TextFormattingRules][Text Formatting Rules]]: quick reference to the text formatting rules
+      * [[Document Graphics]]: icon images
+      * [[File Attachments]]: Upload and attach files for distribution or display
+      * [[Plugins]]: what they are
+      * [[InstalledPlugins]]: which plugins (and other extensions) are installed
+      * [[Access Control]]: how to control who has access to what
+      * [[Skins]]: defining the look and feel of rendered pages
+      * [[Template Topics]]: Using topics to define default text for new topics
+
+   * *Detailed documentation*
+      * The full [[Reference Manual]] is always available.
+      * [[Admin Documentation Category]] has links to documentation for administrators

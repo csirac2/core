@@ -1,0 +1,15 @@
+<#-- FEEDABCK TEMPLATE  -->
+<h3 style="margin-top:0;">Your updates</h3>
+
+<#if messageType == 4>Password changed</#if>
+
+<#if changesList??>
+	<div class='configureChangeList'>
+		<table>
+			<#list changesList as i>
+				<tr><th>${i.key}</th><td>${i.value}</td></tr>
+			</#list>
+		</table>
+	</div>
+	<a href="#" id="closeMessages">Hide</a>
+</#if>

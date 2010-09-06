@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="Macros"}%
+#VarFORMFIELD
+---+++ FORMFIELD{"fieldname"} -- renders a field in the form attached to some topic
+   * Syntax: =%<nop>FORMFIELD{"fieldname"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="fieldname"= | The name of a [[DataForms][Data form]] field | required |
+     | =topic="..."= | Topic where form data is located. May be of the form =Web.<nop>TopicName= | Current topic |
+     | =format="..."= | Format string. =$value= expands to the field value, and =$name= expands to the field name, =$title= to the field title, =$form= to the name of the form the field is in. The [[FormatTokens][standard format tokens]] are also expanded. | ="$value"= |
+     | =default="..."= | Text shown if the field is defined in the topic, but the field value is empty. For example, a text field for which all the content has been deleted. | =""= |
+     | =alttext="..."= | Text shown if the field is not defined in the topic (even if it is specified in the form definition). For example, this is used when a field exists in the form definition, but the referring topic hasn't been edited since it was added. | =""= |
+     | =rev="n"= | Specifiy a revision of the topic. If not specified, defaults to the most recent rev (or the viewed rev if viewing an old rev of the same topic) |
+   * Example: =%<nop>FORMFIELD{"<nop>ProjectName" topic="Projects.<nop>SushiProject" default="(no project name given)" alttext="<nop>ProjectName field not found in form"}%=
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='Macros'" then="#"}%VarSEARCH][SEARCH]]
+

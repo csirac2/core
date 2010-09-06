@@ -1,0 +1,156 @@
+/* Foswiki base CSS */
+
+.foswikiMakeVisible,
+.foswikiMakeVisibleInline,
+.foswikiMakeVisibleBlock {
+	display:none; /* will be made visible with javascript */
+}
+.foswikiLeft {
+	float:left;
+	position:relative;
+}
+.foswikiRight {
+	position:relative;
+	float:right;
+	display:inline;
+	margin:0;
+}
+.foswikiClear,
+.foswikiFormStep p.foswikiClear {
+	/* to clean up floats */
+	margin:0;
+	padding:0;
+	height:0;
+	line-height:0px;
+	clear:both;
+	display:block;
+}
+.foswikiHidden {
+	display:none;
+}
+.foswikiSmall {
+	font-size:86%;
+	line-height:110%; /*S3*/
+}
+.foswikiSmallish {
+	font-size:94%; /*S2*/
+}
+.foswikiLarge {
+	font-size:1.3em;
+	line-height:1.5em;
+}
+.foswikiBroadcastMessage,
+.foswikiNotification {
+	background-color:#fff7e7;
+	padding:.25em .5em;
+	margin:0 0 1em 0;
+}
+.foswikiBroadcastMessage b,
+.foswikiBroadcastMessage strong {
+	color:#f00;
+}
+.foswikiMessage {
+	padding:.5em 10px;
+	background-color:#fff7e7;
+	border:none;
+}
+.foswikiAlert,
+.foswikiAlert code {
+	color:#f00;
+}
+.foswikiEmulatedLink {
+	text-decoration:underline;
+}
+.foswikiAccessKey {
+	text-decoration:none;
+	border-width:0 0 1px 0;
+	border-style:solid;
+}
+a:hover .foswikiAccessKey {
+	text-decoration:none;
+	border:none;
+}
+img {
+	border:0;
+	vertical-align:middle;
+}
+.foswikiImage img {
+	padding:3px;
+	border-width:1px;
+	border-style:solid;
+}
+.foswikiPreviewArea {
+	border-width:1px;
+	border-style:solid;
+	border-color:#f00;
+	margin:1em 0;
+	padding:1em;
+}
+.foswikiSummary em {
+	font-weight:bold;
+	font-style:normal;
+	color:#000;
+}
+/* tabs */
+.foswikiTabs ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+	position:relative;
+	bottom:0;
+}
+.foswikiTabs ul li {
+	display:inline;
+}
+.foswikiTabs ul li a,
+.foswikiTabs ul li a:link,
+.foswikiTabs ul li a:hover,
+.foswikiTabs ul li a:visited {
+	text-decoration:none;
+	color:#000;
+}
+.foswikiTabs ul li a,
+.foswikiTabs ul li span {
+	display:block;
+	float:left;
+	margin:0 6px 0 0;
+	padding:.35em .7em;	
+	border-style:solid;
+	border-width:1px;
+	border-color:#ccc;
+	background:#eee;
+}
+.foswikiTabs ul li a,
+.foswikiTabs ul li span,
+.foswikiTabContent {
+	border-style:solid;
+	border-width:1px;
+	border-color:#ccc;
+}
+.foswikiTabs ul li.foswikiActiveTab a,
+.foswikiTabs ul li a:hover,
+.foswikiTabs ul li span {
+	border-bottom-color:#fff;
+	background:#fff;
+}
+.foswikiTabContent {
+	margin:-1px 0 1em 0;
+	padding:.7em;
+	background:#fff;
+}
+.foswikiHorizontalList ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+	clear:both;
+}
+.foswikiHorizontalList ul li {
+	float:left;
+	display:block;
+	padding:0 .5em;
+	border-style:none solid none none;
+	border-width:1px;
+}
+.foswikiHorizontalList ul li.foswikiLast {
+	border:none;
+}

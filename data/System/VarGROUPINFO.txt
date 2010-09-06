@@ -1,0 +1,26 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev: 1838 $"}%
+%META:TOPICPARENT{name="Macros"}%
+#VarGROUPINFO
+---+++ GROUPINFO{"name"} -- retrieve details about a Group
+   * Syntax: =%<nop>GROUPINFO%=
+   * Expands to: comma-separated list of all groups
+   * Syntax: =%<nop>GROUPINFO{"groupname"}%=
+   * Expands to: comma-separated list of users in that group
+   * Parameters:
+
+| =format= | Format of a single user or group in the list. \
+<ul> \
+<li> =$name= expands to the group name, and (for users list only) </li>\
+<li> =$wikiname=, =$username= and =$wikiusername= to the relevant strings. </li>\
+<li> =$allowschange= returns 0 (false) or 1 (true) if that group can be modified by the current user. </li>\
+<li> =$allowschange(!UserWikiName)= returns 0 (false) or 1 (true) if that group can be modified by the specified user (does not work for groups yet.). </li>\
+<li> The standard FormatTokens are also supported. </li>\
+</ul>| =$name= for groups list, =$wikiusername= for users list |
+| =separator= | separator between items in the list | =,= |
+| =header= | Header for the list | '' |
+| =footer= | Footer for the list | '' |
+| =zeroresults= | If set, and there are no Groups or Members that can be shown, the =header= and =footer= are suppressed, and this text is output | =undefined= |
+| =show= | filter the output list of Groups - can be set to =all=, allowschange=, =denychange=, =allowschange(!UserWikiName)=, =denychange(!UserWikiName)= | =all= |
+| =limit= | If set, limits the number of results to this | infinity |
+| =limited= | If limit is set, and the list is truncated, this text will be added at the end of the list | '' |
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='Macros'" then="#"}%VarUSERINFO][USERINFO]]

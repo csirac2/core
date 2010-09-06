@@ -1,0 +1,4345 @@
+# Foswiki translation for Bulgarian  (Български)
+# Translators:
+#   Foswiki:Main/KrassimirBerov <k.berov@gmail.com>, 2006, 2007, 2008, 2009
+msgid ""
+msgstr ""
+"Project-Id-Version: bg\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2009-06-24 15:32+0200\n"
+"Last-Translator: Krassimir Berov <k.berov@gmail.com>\n"
+"Language-Team: Bulgarian <k.berov@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: bg\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 1.2.1\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: Bulgaria\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. ($days)
+#: core/lib/Foswiki/Time.pm:480
+msgid "%*(%1,day) "
+msgstr "%*(%1,ден) "
+
+#. ($hours)
+#: core/lib/Foswiki/Time.pm:483
+msgid "%*(%1,hour) "
+msgstr "%*(%1,час) "
+
+#. ($mins)
+#: core/lib/Foswiki/Time.pm:486
+msgid "%*(%1,minute) "
+msgstr "%*(%1,минута) "
+
+#. ($secs)
+#: core/lib/Foswiki/Time.pm:489
+msgid "%*(%1,second) "
+msgstr "%*(%1,секунда) "
+
+#: core/templates/oopsgeneric.tmpl:12 core/templates/oopsgeneric.tmpl:14
+#: core/templates/oopsgeneric.tmpl:16 core/templates/oopsgeneric.tmpl:18
+#: core/templates/oopsgeneric.tmpl:7
+msgid "%1"
+msgstr "%1"
+
+#: core/templates/registerfailednotremoved.tmpl:3
+#: core/templates/registerfailedremoved.tmpl:3
+msgid "%1 - Registration failure for %2 (%3)"
+msgstr "%1 - Провалена регистрация за %2 (%3)"
+
+#: core/templates/registernotify.tmpl:3
+#: core/templates/registernotifyadmin.tmpl:3
+msgid "%1 - Registration for %2 (%3)"
+msgstr "%1 - Регистрация за %2 (%3)"
+
+#: PatternSkin/templates/view.pattern.tmpl:41
+msgid "%1 Web"
+msgstr "Раздел %1"
+
+#: core/templates/messages.tmpl:480
+msgid "%1 added to the %2 group. "
+msgstr ""
+
+#: core/templates/messages.tmpl:487
+msgid "%1 group topic upgraded. "
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:65
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:39
+msgid "%1 has a list of other Foswiki users"
+msgstr "на %1 има списък с Foswiki потребители"
+
+#: core/templates/messages.tmpl:528
+msgid ""
+"%1 has been editing the topic for %2 and the lease is still active for "
+"another %3."
+msgstr "%1 променя страницата от %2, и сесията му е валидна за още %3."
+
+#: core/templates/registerfailednotremoved.tmpl:10
+#: core/templates/registernotifyadmin.tmpl:10
+msgid "%1 has been registered with e-mail %2"
+msgstr "%1 е регистриран с електронна поща %2"
+
+#: core/templates/validate.tmpl:26
+msgid "%1 has received a suspicious change request from your browser."
+msgstr "%1 получи подозрителна заявка за промяна от вашия браузър."
+
+#: core/templates/messages.tmpl:23
+msgid "%1 home"
+msgstr "Начало %1"
+
+#: core/templates/messages.tmpl:114
+msgid "%1 is an invalid name for a new web"
+msgstr "%1 е невалидно име за нов раздел"
+
+#: core/templates/login.sudo.tmpl:4 core/templates/login.tmpl:6
+msgid "%1 is currently logged in"
+msgstr "%1 в момента е влязъл"
+
+#: core/templates/messages.tmpl:433
+msgid "%1 is currently set to %2"
+msgstr "%1 сега е настроено на %2"
+
+#: core/templates/messages.tmpl:526
+#, fuzzy
+msgid "%1 is editing [[%2][%3]]."
+msgstr " %1 сега редактира %2."
+
+#: core/templates/messages.tmpl:49
+msgid "%1 is in at least one group and cannot be removed"
+msgstr "%1 е член на поне една група и не може да бъде изтрит"
+
+#: core/templates/messages.tmpl:126
+#, fuzzy
+msgid "%1 is not a valid form name"
+msgstr "'%1' е невалидно %2 "
+
+#: core/templates/messages.tmpl:122
+#, fuzzy
+msgid "%1 is not a valid value for the %2 parameter"
+msgstr "'%1' е невалидно %2 "
+
+#: core/templates/renameattachmentdelete.tmpl:41
+msgid "%1 is the default topic for deleted attachments."
+msgstr "%1 е подразбиращата се страница за изтрити прикачени файлове."
+
+#: core/templates/messages.tmpl:534
+msgid "%1 may still be editing %2."
+msgstr "%1 може би все още редактира %2."
+
+#: core/data/System/WebChanges.txt:3
+#, fuzzy
+msgid "%1 recent changes in %2 Web"
+msgstr "%1 Последни промени в раздел %2"
+
+#: core/templates/messages.tmpl:518
+#, fuzzy
+msgid "%1 removed from the %2 group. "
+msgstr "%1 е преместен(а) от %2 на %3 от %4"
+
+#: core/templates/messages.tmpl:22
+msgid "%1 to create another web"
+msgstr "%1, за да създадете нов раздел"
+
+#: core/templates/messages.tmpl:21
+msgid "%1 to customize the web specific preferences"
+msgstr "%1, за да промените настройките за раздела"
+
+#: core/templates/messages.tmpl:20
+msgid "%1 to start working on the new web"
+msgstr "%1, за да работите по новия раздел"
+
+#: core/templates/messages.tmpl:600 core/templates/messages.tmpl:611
+msgid "%1 topic does not exist"
+msgstr "Страница %1 не съществува"
+
+#: core/templates/registerfailedremoved.tmpl:10
+msgid "%1 tried to register with e-mail %2"
+msgstr "%1 се опита да се регистрира с електронна поща %2"
+
+#. ("<nop>$toWeb.<nop>$toTopic", "<nop>$fromWeb.<nop>$fromTopic",                $date, $by)
+#: core/lib/Foswiki/Render.pm:229
+#, fuzzy
+msgid "%1 was renamed or moved from %2 on %3 by %4"
+msgstr "%1 е преместен(а) от %2 на %3 от %4"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:16
+msgid "&Cancel"
+msgstr "Отказ"
+
+#: PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
+msgid "&Edit text"
+msgstr "Редактиране на текста"
+
+#: core/templates/foswiki.tmpl:162
+msgid "&History"
+msgstr "История"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:92
+#, fuzzy
+msgid "&Sequential"
+msgstr "Последователно"
+
+#: core/templates/messages.tmpl:283
+msgid "'%1' is not a valid %2 "
+msgstr "'%1' е невалидно %2 "
+
+#: core/data/System/WebTopicCreator.txt:3
+msgid "'Create New Topic' page has moved"
+msgstr "Страницата \"Създаване на нова страница\" е преместена"
+
+#: core/templates/login.tmpl:10
+msgid "(%1 login)"
+msgstr "(%1 вход)"
+
+#: core/templates/validate.tmpl:6
+msgid "(%1 validation)"
+msgstr "(%1 валидация)"
+
+#: PatternSkin/templates/rdiff.pattern.tmpl:3 core/templates/rdiff.tmpl:4
+msgid "(%1 vs. %2)"
+msgstr "(%1 с-у %2)"
+
+#: core/templates/messages.tmpl:172
+msgid "(*Suggestion:* How about uploading your picture to your topic?)"
+msgstr "(*Предложение:* Можете да прикачите ваша снимка към страницата.)"
+
+#: core/data/System/WebSearch.txt:129
+msgid "(=all= to show all topics)"
+msgstr "(=всички= за показване на всички страници)"
+
+#: WysiwygPlugin/lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm:117
+msgid "(This message will be removed automatically)"
+msgstr ""
+
+#: core/templates/oopsaccessdenied.tmpl:4
+msgid "(access denied)"
+msgstr "(достъпът отказан)"
+
+#: PatternSkin/templates/attach.pattern.tmpl:8 core/templates/attachnew.tmpl:2
+msgid "(attach)"
+msgstr "(прикачване)"
+
+#: core/templates/backlinksweb.tmpl:2
+msgid "(backlinks in %1 Web)"
+msgstr "(обратни връзки в раздел %1)"
+
+#: core/templates/backlinksallwebs.tmpl:3
+msgid "(backlinks in all Webs)"
+msgstr "(връзки \"назад\" във всички раздели)"
+
+#: core/templates/searchbookview.tmpl:4
+msgid "(book view)"
+msgstr "(книжен изглед)"
+
+#: core/templates/changeform.tmpl:3
+msgid "(change form)"
+msgstr "(промяна на форма)"
+
+#: core/templates/oopslanguagechanged.tmpl:3
+msgid "(change language)"
+msgstr "(промяна на език)"
+
+#: PatternSkin/templates/changes.pattern.tmpl:2 core/templates/changes.tmpl:2
+msgid "(changes)"
+msgstr "(промени)"
+
+#: CompareRevisionsAddOn/templates/compare.tmpl:3
+#, fuzzy
+msgid "(compare)"
+msgstr "(още)"
+
+#: core/templates/renameattachmentdelete.tmpl:5
+msgid "(delete attachment)"
+msgstr "(изтриване на прикачения файл)"
+
+#: core/templates/renamedelete.tmpl:3
+msgid "(delete)"
+msgstr "(изтриване)"
+
+#: core/templates/editform.tmpl:4 core/templates/editform.tmpl:5
+msgid "(edit form)"
+msgstr "(редакция на формата)"
+
+#: core/templates/edittext.tmpl:3 core/templates/edittext.tmpl:6
+msgid "(edit text)"
+msgstr "(редакция на текста)"
+
+#: core/templates/edit.tmpl:3 core/templates/edit.tmpl:9
+msgid "(edit)"
+msgstr "(редакция)"
+
+#: core/templates/login.tmpl:4
+msgid "(login)"
+msgstr "(вход)"
+
+#: core/templates/more.tmpl:3
+msgid "(more)"
+msgstr "(още)"
+
+#: core/templates/moveattachment.tmpl:3
+msgid "(move attachment)"
+msgstr "(преместване на прикаченеия файл)"
+
+#: core/data/System/WebCreateNewTopicTemplate.txt:60
+msgid "(no parent, orphaned topic)"
+msgstr "(няма родителска страница, страница сираче)"
+
+#: core/lib/Foswiki/UI/Rename.pm:1136 core/lib/Foswiki/UI/Rename.pm:1160
+#: core/lib/Foswiki/UI/Rename.pm:1216 core/lib/Foswiki/UI/Rename.pm:1219
+#: core/lib/Foswiki/UI/Rename.pm:1222 core/lib/Foswiki/UI/Rename.pm:1257
+#: core/lib/Foswiki/UI/Rename.pm:1280 core/lib/Foswiki/UI/Rename.pm:545
+#: core/lib/Foswiki/UI/Rename.pm:549 core/lib/Foswiki/UI/Rename.pm:553
+#: core/lib/Foswiki/UI/Rename.pm:557
+msgid "(none)"
+msgstr "(нищо)"
+
+#: core/data/System/WebSearch.txt:80 core/data/System/WebSearch.txt:94
+msgid "(otherwise search %1 Web only)"
+msgstr "(в противен случай, търсете само в раздел %1)"
+
+#: PatternSkin/templates/view.pattern.tmpl:43
+msgid "(raw view)"
+msgstr "(суров изглед)"
+
+#: core/templates/rename.tmpl:3 core/templates/renameconfirm.tmpl:3
+#: core/templates/renameweb.tmpl:3 core/templates/renamewebconfirm.tmpl:3
+msgid "(rename)"
+msgstr "(преименуване)"
+
+#: PatternSkin/templates/view.pattern.tmpl:43
+msgid "(revision %1)"
+msgstr "(версия %1)"
+
+#: core/templates/oopssaveerr.tmpl:7
+msgid "(save error)"
+msgstr "(грешка при запис)"
+
+#: PatternSkin/templates/settings.pattern.tmpl:6
+#: core/templates/settings.tmpl:3
+msgid "(set preferences)"
+msgstr "(настройки)"
+
+#: core/templates/messages.tmpl:296
+msgid "(single character first name)"
+msgstr "(една буква за име)"
+
+#: core/templates/messages.tmpl:295
+msgid "(single character last name)"
+msgstr "(една буква за фамилия)"
+
+#: core/lib/Foswiki/UI/Rename.pm:1115
+msgid "(skipped)"
+msgstr "(пропуснато)"
+
+#: core/templates/attachagain.tmpl:18
+msgid ""
+"*Change comment:* If you use _Change Properties_ to change a comment, the "
+"comment shown in the topic will change, but the comment shown against the "
+"attachment history will be the comment when the file was uploaded."
+msgstr ""
+"*Промяна на коментар:* Ако използвате _Промяна на характеристики_ за да "
+"промените коментар, коментарът, покзан на страницата ще се промени, но "
+"коментараът показан срещу историята на пртурката  ще си остане същия както е "
+"бил при качваненто на файла."
+
+#: core/data/System/WikiSyntaxSummary.txt:9
+msgid "*Formatting help:*"
+msgstr "*Как да форматирате*"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:280
+#, fuzzy
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the web server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and e-"
+"mail addresses will be obfuscated to help prevent spamming). Your country, "
+"or the country where the server is hosted, may have Data Protection laws "
+"governing the maintenance of such databases. If you are in doubt, you should "
+"contact %1 for details of the Data Protection Policy of this web server "
+"before registering."
+msgstr ""
+"*Важно:* Информацията, предоставена в тази форма ще бъде записана в базата "
+"данни на сървъра. Тази база данни е достъпна за всеки, който има достъп до "
+"сървъра (все пак паролите са криптирани и e-mail адресите са замаскирани, за "
+"да се предотврати спам). Вашата страна или страната, където се хоства може "
+"да има закони за защита на данните,  отнасящи се до управлението на такива "
+"бази от данни. Ако имате някакви съмнения, трябва да се свържете с %1 за "
+"подробности по политиката за защита на данните на този Foswiki-съръвър преди "
+"да се регистрирате"
+
+#: core/templates/attachagain.tmpl:19
+msgid ""
+"*Local file:* If you select a different file in _Local file:_, it is this "
+"that will be updated or added."
+msgstr ""
+"*Локален файл:*Ако изберете различен файл в _Локален файл:_, той ще бъде "
+"заместен или добавен."
+
+#: core/templates/attachagain.tmpl:17
+msgid ""
+"*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"%1."
+msgstr ""
+"*Свойства:* Коментарът и видимостта (например скрит ли е прикрепения файл) "
+"могат да бъдат променени без да се качва файл като щракнете върху  \"Change "
+"Properties only\"; вижте %1."
+
+#: core/data/System/WikiSyntaxSummary.txt:10
+msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
+msgstr "*удебелено* сложете звездички около думата/израза: =<nop>*думи*="
+
+#: core/data/System/WikiSyntaxSummary.txt:11
+msgid ""
+"*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
+"your text="
+msgstr ""
+"*списък с водачи* 3 паузи, звездичка, 1 пауза: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
+"вашия текст="
+
+#: core/data/System/WikiSyntaxSummary.txt:15
+msgid ""
+"*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to "
+"Yahoo]]="
+msgstr ""
+"*външни връзки* =http://yahoo.com= или =[<nop>[http://yahoo.com/][връзка към "
+"Yahoo]]="
+
+#: core/data/System/WikiSyntaxSummary.txt:12
+msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
+msgstr ""
+"*заглавия* 3 тирета, 1 до 6 плюса, 1 пауза: =---++&&nbsp;Вашето Заглавие="
+
+#: core/data/System/WikiSyntaxSummary.txt:13
+msgid "*italic* put word/phrase in underscores: =_<nop>your words_="
+msgstr ""
+"*италичен* поставете думата/фразата между подчертавки: =_<nop>вашите думи_="
+
+#: core/data/System/WikiSyntaxSummary.txt:16
+msgid "*monospaced* put word/phrase in equal signs: =<nop>=your words=="
+msgstr ""
+"*шрифт с фиксирана ширина*  сложете знак за равенство около думата/израза: "
+"=<nop>=вашите думи=="
+
+#: core/data/System/WikiSyntaxSummary.txt:17
+msgid "*paragraphs* separate with blank line"
+msgstr "*абзаци* разделете с празен ред"
+
+#: core/data/System/WikiSyntaxSummary.txt:14
+msgid "*site links* use topic name: =%1= or =[<nop>[%1][Our homepage]]="
+msgstr ""
+"*връзки в сайта* използвайте име на страница: =%1= или =[<nop>[%1][вашата "
+"страница]]="
+
+#: core/lib/Foswiki/I18N/Extract.pm:93
+msgid "..."
+msgstr "..."
+
+#: core/data/System/WebChanges.txt:9
+msgid ""
+"<a href='%1'>RSS feed</a>, recent changes with <a href='%2'>50</a>, <a "
+"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
+"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
+"topics, <a href='%7' rel='nofollow'>all changes</a>"
+msgstr ""
+"<a href='%1'>RSS Емисии</a>, последни промени <a href='%2'>50</a>, <a href='%"
+"3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' "
+"rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> страници, <a "
+"href='%7' rel='nofollow'>всички промени</a>"
+
+#: core/templates/more.tmpl:89
+msgid "<em>in %1 web</em> only"
+msgstr "само <em>в раздел %1</em>"
+
+#: core/templates/more.tmpl:87
+msgid "<em>in all public webs</em>"
+msgstr "<em>във всички общодостъпни раздели</em>"
+
+#: core/templates/messages.tmpl:381
+msgid "A =.txt= extension is appended to some filenames for security reasons"
+msgstr ""
+"Разширение =.txt= се добавя към някои имена на файлове от съображения за "
+"сигурност"
+
+#: core/templates/messages.tmpl:583
+msgid ""
+"A Foswiki site is divided into webs; each one represents one subject, one "
+"area of collaboration. You are trying to %1 in a web that does not exist."
+msgstr ""
+"Един Foswiki сайт се състои от раздели. Всеки раздел представлява някаква "
+"сфера на сътрудничество. Опитвате се да  %1 в раздел, който не съществува"
+
+#: core/templates/messages.tmpl:139
+msgid ""
+"A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
+"=#FFFF00=."
+msgstr ""
+"Описание то на цвета започва със знак # , последван от 6 числа в "
+"шестнадесетичната бройна система, например: =#FFFF00=."
+
+#. ($data->{Email})
+#: core/lib/Foswiki/UI/Register.pm:929
+msgid "A confirmation e-mail has been sent to %1"
+msgstr "e-mail с потвърждение бе изпратен на %1"
+
+#: core/templates/messages.tmpl:587
+msgid ""
+"A link to a topic located in another web is written like %1. Make sure that "
+"the name of the web is not spelt wrongly on the previous page; fix the link "
+"if necessary."
+msgstr ""
+"Връзка към страница в друг раздел се изписва като  %1. Уверете се, че сте "
+"написали правилно името на раздела на предната страница; поправете връзката "
+"ако е необходимо."
+
+#: core/data/Sandbox/WebHome.txt:32
+#, fuzzy
+msgid "A more extensive changes list is available via [[%1][Recent changes]]."
+msgstr ""
+"По-подробен списък с промените ще намерите на страница [[%1][Последни "
+"промени]]."
+
+#: core/templates/messages.tmpl:559
+#, fuzzy
+msgid ""
+"A new system-generated password for your login name '%1' (!WikiName %2) has "
+"been sent to your registered e-mail address. If your e-mail address is no "
+"longer valid, please contact %3"
+msgstr ""
+"Нова генерирана от системата парола за вход %1 (!WikiName %2) бе изпратена "
+"на вашия регистриран e-mail-адрес. Ако вашият e-mail-адрес вече е невалиден,"
+"моля свържете се с %3"
+
+#: core/data/System/WebTemplateTopics.txt:5
+msgid "A topic template defines the initial content of a newly created topic."
+msgstr ""
+"Шаблонът за страница определя първоначалното съдържание на новосъздадената "
+"страница."
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:21
+msgid "A topic with this name did exist, but has been renamed or moved to %1."
+msgstr ""
+"Страница с това име е съществувала, но е преименувана или преместена в %1."
+
+#: core/data/System/WebSearch.txt:65
+msgid "A-Z"
+msgstr ""
+
+#: core/templates/oopsaccessdenied.tmpl:6
+msgid "Access Denied"
+msgstr "Достъпът отказан"
+
+#: core/templates/messages.tmpl:567
+msgid "Access check on %1 failed"
+msgstr "Достъпът до %1 бе отказан"
+
+#: PatternSkin/templates/edit.pattern.tmpl:47
+#: PatternSkin/templates/preview.pattern.tmpl:21
+#: PatternSkin/templates/settings.pattern.tmpl:21
+msgid "Access keys"
+msgstr "Клавиши за достъп"
+
+#: core/templates/attachtables.tmpl:4 core/templates/attachtables.tmpl:43
+#: core/templates/changeform.tmpl:9
+msgid "Action"
+msgstr "Действие"
+
+#: core/templates/messages.tmpl:568
+msgid "Action %1: %2."
+msgstr "Действие %1 : %2."
+
+#: JQueryPlugin/data/System/JQueryButton.txt:29
+#, fuzzy
+msgid "Add"
+msgstr "Добавяне на ред"
+
+#: core/data/Main/GroupViewTemplate.txt:141
+msgid "Add a user to this group"
+msgstr ""
+
+#: core/templates/addform.tmpl:1
+msgid "Add form"
+msgstr "Добавяне на форма"
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:162
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:979
+msgid "Add row"
+msgstr "Добавяне на ред"
+
+#: core/data/Main/GroupViewTemplate.txt:143
+#, fuzzy
+msgid "Add user"
+msgstr "Добавяне на ред"
+
+#: core/data/Main/GroupViewTemplate.txt:79
+msgid "Add user..."
+msgstr ""
+
+#: core/templates/messages.tmpl:369
+#, fuzzy
+msgid "Adding a %1 preference in WebPreferences"
+msgstr "Добавяне на променлива %1 в страница WebPreferences"
+
+#: core/templates/login.sudo.tmpl:3
+msgid "Admin Foswiki User Authentication"
+msgstr "Автентикация на Администратора на Foswiki"
+
+#: PatternSkin/data/System/WebLeftBarExample.txt:26
+msgid "Admin Maintenance"
+msgstr "Администрация"
+
+#: core/data/System/WebSearch.txt:64
+msgid "Advanced search"
+msgstr "Разширено търсене"
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:27
+msgid ""
+"After submitting this form your e-mail will be changed, and you will be "
+"returned to this form."
+msgstr ""
+"След като изпратите тази форма вашата електронна поща ще бъде променена и ще "
+"бъдете върнати обратно на формата"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:19
+msgid "After submitting this form your password will be changed."
+msgstr "След изпращането на тази форма, паролата ви ще бъде променена"
+
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:14
+#, fuzzy
+msgid ""
+"After submitting this form, you will receive an e-mail with your new, system-"
+"generated password, and a link to a page where you can change it."
+msgstr ""
+"След изпращането на тази форма, ще получите  e-mail с новата ви *генереирана "
+"от системата* парола и връзка към страница, където можете да я промените"
+
+#: core/data/System/WebSearch.txt:80 core/data/System/WebSearch.txt:94
+msgid "All public webs"
+msgstr "Всички публични рздели"
+
+#: core/templates/foswiki.tmpl:44
+msgid "Allow non <nop>WikiWord for the new topic name"
+msgstr "Разреши не-<nop>WikiWord в името на новата страница"
+
+#: core/templates/messages.tmpl:277
+msgid ""
+"Alternatively hit back to go back to %SYSTEMWEB%.UserRegistration and choose "
+"a different username."
+msgstr ""
+"Също така може да отидете на %SYSTEMWEB%.UserRegistration и да изберете "
+"различно потребителско име."
+
+#: core/lib/Foswiki/UI/Rename.pm:199
+#, fuzzy
+msgid "An attachment with the same name already exists in this topic."
+msgstr "Прикрепения файл вече съществува в нова страница"
+
+#: core/templates/messages.tmpl:264
+msgid ""
+"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+msgstr ""
+"Съобщението не може да бъде доставено. Моля уведомете вашия %1 "
+"администратор, %2"
+
+#: core/templates/moveattachment.tmpl:49
+msgid ""
+"An error page will be shown if either of the topics are locked by another "
+"user."
+msgstr ""
+"Ще бъде показано съобщение за грешка ако някоя от страниците е заключена от "
+"друг потребител."
+
+#: core/templates/messages.tmpl:17
+msgid "And populated with topics from the base web"
+msgstr "И запълнен със страници от основния раздел."
+
+#: core/templates/changeform.tmpl:27
+msgid ""
+"Any changes you made to the topic before coming to this page are preserved."
+msgstr ""
+"Всички промени, направени от вас по страницата преди да дойдете на тази "
+"страница , са запазени."
+
+#: core/templates/viewtopicactionbuttons.tmpl:66
+msgid "Attach"
+msgstr "Прикрепи"
+
+#: core/templates/attach.tmpl:9
+#, fuzzy
+msgid "Attach a file"
+msgstr "Прикрепяне на нов файл"
+
+#: PatternSkin/templates/attachnew.pattern.tmpl:2
+#: core/templates/attachnew.tmpl:4
+msgid "Attach file to %1"
+msgstr "Прикрепяне на файл към %1"
+
+#: PatternSkin/templates/attach.pattern.tmpl:11
+msgid "Attach image or document on %1"
+msgstr "Прикрепяне на картинка или документ към %1"
+
+#: PatternSkin/templates/attach.pattern.tmpl:36 core/templates/attach.tmpl:15
+#: core/templates/attachnew.tmpl:6 core/templates/attachnew.tmpl:8
+msgid "Attach new file"
+msgstr "Прикрепяне на нов файл"
+
+#: core/templates/attachtables.tmpl:4
+msgid "Attachment"
+msgstr "Прикрепен файл"
+
+#: core/templates/messages.tmpl:617
+msgid "Attachment '%1' does not exist"
+msgstr "Прикрепеният файл '%1' не съсществува"
+
+#: core/templates/messages.tmpl:62
+msgid "Attachment delete failed"
+msgstr "Изтриването на притурката се провали"
+
+#: core/lib/Foswiki/UI/Rename.pm:166
+#, fuzzy
+msgid "Attachment does not exist."
+msgstr "Притурката не съществува"
+
+#: core/templates/attachtables.tmpl:42
+#, fuzzy
+msgid "Attachment history"
+msgstr "Притурки"
+
+#: core/lib/Foswiki/UI/RDiff.pm:63
+#, fuzzy
+msgid "Attachment metadata"
+msgstr "Преместването на притурката се провали"
+
+#: core/templates/messages.tmpl:54
+msgid "Attachment move failed"
+msgstr "Преместването на притурката се провали"
+
+#: core/templates/moveattachment.tmpl:37
+#, fuzzy
+msgid "Attachment name:"
+msgstr "Прикрепен файл"
+
+#: PatternSkin/templates/attachtables.pattern.tmpl:6
+#: core/templates/attachtables.tmpl:16 core/templates/attachtables.tmpl:29
+msgid "Attachments"
+msgstr "Притурки"
+
+#: PatternSkin/templates/attach.pattern.tmpl:14
+msgid "Attachments help"
+msgstr "Помощ относно притурките"
+
+#: core/templates/attach.tmpl:5
+msgid "Attachments of %1"
+msgstr "Притурки към %1"
+
+#: PatternSkin/templates/attach.pattern.tmpl:57 core/templates/attach.tmpl:45
+msgid "Attachments will not be shown in topic view page."
+msgstr "Притурките няма да се показват в страницата."
+
+#: core/templates/oopsaccessdenied.tmpl:5 core/templates/oopsattention.tmpl:5
+#: core/templates/oopslanguagechanged.tmpl:13
+#: core/templates/oopsleaseconflict.tmpl:4 core/templates/oopssaveerr.tmpl:9
+msgid "Attention"
+msgstr "Внимание"
+
+#: core/templates/attachtables.tmpl:30
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: MailerContrib/templates/mailnotify.tmpl:62
+msgid "Automated notification of topic changes"
+msgstr "Автоматично известяване при промяна на страницата"
+
+#: core/data/_default/WebHome.txt:4
+msgid "Available Information"
+msgstr "Налична информация"
+
+#: PatternSkin/templates/changeform.pattern.tmpl:13
+#: core/templates/changeform.tmpl:33
+msgid "Available form templates"
+msgstr "Налични шаблони за форми"
+
+#: core/data/System/WebTemplateTopics.txt:7
+msgid "Available templates in %1 Web:"
+msgstr "Налични шаблони в Раздел %1 :"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:16
+msgid "Back to topic"
+msgstr "Обратно в страницата"
+
+#: core/templates/more.tmpl:85 core/templates/viewtopicactionbuttons.tmpl:89
+msgid "Backlinks"
+msgstr "Обратни връзки"
+
+#: core/templates/backlinksweb.tmpl:5
+msgid "Backlinks to %1 in %2 Web"
+msgstr "Обратни връзки към %1 в %2 Раздел"
+
+#: core/templates/backlinksallwebs.tmpl:6
+msgid "Backlinks to %1 in all Webs"
+msgstr "Обратни връзки към %1 във всички раздели"
+
+#: core/templates/messages.tmpl:301
+msgid "Bad password"
+msgstr "Грешна парола"
+
+#: core/templates/messages.tmpl:134
+msgid "Base web %1 is missing or does not exist"
+msgstr "Основния раздел %1 липсва или не съществува"
+
+#: core/lib/Foswiki/OopsException.pm:41
+msgid "Bathing problem"
+msgstr ""
+
+#: core/data/System/WebSearch.txt:78 core/data/System/WebSearch.txt:92
+msgid "Both body and title"
+msgstr "В заглавието и в текста"
+
+#: core/templates/changeform.tmpl:28
+msgid ""
+"But existing form data will be lost (you can always retrieve this data "
+"through the topic history)"
+msgstr ""
+"Но съществуващите данни от формата ще се загубят (винаги може да извлечете "
+"тези данни от историята на страницата)"
+
+#: core/data/Trash/WebHome.txt:7
+msgid ""
+"By default, viewing the Trash web is restricted to %1. If you would like to "
+"allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction "
+"in WebPreferences."
+msgstr ""
+"По подразбиране виждането на страницата Trash (Кошче) е забранено за %1. Ако "
+"желаете да рарешите на всички потребители да я виждат, премахнете забраната "
+"=ALLOWWEBVIEW= в WebPreferences."
+
+#: core/templates/messages.tmpl:44 core/templates/messages.tmpl:557
+msgid "Can't find user %1"
+msgstr "Потребителят %1  не бе открит"
+
+#: core/templates/messages.tmpl:558
+msgid "Can't get an e-mail address for %1 (required for password reset)"
+msgstr "Няма e-mail-адрес за %1 (задължителен за нулиране на паролата)"
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:164
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:987
+#: JQueryPlugin/data/System/JQueryButton.txt:27
+#: JQueryPlugin/data/System/JQuerySimpleModal.txt:109
+#: JQueryPlugin/data/System/VarBUTTON.txt:28 core/templates/foswiki.tmpl:133
+#: core/templates/validate.tmpl:51
+msgid "Cancel"
+msgstr "Отказ"
+
+#: PatternSkin/templates/edit.pattern.tmpl:41
+msgid "Cancel editing and discard changes"
+msgstr "Откажи редакцията и отмени промените"
+
+#: core/templates/messages.tmpl:69
+msgid "Cannot create %1 because it already exists."
+msgstr "Страницата %1 не може да бъде създадена, тъй като вече съществува."
+
+#: core/templates/messages.tmpl:130
+msgid "Cannot create web %1 because it already exists"
+msgstr "Разделът %1 не може да бъде създаден, тъй като вече съществува."
+
+#: core/templates/messages.tmpl:75 core/templates/messages.tmpl:81
+msgid "Cannot rename %1 to %2 because it already exists."
+msgstr "%1 не може да бъде преименуван/а на %2 , тъй като %2  вече съществува."
+
+#: core/data/System/WebSearch.txt:111
+msgid "Case sensitive"
+msgstr "Чуствително към регистъра"
+
+#: PatternSkin/data/System/WebLeftBarExample.txt:35
+msgid "Categories"
+msgstr "Категории"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:3
+msgid "Change Password"
+msgstr "Промяна на паролата"
+
+#: core/templates/validate.tmpl:22
+msgid "Change cannot be completed"
+msgstr ""
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:14
+msgid "Change comment and properties only"
+msgstr "Промяна само на коментар и свойства"
+
+#: core/templates/renamebase.tmpl:14
+#, fuzzy
+msgid "Change from"
+msgstr "Промяна от:"
+
+#: core/data/System/LanguageSelector.txt:35
+#: core/templates/oopslanguagechanged.tmpl:5
+msgid "Change language"
+msgstr "Смяна на език"
+
+#: core/templates/renamewebbase.tmpl:43
+msgid "Change links in topics that refer to !%1 in any Web:"
+msgstr "Промяна на връзки в страници, рефериращи %1 във всеки раздел:"
+
+#: core/templates/renamewebbase.tmpl:40
+msgid "Change links in topics that refer to !%1 in the %2 Web:"
+msgstr "Промяна на връзки в страници, рефериращи %1 Раздел %2:"
+
+#: core/templates/renamebase.tmpl:57
+msgid "Change links in topics that refer to %1 in any Web:"
+msgstr "Промяна на връзки в страници, рефериращи %1 във всеки раздел:"
+
+#: core/templates/renamebase.tmpl:53
+msgid "Change links in topics that refer to %1 in the %2 Web:"
+msgstr "Промяна на връзки в страници, рефериращи %1 Раздел %2:"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:32
+msgid "Change password"
+msgstr "Смяна на парола"
+
+#: core/templates/attachagain.tmpl:21
+msgid "Change properties only"
+msgstr "Промяна само на свойствата"
+
+#: core/templates/edit.tmpl:6
+msgid "Change topic"
+msgstr "Смяна на страница"
+
+#: MailerContrib/templates/mailnotify.tmpl:18
+msgid "Changed by"
+msgstr "Променен от"
+
+#: MailerContrib/templates/mailnotify.tmpl:16
+msgid "Changed:"
+msgstr "Променен:"
+
+#: MailerContrib/templates/mailnotify.tmpl:11
+#: PatternSkin/data/Main/WebLeftBarExample.txt:9
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:9
+#: PatternSkin/data/System/WebLeftBarExample.txt:10
+#: PatternSkin/data/Trash/WebLeftBarExample.txt:7
+#: PatternSkin/data/_default/WebLeftBar.txt:8
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:8
+msgid "Changes"
+msgstr "Промени"
+
+#. ($rLow, $rHigh)
+#: core/lib/Foswiki/UI/RDiff.pm:582
+msgid "Changes from r%1 to r%2"
+msgstr "Промени от r%1 до r%2"
+
+#: core/templates/messages.tmpl:429
+msgid "Check your configuration settings for {TemplateDir} and {TemplatePath}."
+msgstr ""
+
+#: core/templates/renamebase.tmpl:45 core/templates/renamedelete.tmpl:34
+msgid "Checked topics will be updated to point to the new topic location."
+msgstr ""
+"Отметнатите страници ще бъдат обновени да сочат към новото местонахождение "
+"на страницата"
+
+#: core/templates/renameweb.tmpl:28
+msgid "Checked topics will be updated to point to the new web name."
+msgstr ""
+"Отметнатите страници ще бъдат обновени да сочат към новото  име на раздела."
+
+#: core/templates/more.tmpl:188
+msgid "Child topics in %1 web"
+msgstr "Подстраници в раздел %1"
+
+#: core/templates/changeform.tmpl:6
+msgid "Choose a new form for %1"
+msgstr "Изберете нова форма за %1"
+
+#: PatternSkin/templates/renamebase.pattern.tmpl:22
+#: core/lib/Foswiki/Form/Checkbox.pm:43
+msgid "Clear all"
+msgstr "Изчистван на всичко"
+
+#: core/lib/Foswiki/Render.pm:214
+msgid ""
+"Click to move topic back to previous location, with option to change "
+"references."
+msgstr ""
+"Щракнете за да върнете страницата на предишното й място с възможност за "
+"промяна на връзките"
+
+#: TwistyPlugin/data/System/TwistyPlugin.txt:477
+#: TwistyPlugin/lib/Foswiki/Plugins/TwistyPlugin.pm:94
+msgid "Close"
+msgstr "Затваряне"
+
+#: core/templates/messages.tmpl:138
+msgid "Color %1 has an invalid format"
+msgstr "Цвета %1 е с невалиден формат"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:34
+#: PatternSkin/templates/attach.pattern.tmpl:45 core/templates/attach.tmpl:24
+#: core/templates/attachtables.tmpl:4 core/templates/attachtables.tmpl:43
+msgid "Comment"
+msgstr "Коментар"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:76 core/templates/more.tmpl:151
+msgid "Compare revisions"
+msgstr "Сравняване на версиите"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:177
+#, fuzzy
+msgid "Confirm password"
+msgstr "Вашата парола:"
+
+#: core/templates/renameconfirm.tmpl:6 core/templates/renamewebconfirm.tmpl:6
+msgid "Confirm rename or move"
+msgstr "Попотвърдете преименуването или преместването"
+
+#: core/templates/messages.tmpl:31
+msgid ""
+"Confirm your changes using Foswiki's [[%1][topic history comparison tool "
+"(diff)]]."
+msgstr ""
+
+#: core/templates/oopsleaseconflict.tmpl:6
+msgid "Conflict"
+msgstr "Конфликт"
+
+#: core/templates/messages.tmpl:570 core/templates/messages.tmpl:576
+#: core/templates/messages.tmpl:597 core/templates/messages.tmpl:608
+#: core/templates/messages.tmpl:614 core/templates/messages.tmpl:620
+#: core/templates/messages.tmpl:629
+msgid "Contact %1 if you have any questions."
+msgstr "Свържете се с %1 ако имате някакви въпроси."
+
+#: HistoryPlugin/templates/oopshistory.tmpl:58
+#, fuzzy
+msgid "Context:"
+msgstr "Страна:"
+
+#: core/templates/messages.tmpl:421
+msgid "Continue and try to rename web?"
+msgstr "Продължете и се опитайте да преименувате раздела."
+
+#: core/data/System/WebTopicCreator.txt:5
+msgid "Continue to create the new page"
+msgstr "Продължете, за да създадете новата страница"
+
+#: WysiwygPlugin/lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm:113
+msgid ""
+"Conversion to HTML for WYSIWYG editing is disabled because of the topic "
+"content."
+msgstr ""
+
+#: core/templates/more.tmpl:27
+msgid "Copy this topic (and all attachments) to a new topic."
+msgstr ""
+
+#: core/templates/more.tmpl:26
+msgid "Copy topic"
+msgstr "Копиране на страница"
+
+#: core/templates/more.tmpl:36
+#, fuzzy
+msgid "Copy topic..."
+msgstr "Копиране на страница"
+
+#: core/data/System/DefaultPreferences.txt:40
+msgid ""
+"Copyright &&copy; by the contributing authors. All material on this "
+"collaboration platform is the property of the contributing authors."
+msgstr ""
+"Авторските права &&copy; принадлежат на сътрудничещите автори. Всички "
+"материали по тази платформа за сътрудничество са собственост на "
+"сътрудничещите автори."
+
+#: core/data/System/WebPreferences.txt:33
+msgid ""
+"Copyright &&copy; by the contributing authors. All material on this site is "
+"the property of the contributing authors."
+msgstr ""
+"Авторските права &&copy; принадлежат на сътрудничещите автори. Всички "
+"материали на този сайт са собственост на сътрудничещите автори."
+
+#: core/templates/messages.tmpl:148
+msgid "Could not create the new web %1"
+msgstr "Новият раздел %1 не може да бъде създаден"
+
+#: core/templates/messages.tmpl:427
+msgid "Could not find template"
+msgstr "Шаблонът не може да бъде създаден"
+
+#: core/templates/messages.tmpl:562
+msgid "Could not perform search. Error was: %1"
+msgstr "Търсенето е невъзможно. Грешката беше: %1"
+
+#: core/templates/messages.tmpl:333
+msgid "Could not save %1."
+msgstr "Неуспешен запис на %1."
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:258
+#, fuzzy
+msgid "Country"
+msgstr "Страна:"
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:6
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:6
+#: PatternSkin/data/_default/WebLeftBar.txt:5
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:5
+msgid "Create New Topic"
+msgstr "Нова Страница"
+
+#: PatternSkin/data/System/PatternSkinWebCreateNewTopicTemplate.txt:49
+#: core/data/System/WebCreateNewTopicTemplate.txt:6
+msgid "Create New Topic in %1 Web"
+msgstr "Създаване на нова страница в Раздел %1"
+
+#: PatternSkin/templates/attach.pattern.tmpl:55 core/templates/attach.tmpl:37
+msgid "Create a link to the attached file"
+msgstr "Създаване на връзка към притурката(прикачения файл)"
+
+#: core/data/Main/WikiGroups.txt:7
+#, fuzzy
+msgid "Create a new group"
+msgstr "Нова Страница"
+
+#: core/data/Main/WikiGroups.txt:31
+#, fuzzy
+msgid "Create group"
+msgstr "Нова Страница"
+
+#: core/data/System/FrequentlyAskedQuestions.txt:44
+#, fuzzy
+msgid "Create new FAQ topic"
+msgstr "Нова Страница"
+
+#: core/templates/messages.tmpl:595
+msgid "Create the topic"
+msgstr "Създаване на Страницата"
+
+#: core/data/System/DefaultPreferences.txt:373
+#: core/data/System/DefaultPreferences.txt:375
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:15
+#: core/data/System/WebCreateNewTopicTemplate.txt:64
+#: core/lib/Foswiki/Render.pm:49
+msgid "Create this topic"
+msgstr "Създаване на тази Страница"
+
+#: core/data/Sandbox/WebHome.txt:19
+#, fuzzy
+msgid "Create topic"
+msgstr "Създаване на Страницата"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:13
+msgid "Create your account to edit pages on this site."
+msgstr ""
+
+#: core/templates/messages.tmpl:368
+msgid "Creating a suitable Form Definition topic"
+msgstr "Създаване на подходяща страница за дефиниция на форма"
+
+#: core/templates/renameattachmentdelete.tmpl:9
+#: core/templates/renamedelete.tmpl:9
+msgid "Current location:"
+msgstr "текущо местонахождение:"
+
+#: core/templates/more.tmpl:99
+msgid "Current parent:"
+msgstr "Текуша родителска страница/раздел:"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:25
+msgid "Current password"
+msgstr "Текуща парола"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:32
+#: HistoryPlugin/templates/oopshistory.tmpl:43
+#: core/templates/attachtables.tmpl:4 core/templates/attachtables.tmpl:43
+msgid "Date"
+msgstr "Дата"
+
+#: core/templates/mailresetpassword.tmpl:8
+msgid "Dear %1"
+msgstr "Уважаеми %1"
+
+#: core/templates/more.tmpl:160
+msgid "Debug"
+msgstr "Дебъг"
+
+#: core/data/System/WebCreateNewTopicTemplate.txt:62
+msgid "Default template"
+msgstr "Шаблон по подразбиране"
+
+#: JQueryPlugin/data/System/JQueryButton.txt:30
+#: PatternSkin/templates/attachagain.pattern.tmpl:22
+#: core/templates/renameattachmentdelete.tmpl:25
+#: core/templates/renamedelete.tmpl:37 core/templates/renamedelete.tmpl:6
+msgid "Delete"
+msgstr "Изтриване"
+
+#: core/templates/renameattachmentdelete.tmpl:28
+msgid "Delete attachment"
+msgstr "Изтриване на притурка"
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:163
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:983
+msgid "Delete last row"
+msgstr "Изтриване на последния ред"
+
+#: core/templates/more.tmpl:49
+msgid "Delete topic"
+msgstr "Изтриване на страница"
+
+#: core/templates/more.tmpl:59
+msgid "Delete topic..."
+msgstr "Изтриване на страница..."
+
+#: PatternSkin/templates/attach.pattern.tmpl:47
+msgid "Describe the file so other people know what it is."
+msgstr "Опишете файла, така че другите да знаят каво е това."
+
+#: core/lib/Foswiki/Form.pm:316
+msgid "Details in separate window"
+msgstr "Подробностите в отделен прозорец.щ"
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:7
+msgid ""
+"Did you spell the topic name correctly? Remember, a topic name is case "
+"sensitive."
+msgstr ""
+"Написали ли сте правилно %1 ? Запомнете, името на страницата е чувствително "
+"към регистъра."
+
+#: core/data/System/VarMAKETEXT.txt:21
+msgid "Did you want to [[%1][reset %2's password]]?"
+msgstr "Да не искахте да нулирате [[%1][паролата на %2]]?"
+
+#: core/templates/rdiff.tmpl:14
+#, fuzzy
+msgid "Difference Topic"
+msgstr "Разлика:"
+
+#: CompareRevisionsAddOn/templates/compare.tmpl:5
+#: PatternSkin/templates/rdiff.pattern.tmpl:11
+msgid "Difference:"
+msgstr "Разлика:"
+
+#: core/data/System/WebPreferences.txt:12
+msgid "Discover the details, and how to start your own site with Foswiki"
+msgstr ""
+
+#: core/templates/preview.tmpl:11
+msgid "Do not forget to save your changes"
+msgstr "Не забравяйте да запишете промените си!"
+
+#: PatternSkin/templates/attach.pattern.tmpl:57 core/templates/attach.tmpl:45
+msgid "Do not show attachment in table"
+msgstr "Да не се показват притурките в таблицата."
+
+#: core/data/System/WebSearch.txt:121
+msgid "Don't show:"
+msgstr "Не показвай:"
+
+#: core/templates/messages.tmpl:63
+msgid ""
+"During deletion of attachment =%1= an error was found. Please notify your %2 "
+"administrator."
+msgstr ""
+"При изтриването на притурката =%1= се появи грешка. Моля, уведомете вашия %2 "
+"администратор."
+
+#: core/templates/messages.tmpl:55
+#, fuzzy
+msgid "During move of attachment =%1= to %2 an error was found."
+msgstr ""
+"При преместването на  %1 в %2 се появи грешка. Моля, уведомете вашия %3 "
+"администратор."
+
+#: core/templates/messages.tmpl:99
+msgid ""
+"During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
+"4 administrator."
+msgstr ""
+"При преименуване на страница %1 на %2 се появи грешка (%3). Моля, уведомете "
+"вашия %4 администратор."
+
+#: core/templates/messages.tmpl:102
+msgid ""
+"During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
+"administrator."
+msgstr ""
+"При преименуване на раздел %1 на %2 се появи грешка (%3). Моля, уведомете "
+"вашия %4 администратор."
+
+#: core/templates/messages.tmpl:398 core/templates/oopssaveerr.tmpl:16
+msgid ""
+"During save of %1 an error was found by the version control system. Please "
+"notify your %2 administrator."
+msgstr ""
+"При записа на %1 бе открита грешка от системата за контрол на версиите. "
+"Моля, уведомете вашия %2 администратор."
+
+#: core/templates/messages.tmpl:201
+msgid "E-mail changed successfully!"
+msgstr "E-mail адресът ви бе променен успешно!"
+
+#: core/templates/messages.tmpl:632
+msgid "ENCODE failed - =type= cannot be used alongside =old= and =new= "
+msgstr ""
+
+#: core/templates/messages.tmpl:633
+msgid "ENCODE failed - both of =old= and =new= must be given"
+msgstr ""
+
+#: core/templates/messages.tmpl:634
+msgid "ENCODE failed - token '%PARAM1%' is repeated in =old= "
+msgstr ""
+
+#: core/templates/messages.tmpl:637
+msgid "EXPAND failed - access to '%PARAM1%' denied"
+msgstr ""
+
+#: core/templates/messages.tmpl:635
+msgid "EXPAND failed - no macro"
+msgstr ""
+
+#: core/templates/messages.tmpl:636
+msgid "EXPAND failed - no such topic '%PARAM1%'"
+msgstr ""
+
+#: core/templates/settings.tmpl:26
+msgid "Each preference has the syntax"
+msgstr "Всяка настройка има синтаксисът"
+
+#: core/templates/viewtopicactionbuttons.tmpl:45
+msgid "Edit"
+msgstr "Редактиране"
+
+#: core/templates/oopsleaseconflict.tmpl:25
+msgid "Edit Anyway"
+msgstr "Редактиране все пак!"
+
+#: core/templates/viewtopicactionbuttons.tmpl:61
+msgid "Edit Wiki<nop>Text"
+msgstr ""
+
+#: PatternSkin/templates/edit.pattern.tmpl:11
+msgid "Edit help"
+msgstr "Помощ при редактиране"
+
+#: PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
+msgid "Edit personal data"
+msgstr "Редактиране на лични данни"
+
+#: core/templates/more.tmpl:17
+#, fuzzy
+msgid "Edit settings for this topic..."
+msgstr "Промяна на настройките за тази страница"
+
+#: PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
+msgid "Edit text"
+msgstr "Редактиране на текст"
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:159
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:967
+msgid "Edit this table"
+msgstr "Редактиране на тази таблица"
+
+#: PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
+msgid "Edit this topic text"
+msgstr "Редактиране на текста в тази страница"
+
+#: core/templates/more.tmpl:13
+msgid "Edit topic preference settings"
+msgstr "Редактиране настройките на тази страница"
+
+#: core/templates/messages.tmpl:318
+msgid ""
+"Either the code is not valid, or you have already confirmed your "
+"registration using it."
+msgstr ""
+"Кодът е невалиден или вече сте го използвали за потвърждаване на "
+"регистрацията си."
+
+#: core/templates/messages.tmpl:127
+msgid "Either the name is invalid, or it refers to a non-existant form."
+msgstr ""
+
+#: core/templates/messages.tmpl:123
+msgid "Either the name is invalid, or it refers to a non-existant topic."
+msgstr ""
+
+#: core/templates/messages.tmpl:389
+msgid ""
+"Either you did not specify a file name, or the file you are trying to upload "
+"%1 has no content. You may not upload an empty file."
+msgstr ""
+"Не сте предоставили име за файла или файла, който се опитвате да качите( %"
+"1 ) е празен. Не може да качите празен файл."
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:167
+#, fuzzy
+msgid "Email address"
+msgstr "E-mail адрес:"
+
+#: core/lib/Foswiki/UI/Passwords.pm:39 core/lib/Foswiki/UI/Register.pm:462
+msgid "Email has been disabled for this Foswiki installation"
+msgstr ""
+"Изпращането на електронна поща е изключено за тази инсталация на Foswiki"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:81
+msgid "Enlarge edit box"
+msgstr "Уголеми кутията за редактиране"
+
+#: core/templates/login.tmpl:7
+msgid "Enter a new username and password to change identity"
+msgstr ""
+"Въведете ново потребителско име и парола, за да промените идентичността си"
+
+#: core/templates/login.sudo.tmpl:18
+msgid "Enter the Wiki Administrator user or login as set in %1"
+msgstr "Въведете Wiki Администратор потребител или влезте както е указано в %1"
+
+#: core/templates/messages.tmpl:251
+msgid "Error registering new user"
+msgstr "Грешка при регистрация на нов потребител"
+
+#: core/templates/messages.tmpl:242
+msgid "Error registering user %1"
+msgstr "Грешка при регистрация на потребител %1"
+
+#: core/templates/messages.tmpl:397
+msgid "Error saving topic"
+msgstr "Грешка при запис на страницата"
+
+#: core/templates/login.tmpl:26
+msgid "Error: %1"
+msgstr "Грешка: %1"
+
+#: core/templates/messages.tmpl:548
+msgid "Error: File attachment at %1,%2 does not exist"
+msgstr "Грешка: прикрепенияткъм %1файл %2, does not exist"
+
+#: core/templates/messages.tmpl:550
+msgid ""
+"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+"=text/css=)"
+msgstr ""
+"грешка: Неподдържан тип на съдържанието: %1 (Трябва да бъде =text/html=, "
+"=text/plain= или =text/css=)"
+
+#: core/templates/messages.tmpl:549
+msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
+msgstr "Грешка: Неподдържан протокол. (Трябва да бъде 'http://domain/...')"
+
+#: core/templates/messages.tmpl:268
+msgid "Errors"
+msgstr "Грешки"
+
+#: core/templates/messages.tmpl:466
+#, fuzzy
+msgid "Errors adding users to group"
+msgstr "Грешка при запис на страницата"
+
+#: core/templates/messages.tmpl:504
+msgid "Errors removing users from groups"
+msgstr ""
+
+#: core/lib/Foswiki/Plugins.pm:366
+msgid "Failed plugins"
+msgstr ""
+
+#: core/templates/messages.tmpl:560
+msgid "Failed to include URL %1"
+msgstr "Неуспешно включване на URL %1"
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:34
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:23
+msgid "Fields marked %1 are required"
+msgstr "Полетата, маркирани с %1 са задължителни"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:32
+#, fuzzy
+msgid "Fields marked <span class='required'>*</span> are required"
+msgstr "Полетата, маркирани с %1 са задължителни"
+
+#: core/templates/messages.tmpl:374
+msgid "File has been uploaded with different name"
+msgstr "Файлът бе качен с различно име"
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:12
+msgid "Find similar topics"
+msgstr "Търсене на подобни страници"
+
+#: core/templates/more.tmpl:86 core/templates/more.tmpl:88
+msgid "Find topics that link to %1 ..."
+msgstr "Намери страници, които имат връзки към %1 ..."
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:138
+#, fuzzy
+msgid "First name"
+msgstr "Име:"
+
+#: PatternSkin/templates/edit.pattern.tmpl:24
+msgid "Force new revision"
+msgstr "Нова версия сега!"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:14
+msgid "Forgotten your password?"
+msgstr "Забравена парола?"
+
+#: core/templates/messages.tmpl:346
+msgid "Form Definition %1 missing"
+msgstr "Дефиниция на форма %1 липсва"
+
+#: PatternSkin/templates/formtables.pattern.tmpl:5 core/templates/form.tmpl:9
+#: core/templates/formtables.tmpl:6
+msgid "Form data"
+msgstr ""
+
+#: core/templates/messages.tmpl:343
+#, fuzzy
+msgid "Form definition '%1' not found"
+msgstr "Дефиниция на форма %1 липсва"
+
+#: core/templates/messages.tmpl:351
+msgid "Form definition missing"
+msgstr "Липсва дефиниция на формата"
+
+#: core/templates/login.tmpl:3
+msgid "Foswiki User Authentication"
+msgstr ""
+
+#: core/templates/mailresetpassword.tmpl:3
+msgid "Foswiki password reset for %1"
+msgstr "Foswiki паролата е нулирана за %1"
+
+#: core/templates/settings.tmpl:25
+msgid ""
+"Get help on <a target='Macros' class='foswikiPopUp' href='%1' "
+"rel='nofollow'>Setting topic preferences</a>."
+msgstr ""
+"Помощ относно <a target='Macros'  class='foswikiPopUp' href='%1' "
+"rel='nofollow'>Настройии на страницата</a>."
+
+#: core/templates/renamebase.tmpl:69
+msgid ""
+"Get help on <a target='ManagingTopics' class='foswikiPopUp' href='%1' "
+"rel='nofollow'>Renaming and moving topics</a>."
+msgstr ""
+"Помощ относно <a target='ManagingTopics' class='foswikiPopUp' href='%1' "
+"rel='nofollow'>Преименуване и преместване на страници</a>."
+
+#: core/templates/renamewebbase.tmpl:50
+msgid ""
+"Get help on <a target='ManagingWebs' class='foswikiPopUp' href='%1' "
+"rel='nofollow'>Renaming and moving webs</a>."
+msgstr ""
+"Помощ относно <a target='ManagingWebs'  class='foswikiPopUp' href='%1' "
+"rel='nofollow'>Преименуване и преместване на раздели</a>."
+
+#: core/data/System/WebSearch.txt:157
+msgid "Get notified on changes on this search"
+msgstr "Уведомяване за промени в това търсене"
+
+#: JQueryPlugin/data/System/JQueryButton.txt:31
+#, fuzzy
+msgid "Globe"
+msgstr "Затваряне"
+
+#: core/templates/foswiki.tmpl:137
+msgid "Go back"
+msgstr "Обратно"
+
+#: core/templates/messages.tmpl:337
+#, fuzzy
+msgid ""
+"Go back in your browser and insert values for all mandatory fields before "
+"saving again"
+msgstr ""
+"Върнете се назад с браузъра си и въведете информация във всички задължителни "
+"полета."
+
+#: core/templates/messages.tmpl:404 core/templates/oopssaveerr.tmpl:20
+msgid "Go back in your browser and save your changes locally."
+msgstr "Върнете се назад с браузъра си и запишете локално промените."
+
+#: core/templates/validate.tmpl:34
+msgid ""
+"Go back to the previous page, and enable Cookies and Javascript before "
+"trying again"
+msgstr ""
+
+#: core/templates/messages.tmpl:292
+msgid "Good examples:"
+msgstr "Добри примери:"
+
+#: core/data/Main/WikiGroups.txt:49
+#, fuzzy
+msgid "Group"
+msgstr "Групи"
+
+#: core/data/Main/WikiGroups.txt:17
+#, fuzzy
+msgid "Group name"
+msgstr "Име на страницата"
+
+#: PatternSkin/data/System/WebLeftBarExample.txt:7
+msgid "Groups"
+msgstr "Групи"
+
+#: PatternSkin/data/System/WebLeftBarLogin.txt:4
+msgid "Hello %1"
+msgstr "Здравей %1"
+
+#: core/templates/foswiki.tmpl:166
+msgid "Hello %1!"
+msgstr "Здравей %1!"
+
+#: core/data/System/WebSearch.txt:109 core/data/System/WebSearch.txt:66
+#: core/templates/login.tmpl:48
+msgid "Help"
+msgstr "Помощ"
+
+#: core/templates/attach.tmpl:43
+msgid "Hide file"
+msgstr "Скриване на файла"
+
+#: core/data/System/WebPreferencesHelp.txt:5 core/templates/login.tmpl:48
+msgid "Hide help"
+msgstr "Скриване на помощта"
+
+#: core/templates/messages.tmpl:117
+msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
+msgstr ""
+"Поддръжката на раздели в йерархия е изключена. Не можете да създавате "
+"раздели един в друг."
+
+#: core/data/System/SiteMap.txt:31
+msgid "Home"
+msgstr ""
+
+#: core/templates/registernotify.tmpl:16
+msgid "How about attaching your photo?"
+msgstr "Защо не прикрепите ваша снимка?"
+
+#: core/templates/registerconfirm.tmpl:4
+msgid "How to activate your %1 registration"
+msgstr "Как да активирате вашата %1 регистрация"
+
+#: core/templates/registerfailednotremoved.tmpl:12
+msgid ""
+"However, sending a confirmation e-mail to %2 failed, suggesting that this "
+"may be a fraudulent registration.  The user '%1' could not be removed "
+"automatically."
+msgstr ""
+
+#: core/templates/registerfailedremoved.tmpl:12
+msgid ""
+"However, sending a confirmation e-mail to %2 failed, suggesting that this "
+"maye be a fraudulent registration.  The user '%1' was removed automatically. "
+"However you may have to remove the user's personal topic manually."
+msgstr ""
+
+#: core/templates/messages.tmpl:376
+msgid ""
+"However, the filename has been changed from %1 to %2. Please make a note of "
+"it."
+msgstr "Моля забележете, че името на файла бе променено от %1 на %2."
+
+#: core/templates/login.tmpl:63
+msgid "I forgot my password"
+msgstr "Забравих си паролата"
+
+#: core/data/System/DefaultPreferences.txt:40
+#: core/data/System/WebPreferences.txt:33
+msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
+msgstr ""
+"Идеи, заявки, проблеми, свързани с %1? <a href='%2'>Вашите впечатления</a>"
+
+#: core/templates/messages.tmpl:431
+#, fuzzy
+msgid ""
+"If that's not the problem, it may be because you have a setting of %1 that "
+"is pointing to a template that doesn't exist."
+msgstr ""
+"Проверете настройките си за {TemplateDir} и {TemplatePath}. Ако това не е "
+"проблема, е може би защото имате настройка за %1, която сочи към "
+"несъществуващ шаблон."
+
+#: core/templates/messages.tmpl:360
+msgid "If this line isn't present see _upgrade_ section below"
+msgstr "Ако този ред го няма, вижте секцията _подобрения_ по-долу"
+
+#: core/templates/messages.tmpl:354
+msgid "If this topic is missing create it, otherwise check it for errors."
+msgstr "Ако тази страница липсва, създайте я или я проверете за грешки."
+
+#: core/templates/messages.tmpl:448
+msgid ""
+"If you are developing a Foswiki application, see %1 for a description of the "
+"correct parameters."
+msgstr ""
+"Ако разработвате <nop>FoswikiApplication, прегледайте %1 за описание на "
+"правилните параметри."
+
+#: core/templates/validate.tmpl:41
+msgid "If you are unsure what this means, read:"
+msgstr ""
+
+#: core/templates/messages.tmpl:585
+msgid "If you came here by clicking on a question mark link"
+msgstr "Ако сте тук защото сте щракнали върху връзка с въпрос"
+
+#: core/templates/messages.tmpl:257
+msgid "If you don't receive a verification email within the next hour, "
+msgstr ""
+
+#: core/templates/renameattachmentdelete.tmpl:41
+#, fuzzy
+msgid "If you enter a different name, make sure the topic exists."
+msgstr "Ако въвеждате различно име, уверете се че страницата същеµµствува."
+
+#: core/templates/registerconfirm.tmpl:14
+#: core/templates/registernotify.tmpl:23
+msgid ""
+"If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
+"using your mail address %3. Contact %4 if this is in error."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:21
+msgid "If you have any questions about registration, send an e-mail to %1."
+msgstr "Ако имате въпроси относно регистрацията, изпратете e-mail до %1."
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:64
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:38
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:36
+#: core/templates/login.tmpl:74
+msgid "If you have any questions, please contact %1"
+msgstr "Ако имате някакви въпроси, моля свържете се с %1"
+
+#: core/data/System/VarMAKETEXT.txt:18
+#: core/templates/mailresetpassword.tmpl:17
+msgid "If you have any questions, please contact %1."
+msgstr "Ако имате въпроси, моля свържате се с %1."
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:150
+#: core/templates/registernotify.tmpl:25
+msgid "If you haven't set a password yet or you want to reset it, go to: %1"
+msgstr ""
+"Ако не сте задали парола все още или желаете д я промените, отидете на  %1"
+
+#: core/templates/messages.tmpl:446
+msgid ""
+"If you received a link to this topic in an e-mail or just want to look at "
+"the topic, [[%1][cancel save]] to go to %2."
+msgstr ""
+
+#: core/templates/messages.tmpl:594
+msgid "If you want to create the topic"
+msgstr "Ако желаете да създадете страницата"
+
+#: core/templates/messages.tmpl:590
+msgid "If you would like to create this web"
+msgstr "Ако желаете да създадете този раздел"
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:22
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:57
+msgid ""
+"If your old e-mail addresses are all invalid (you can't receive mail there "
+"any more) and you have forgotten your password, please contact %1 for help."
+msgstr ""
+"Ако старите ви адреси за електронна поща са невалидни(не можете да "
+"получавате поща на тях) и сте забравили паролата си, моля свържете се с %1 "
+"за помощ."
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:20
+msgid ""
+"If your user topic is not protected from changes by other people, and you "
+"don't register an e-mail address using this form, then your user account "
+"could be hijacked by someone else."
+msgstr ""
+
+#: PatternSkin/templates/attach.pattern.tmpl:55 core/templates/attach.tmpl:37
+msgid "Images will be displayed, for other attachments a link will be created."
+msgstr ""
+"Картинките ще бъдат показани. За другите файлове ще бъде създадена връзка "
+"към тях."
+
+#: core/data/System/WebSearch.txt:104
+msgid "In reversed order"
+msgstr "В обратен ред"
+
+#: core/templates/messages.tmpl:379
+msgid ""
+"In some cases, Foswiki changes the name of the uploaded file to make it safe "
+"and accessible across all platforms:"
+msgstr ""
+"В някои случаи Foswiki променя името на качения файл от съображения за "
+"сигурност и по-добър достъп на всички платформи."
+
+#: core/templates/messages.tmpl:282 core/templates/messages.tmpl:289
+msgid "Incorrect %1"
+msgstr "Невярно %1"
+
+#: core/templates/messages.tmpl:292
+msgid "Incorrect %1.WikiNames:"
+msgstr "Невярно %1.WikiИмена:"
+
+#: core/templates/messages.tmpl:105
+msgid "Incorrect Password"
+msgstr "Грешна парола"
+
+#: core/templates/messages.tmpl:444
+msgid "Incorrect parameters to the =%1= script"
+msgstr "Грешни параметри към скрипта =%1="
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:7
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:7
+#: PatternSkin/data/System/WebLeftBarExample.txt:8
+#: PatternSkin/data/Trash/WebLeftBarExample.txt:5
+#: PatternSkin/data/_default/WebLeftBar.txt:6
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:6
+msgid "Index"
+msgstr "Индекс"
+
+#: JQueryPlugin/data/System/JQueryButton.txt:28
+msgid "Info"
+msgstr ""
+
+#: core/templates/messages.tmpl:383
+msgid ""
+"International (8-bit) characters are removed (replaced by US-ASCII "
+"equivalents for Latin-1)"
+msgstr ""
+"Международните (8-битови) символи са премахнати (заместени с US-ASCII "
+"еквиваленти за Latin-1)"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:55
+msgid "Interweave"
+msgstr ""
+
+#: core/templates/messages.tmpl:315
+msgid "Invalid Activation Code"
+msgstr "Невалиден код за активиране"
+
+#: core/templates/messages.tmpl:307
+msgid "Invalid e-mail address"
+msgstr "невалиден адрес за електронна поща"
+
+#: core/templates/messages.tmpl:530
+msgid ""
+"It is probably OK to go ahead and edit - unless you intend to change data in "
+"a form attached to the topic. If %1 actually _does_ save the topic while you "
+"are editing, your changes will be merged, and nothing will be lost. Form "
+"data cannot easily be merged though, so in this case you are recommended to "
+"check with %1 first."
+msgstr ""
+
+#: core/templates/foswiki.tmpl:46
+msgid ""
+"It's usually best to choose a <a target='WikiWord' class='foswikiPopUp' "
+"href='%1' rel='nofollow'>WikiWord</a> for the new topic name, otherwise "
+"automatic linking may not work. Characters not allowed in topic names, such "
+"as spaces will automatically be removed."
+msgstr ""
+"Обикновено е най-добре да изберете <a target='WikiWord' class='foswikiPopUp' "
+"href='%1' rel='nofollow'>WikiДума</a> за име на новата страница, защото в "
+"противен случай автоматичното генериране на връзки може да не сработи. "
+"Символи, които не са разрешени в имената на страниците, като паузи ще бъдат "
+"премахнати автоматично. =бел.прев.=: Не използвайте кирилица ако не сте "
+"сигурни, че файловата ви система поддържа кирилица в имената на файловете."
+
+#: core/templates/renameweb.tmpl:16
+msgid ""
+"It's usually best to choose a short name for the new web, as it is easier to "
+"link to them later on. Characters not allowed in web names, such as spaces "
+"will automatically be removed."
+msgstr ""
+
+#: PatternSkin/data/System/WebLeftBarSearch.txt:3
+#: PatternSkin/data/System/WebTopBarExample.txt:7
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:19
+msgid "Jump"
+msgstr "Скок!"
+
+#: core/data/System/WebSearch.txt:114
+#, fuzzy
+msgid "Keyword search"
+msgstr "Промяна на търсенето"
+
+#: core/data/System/WebSearch.txt:102
+msgid "Last editor"
+msgstr "Последен редактор"
+
+#: core/data/System/WebSearch.txt:101
+msgid "Last modified time"
+msgstr "Последна промяна"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:145
+#, fuzzy
+msgid "Last name"
+msgstr "Фамилия:"
+
+#: core/data/System/WebSearch.txt:128
+msgid "Limit results to:"
+msgstr "Ограничи резултатите до:"
+
+#. ($left)
+#. ($right)
+#: core/lib/Foswiki/UI/RDiff.pm:165 core/lib/Foswiki/UI/RDiff.pm:168
+msgid "Line: %1"
+msgstr "Ред: %1"
+
+#. ($left, $right)
+#: core/lib/Foswiki/UI/RDiff.pm:327
+msgid "Line: %1 to %2"
+msgstr "Редове: %1 до %2"
+
+#: core/templates/attach.tmpl:35
+msgid "Link"
+msgstr "Връзка"
+
+#: core/data/System/WebSearch.txt:183
+msgid "List topics that start with the letter:"
+msgstr "Списък на страниците, които започват с буквата:"
+
+#: core/data/System/WebSearch.txt:115
+msgid "Literal search"
+msgstr "Буквално търсене"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:11
+msgid "Log In"
+msgstr "Вход"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:12
+msgid "Log Out"
+msgstr "Изход"
+
+#: core/templates/login.tmpl:12
+#, fuzzy
+msgid "Log on with your username and password"
+msgstr "Моля, въведете вашето потребителско име и парола"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:160
+#, fuzzy
+msgid "Login name"
+msgstr "Име за вход %1"
+
+#: core/templates/mailresetpassword.tmpl:12
+msgid "Login name %1"
+msgstr "Име за вход %1"
+
+#: PatternSkin/data/System/PatternSkinElements.txt:231
+#: core/templates/login.tmpl:69
+msgid "Logon"
+msgstr "Вход"
+
+#: core/templates/messages.tmpl:266
+msgid "Mail to"
+msgstr "Изпрати до"
+
+#: core/data/System/WebSearch.txt:108
+msgid "Make search:"
+msgstr "Търси:"
+
+#: core/data/Main/GroupViewTemplate.txt:6 core/data/Main/WikiGroups.txt:26
+#: core/data/Main/WikiGroups.txt:50
+msgid "Members"
+msgstr ""
+
+#: core/templates/messages.tmpl:230
+msgid "Missing Fields"
+msgstr "Липсващи полета"
+
+#: core/templates/messages.tmpl:36
+msgid "Missing action command"
+msgstr "Липсваща команда за действие"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:46
+msgid "Modify search"
+msgstr "Промяна на търсенето"
+
+#: core/templates/more.tmpl:7
+msgid "More Actions on Topic %1"
+msgstr "Още действия за страница %1"
+
+#: core/data/System/WikiSyntaxSummary.txt:18
+msgid "More formatting help"
+msgstr "Още помощ при форматиране"
+
+#: PatternSkin/templates/rdiff.pattern.tmpl:26
+#: core/templates/viewtopicactionbuttons.tmpl:76
+msgid "More topic actions..."
+msgstr "Още действия..."
+
+#: HistoryPlugin/templates/oopshistory.tmpl:80
+#, fuzzy
+msgid "More view options:"
+msgstr "Още действия..."
+
+#: TwistyPlugin/data/System/TwistyPlugin.txt:476
+#: TwistyPlugin/lib/Foswiki/Plugins/TwistyPlugin.pm:90
+msgid "More..."
+msgstr "Още..."
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:22
+#: core/templates/moveattachment.tmpl:55
+msgid "Move"
+msgstr "Преместване"
+
+#: core/templates/moveattachment.tmpl:9
+msgid "Move attachment"
+msgstr "Преместване на притурка"
+
+#: core/templates/moveattachment.tmpl:6
+msgid "Move file attachment"
+msgstr "Преместване на притурка"
+
+#: core/templates/attachagain.tmpl:21
+msgid "Move or delete attachment"
+msgstr "Преместване или изтриване на притурка"
+
+#: core/templates/moveattachment.tmpl:31
+#: core/templates/renameattachmentdelete.tmpl:21
+msgid "Move to web:"
+msgstr "Преместване в раздел:"
+
+#: core/templates/renamedelete.tmpl:15
+msgid "Move topic to web:"
+msgstr "Преместване на страницата в раздел:"
+
+#: core/lib/Foswiki/UI/Rename.pm:1229
+msgid "Move/Rename"
+msgstr "Премести/Преименувай"
+
+#: core/lib/Foswiki/Search.pm:1111
+msgid "NEW"
+msgstr "НОВ"
+
+#: core/templates/more.tmpl:31
+#, fuzzy
+msgid "Name of copy"
+msgstr "Име на копие:"
+
+#: core/templates/messages.tmpl:111
+msgid "Name of new web is missing"
+msgstr "Липсва име на новия раздел"
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:9
+msgid "Navigate to a similar topic"
+msgstr "Отиване на подобна страница"
+
+#: core/templates/messages.tmpl:161
+msgid "New User Registration disabled"
+msgstr "Регистрацията на нови потребители е изключена"
+
+#: core/templates/messages.tmpl:152
+msgid "New User Registration not supported"
+msgstr "Регистрация на нови потребители не се поддържа"
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:37
+msgid "New e-mails (space-separated list)"
+msgstr "Нови e-mail-и (списък разделен с паузи)"
+
+#: MailerContrib/templates/mailnotify.tmpl:73
+#: MailerContrib/templates/mailnotify.tmpl:9
+msgid "New or changed topics in %1, since %2:"
+msgstr "Нова или променена страница в %1, от %2:"
+
+#: core/templates/renamewebbase.tmpl:9
+msgid "New parent web:"
+msgstr "Нов родителски раздел:"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:26
+msgid "New password"
+msgstr "Нова парола"
+
+#: core/templates/messages.tmpl:87
+msgid "New topic name %1 is not a %2"
+msgstr "Името на новата страница %1 не е %2"
+
+#: core/templates/renamewebbase.tmpl:6
+msgid "New web name:"
+msgstr "Име на новия раздел:"
+
+#: core/templates/more.tmpl:157
+msgid "Newer revision:"
+msgstr "По-нова версия:"
+
+#: core/templates/messages.tmpl:460 core/templates/messages.tmpl:498
+msgid "No GroupName specified"
+msgstr ""
+
+#: core/templates/more.tmpl:189
+msgid "No child topics"
+msgstr "Няма подстраници"
+
+#: core/templates/messages.tmpl:547
+msgid "No permission to view %1"
+msgstr "нямате права да видите %1"
+
+#: core/templates/more.tmpl:184
+msgid "No previous revision exists."
+msgstr "Не съществува предна версия."
+
+#: core/templates/renamebase.tmpl:45
+#, fuzzy
+msgid "No topics to update."
+msgstr "Преместване на страницата в раздел:"
+
+#: core/templates/messages.tmpl:454 core/templates/messages.tmpl:492
+msgid "No username specified"
+msgstr ""
+
+#: core/templates/messages.tmpl:223
+msgid "No users to reset passwords for."
+msgstr "Няма потребители, чиито пароли да бъдат променени."
+
+#: core/templates/renamedelete.tmpl:34
+msgid "Not recommended when deleting a topic."
+msgstr "Не се препоръчва, когато изтривате страница."
+
+#: core/templates/moveattachment.tmpl:50
+msgid ""
+"Note that any URLs that refer to the attachment will be broken after this "
+"move."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:148
+#: core/templates/messages.tmpl:320 core/templates/messages.tmpl:378
+#: core/templates/registerconfirm.tmpl:13
+#: core/templates/registernotify.tmpl:22
+msgid "Note:"
+msgstr "Забележка:"
+
+#: core/data/System/VarMAKETEXT.txt:15
+msgid "Notes:"
+msgstr "Бележки:"
+
+#: core/data/System/WebNotifyHelp.txt:3
+msgid "Notification help"
+msgstr "Помощ за уведомяване"
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:10
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:10
+#: PatternSkin/data/System/WebLeftBarExample.txt:11
+#: PatternSkin/data/_default/WebLeftBar.txt:9
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:9
+#: core/data/System/SiteMap.txt:34
+msgid "Notifications"
+msgstr "Уведомяване"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:45
+msgid "Number of topics:"
+msgstr "Брой страници:"
+
+#: core/templates/search.text.tmpl:20 core/templates/searchformat.tmpl:11
+#, fuzzy
+msgid "Number of topics: %1"
+msgstr "Брой страници:"
+
+#: JQueryPlugin/data/System/JQueryButton.txt:26
+#: core/templates/foswiki.tmpl:135 core/templates/messages.tmpl:181
+#: core/templates/messages.tmpl:191 core/templates/messages.tmpl:198
+#: core/templates/oopsaccessdenied.tmpl:7 core/templates/oopssaveerr.tmpl:13
+#: core/templates/validate.tmpl:51
+msgid "OK"
+msgstr "Добре"
+
+#: core/templates/more.tmpl:157
+msgid "Older revision:"
+msgstr "По-стара версия"
+
+#: core/templates/messages.tmpl:574
+msgid "Only members of the %1 are allowed to perform this action."
+msgstr "Само членовете на %1 могат да извършват това действие."
+
+#: core/templates/more.tmpl:55 core/templates/more.tmpl:72
+#, fuzzy
+msgid "Only update linked topics in %1 web"
+msgstr "Подстраници в раздел %1"
+
+#: core/templates/login.tmpl:8
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+msgstr ""
+
+#: core/templates/renamedelete.tmpl:20
+#, fuzzy
+msgid "Optionally change attachment name:"
+msgstr "Може да промените името на страницата:"
+
+#: core/templates/renamedelete.tmpl:18
+msgid "Optionally change topic name:"
+msgstr "Може да промените името на страницата:"
+
+#: core/templates/renameattachmentdelete.tmpl:34
+#, fuzzy
+msgid "Optionally enter a different attachment name:"
+msgstr "Може да въведете различно име на страница:"
+
+#: core/templates/renameattachmentdelete.tmpl:32
+msgid "Optionally enter a different topic name:"
+msgstr "Може да въведете различно име на страница:"
+
+#: core/templates/more.tmpl:160
+#, fuzzy
+msgid "Options"
+msgstr "Действие"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:244
+#, fuzzy
+msgid "Organisation name"
+msgstr "Име на организацията"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:251
+#, fuzzy
+msgid "Organisation website"
+msgstr "Име на организацията"
+
+#: PatternSkin/data/System/PatternSkinElements.txt:226
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:36
+#: core/templates/login.tmpl:58
+msgid "Password"
+msgstr "Парола"
+
+#: core/templates/messages.tmpl:184
+msgid "Password changed successfully!"
+msgstr "Паролата е променена успешно!"
+
+#: core/templates/messages.tmpl:194
+msgid "Password could not be changed"
+msgstr "Паролата не може да бъде променена"
+
+#: core/templates/messages.tmpl:222 core/templates/messages.tmpl:226
+msgid "Password reset failed"
+msgstr "Връщането на старата парола се провали"
+
+#: core/templates/messages.tmpl:236
+msgid "Passwords do not match"
+msgstr "Паролите не съвпадат"
+
+#: core/data/System/WebCreateNewTopicTemplate.txt:60
+#: core/templates/more.tmpl:103
+msgid "Pick from a list"
+msgstr "Избор от списък"
+
+#: core/templates/messages.tmpl:141
+msgid "Pick one of the %1."
+msgstr "Изберете едно от %1."
+
+#: core/data/Trash/WebPreferences.txt:10
+#, fuzzy
+msgid "Place for trashed topics and attachments."
+msgstr "Място за изхвърлени прикачени файлове"
+
+#: core/data/Trash/TrashAttachment.txt:3
+msgid "Placeholder for trashed attachments"
+msgstr "Място за изхвърлени прикачени файлове"
+
+#: core/templates/messages.tmpl:470 core/templates/messages.tmpl:508
+msgid "Please check to ensure you have permssion to modify the group."
+msgstr ""
+
+#: core/templates/messages.tmpl:279 core/templates/messages.tmpl:329
+msgid "Please contact %1 if you have any questions."
+msgstr "Моля свържете се с %1 ако имате някакви въпроси."
+
+#: core/templates/messages.tmpl:156 core/templates/messages.tmpl:165
+#: core/templates/messages.tmpl:246 core/templates/messages.tmpl:258
+msgid "Please contact %1."
+msgstr "Моля свържете се с %1."
+
+#: core/templates/login.sudo.tmpl:7
+msgid "Please enter the Wiki admin password"
+msgstr "Моля, въведете администраторската парола за Wiki."
+
+#: core/templates/messages.tmpl:71 core/templates/messages.tmpl:77
+#: core/templates/messages.tmpl:83
+msgid "Please go _back_ in your browser and try a new name."
+msgstr ""
+
+#: core/templates/messages.tmpl:390
+msgid "Please go back in your browser and check again."
+msgstr "Моля върнете се назад с браузъра и проверете отново."
+
+#: core/templates/messages.tmpl:88
+msgid ""
+"Please go back in your browser and choose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
+msgstr ""
+
+#: core/templates/messages.tmpl:108 core/templates/messages.tmpl:112
+#: core/templates/messages.tmpl:119 core/templates/messages.tmpl:131
+#: core/templates/messages.tmpl:135 core/templates/messages.tmpl:145
+#: core/templates/messages.tmpl:233 core/templates/messages.tmpl:239
+#: core/templates/messages.tmpl:286 core/templates/messages.tmpl:298
+#: core/templates/messages.tmpl:304 core/templates/messages.tmpl:312
+#: core/templates/messages.tmpl:37 core/templates/messages.tmpl:41
+#: core/templates/messages.tmpl:59 core/templates/messages.tmpl:95
+msgid "Please go back in your browser and try again."
+msgstr "Моля върнете се назад с браузъра и опитайте отново."
+
+#: core/templates/messages.tmpl:45
+msgid ""
+"Please make sure you spelled the %1 correctly and try again. If you get "
+"stuck, please mail %2."
+msgstr ""
+
+#: core/templates/mailresetpassword.tmpl:15
+msgid ""
+"Please visit %1 to change your password to something more memorable for you."
+msgstr ""
+"Моля, посетете %1, за да промените паролата си на нещо по-запомнящо се за "
+"вас."
+
+#: core/lib/Foswiki/Plugins.pm:397
+msgid "Plugin handlers"
+msgstr ""
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:13
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:13
+#: PatternSkin/data/System/WebLeftBarExample.txt:14
+#: PatternSkin/data/_default/WebLeftBar.txt:12
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:12
+msgid "Preferences"
+msgstr "Настройки"
+
+#: PatternSkin/templates/settings.pattern.tmpl:9
+#: core/templates/settings.tmpl:6
+msgid "Preferences for"
+msgstr "Настройки за"
+
+#: core/templates/validate.tmpl:38
+msgid "Press Cancel otherwise."
+msgstr ""
+
+#: core/templates/validate.tmpl:37
+msgid "Press OK to confirm that this change was intentional."
+msgstr ""
+
+#: core/lib/Foswiki/OopsException.pm:42
+msgid "Problem filling bath"
+msgstr ""
+
+#: PatternSkin/templates/attach.pattern.tmpl:53
+msgid "Properties"
+msgstr "Свойства"
+
+#: core/lib/Foswiki/Render.pm:222
+#, fuzzy
+msgid "Put it back..."
+msgstr "върни обратно"
+
+#: core/data/System/WebSearch.txt:117
+msgid "Query Search"
+msgstr "Търсене със заявка"
+
+#: core/data/System/FrequentlyAskedQuestions.txt:71
+#, fuzzy
+msgid "Question"
+msgstr "Версия"
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:161
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:975
+msgid "Quiet save"
+msgstr "Тих запис"
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:11
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:11
+#: PatternSkin/data/System/WebLeftBarExample.txt:12
+#: PatternSkin/data/_default/WebLeftBar.txt:10
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:10
+msgid "RSS Feed"
+msgstr "RSS Емисии"
+
+#: core/templates/registernotify.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TwentyMinuteTutorial, which is accessible from the same link."
+msgstr ""
+
+#: PatternSkin/templates/edit.pattern.tmpl:24
+msgid "Read new revision help text in new window"
+msgstr ""
+
+#: TipsContrib/data/System/TipsOfTheDayInclude.txt:11
+msgid "Read on"
+msgstr "Целият текст"
+
+#: core/data/System/SiteMap.txt:33
+#, fuzzy
+msgid "Recent changes"
+msgstr "Последно променяни страници"
+
+#: core/data/Sandbox/WebHome.txt:28
+msgid "Recently changed topics"
+msgstr "Последно променяни страници"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:86
+#: core/lib/Foswiki/UI/Rename.pm:1228
+msgid "Refresh"
+msgstr "Презареждане"
+
+#: PatternSkin/data/System/PatternSkinHorizontalNavigationExample.txt:69
+#: PatternSkin/data/System/PatternSkinThemeFatWillyNavigation.txt:78
+#: PatternSkin/data/System/WebLeftBarLogin.txt:4
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:274
+#: core/templates/foswiki.tmpl:166
+msgid "Register"
+msgstr "Регистрация"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:3
+msgid "Registration"
+msgstr "Регистрация"
+
+#: core/templates/messages.tmpl:318
+msgid "Registration codes can only be used once."
+msgstr "Кодовете за регистрация могат да се ползват само по веднъж."
+
+#: core/data/System/WebSearch.txt:116
+msgid "Regular expression search"
+msgstr "Търсене с регулярни изрази"
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:69
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:45
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:43
+#: TopicUserMappingContrib/lib/Foswiki/Users/TopicUserMapping.pm:878
+#: TopicUserMappingContrib/lib/Foswiki/Users/TopicUserMapping.pm:890
+#: core/data/Main/GroupViewTemplate.txt:14 core/templates/messages.tmpl:572
+#: core/templates/messages.tmpl:579
+msgid "Related topics:"
+msgstr "Подобни:"
+
+#: core/templates/login.tmpl:65
+msgid "Remember me on this computer"
+msgstr "Запомни ме на този компютър"
+
+#: core/templates/messages.tmpl:203
+msgid ""
+"Remember to update your user topic if you want your e-mail change to be "
+"reflected there as well."
+msgstr ""
+"Не забравяйте да обновите потребителската си страница, ако искате промяната "
+"на електронната ви поща да бъде отразена и там."
+
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:34
+msgid "Remember your password?"
+msgstr "Запомняне на паролата?"
+
+#: core/data/Main/GroupViewTemplate.txt:166
+msgid "Remove selected users"
+msgstr ""
+
+#: core/templates/messages.tmpl:51
+msgid "Remove the user from the group(s) %1 first."
+msgstr "Първо премахнете потребителя от груп(ата/ите) %1."
+
+#: core/data/Main/GroupViewTemplate.txt:82
+msgid "Remove user..."
+msgstr ""
+
+#: core/data/Main/GroupViewTemplate.txt:162
+#, fuzzy
+msgid "Remove users from this group"
+msgstr "Първо премахнете потребителя от груп(ата/ите) %1."
+
+#: core/templates/rename.tmpl:6 core/templates/renameweb.tmpl:6
+msgid "Rename"
+msgstr "Преименуване"
+
+#: core/templates/messages.tmpl:74 core/templates/messages.tmpl:80
+msgid "Rename failed"
+msgstr "Грешка при преименуването"
+
+#: core/templates/renamebase.tmpl:11
+#, fuzzy
+msgid "Rename or move %1"
+msgstr "Преименувай тази страница"
+
+#: core/templates/more.tmpl:68
+msgid "Rename or move topic"
+msgstr "Преименувай тази страница"
+
+#: core/templates/more.tmpl:76
+#, fuzzy
+msgid "Rename or move topic..."
+msgstr "Преименувай тази страница"
+
+#: core/data/System/RenameWeb.txt:4
+#, fuzzy
+msgid "Rename, move or delete this web"
+msgstr "Преименувай, премести или изтрий този раздел"
+
+#: core/templates/rename.tmpl:21 core/templates/renameconfirm.tmpl:33
+#: core/templates/renameweb.tmpl:32
+msgid "Rename/Move"
+msgstr "Преименувай/Премести"
+
+#: core/templates/form.tmpl:1
+msgid "Replace form..."
+msgstr "Замести форма"
+
+#: core/templates/validate.tmpl:3 core/templates/validate.tmpl:4
+#, fuzzy
+msgid "Request Validation"
+msgstr "Регистрация"
+
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:3
+msgid "Reset Password"
+msgstr "Нулиране на Парола"
+
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:28
+msgid "Reset password"
+msgstr "Нулиране на Парола"
+
+#: core/data/System/DefaultPreferences.txt:186
+msgid "Resetting and setting password is not handled by Foswiki"
+msgstr ""
+
+#: core/templates/more.tmpl:169
+msgid "Restore topic"
+msgstr "Възстанови страница:"
+
+#: core/templates/more.tmpl:174
+msgid "Restore topic to revision:"
+msgstr "Възстанови страница до версия:"
+
+#: core/templates/more.tmpl:177
+msgid "Restore topic to this revision"
+msgstr "Възстанови страницата до тази версия:"
+
+#: core/templates/more.tmpl:177
+#, fuzzy
+msgid "Restore..."
+msgstr "Възстановяване"
+
+#: core/templates/searchformat.tmpl:15
+msgid "Results from %1 web"
+msgstr "Резултати от раздел %1"
+
+#: core/templates/search.text.tmpl:4
+#, fuzzy
+msgid "Results from %1 web:"
+msgstr "Резултати от раздел %1"
+
+#: core/templates/messages.tmpl:207
+msgid "Return to %1."
+msgstr "Върнете се към %1."
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:27
+msgid "Retype new password"
+msgstr "Въведете пак новата парола:"
+
+#: core/templates/messages.tmpl:27
+msgid "Rev %1 was saved by %2, while you were still editing."
+msgstr "Врсия %1 бе записана от %2, докато вие редактирахте."
+
+#: MailerContrib/templates/mailnotify.tmpl:44
+#: MailerContrib/templates/mailnotify.tmpl:76
+msgid "Review recent changes in:"
+msgstr "Преглед на последните промени в:"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:31
+#: HistoryPlugin/templates/oopshistory.tmpl:42
+#: PatternSkin/templates/rdiff.pattern.tmpl:16
+msgid "Revision"
+msgstr "Версия"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:14
+#, fuzzy
+msgid "Revision history of %1"
+msgstr "История на версиите на %1"
+
+#: core/templates/more.tmpl:137
+msgid "Revisions"
+msgstr "Версии"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:72
+msgid "Revisions %1 - %2 (out of %3)"
+msgstr ""
+
+#: PatternSkin/templates/settings.pattern.tmpl:21
+msgid "S = Save, C = Cancel"
+msgstr "S = Запис, C = Отказ"
+
+#: PatternSkin/templates/preview.pattern.tmpl:21
+msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
+msgstr "S = Запис, Q = Quiet save, K = Запис и нататък, D = Отмяна"
+
+#: PatternSkin/templates/edit.pattern.tmpl:47
+msgid ""
+"S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
+msgstr "S = Запис, Q = Тих запис, K = Запис и нататък, P = Преглед, C = Отказ"
+
+#: core/data/Sandbox/WebPreferences.txt:9
+msgid "Sandbox test area to experiment in an unrestricted hands-on web."
+msgstr ""
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:160
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:971
+msgid "Save table"
+msgstr "Запис на таблица"
+
+#: core/templates/registerfailednotremoved.tmpl:18
+#: core/templates/registerfailedremoved.tmpl:19
+#: core/templates/registernotifyadmin.tmpl:16
+msgid "Saved to:"
+msgstr "Записано в:"
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:8
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:8
+#: PatternSkin/data/System/WebLeftBarExample.txt:9
+#: PatternSkin/data/System/WebLeftBarSearch.txt:4
+#: PatternSkin/data/System/WebTopBarExample.txt:9
+#: PatternSkin/data/Trash/WebLeftBarExample.txt:6
+#: PatternSkin/data/_default/WebLeftBar.txt:7
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:7
+#: core/data/System/SiteMap.txt:32 core/data/System/WebSearch.txt:47
+#: core/data/System/WebSearch.txt:63
+msgid "Search"
+msgstr "Търсене"
+
+#: core/templates/backlinksallwebs.tmpl:6
+msgid "Search %1 Web only"
+msgstr "Търсене само в раздел %1"
+
+#: core/templates/backlinksweb.tmpl:5
+msgid "Search all webs"
+msgstr "Търсене във всички раздели"
+
+#: core/templates/backlinksallwebs.tmpl:6 core/templates/backlinksweb.tmpl:5
+#: core/templates/more.tmpl:86
+msgid "Search all webs for topics that link to here"
+msgstr "Търсене във всички раздели за връзки, които сочат насам"
+
+#: core/data/System/WebSearch.txt:22
+#, fuzzy
+msgid "Search in %1 Web"
+msgstr "Търсене само в раздел %1"
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:23
+msgid "Search in all webs"
+msgstr "Търсене във всички раздели"
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:23
+msgid "Search more topics in this web"
+msgstr "Търсене на повече страници в този раздел"
+
+#: core/data/System/WebSearch.txt:39
+#, fuzzy
+msgid "Search options"
+msgstr "Други възможности за търсене"
+
+#: core/templates/searchbookview.tmpl:7
+#, fuzzy
+msgid "Search result"
+msgstr "(резултати от търсенето)"
+
+#: core/data/System/WebSearch.txt:122
+msgid "Search string"
+msgstr "Низ за търсене"
+
+#: core/templates/more.tmpl:88
+msgid "Search the %1 Web for topics that link to here"
+msgstr "Търсене в Раздел %1 за страници, които сочат насам"
+
+#: core/data/System/WebSearch.txt:74 core/data/System/WebSearch.txt:88
+msgid "Search where:"
+msgstr "Търсене къде"
+
+#: core/templates/searchformat.tmpl:8
+msgid "Searched:"
+msgstr "Търсено:"
+
+#: core/data/Trash/WebHome.txt:5
+msgid "Security Note:"
+msgstr "Бележка по Сигурността:"
+
+#: core/templates/messages.tmpl:47
+msgid "See %1 for a list of existing users or register as new user in %2."
+msgstr ""
+"Прегледайте списъка на съществуващите потребители в %1 или регистрирайте нов "
+"потребител в %2."
+
+#: core/templates/messages.tmpl:347
+msgid "See %1 for information about Form Definitions."
+msgstr "Прегледайте %1 за информация относно Дефиниране на Форми."
+
+#: core/templates/messages.tmpl:472 core/templates/messages.tmpl:482
+#: core/templates/messages.tmpl:489 core/templates/messages.tmpl:510
+#: core/templates/messages.tmpl:520
+msgid "See %MAINWEB%.WikiGroups to see the result."
+msgstr ""
+
+#: core/data/System/WebIndex.txt:5
+msgid "See also the faster %1"
+msgstr "Вижте също по-бързия %1"
+
+#: core/data/System/WebTopicList.txt:5
+msgid "See also the verbose %1."
+msgstr "Вижте също подробния %1."
+
+#: core/data/System/WebChanges.txt:7
+msgid "See also:"
+msgstr "Вижте също"
+
+#: core/templates/edit.tmpl:58
+msgid "See below for help in editing this page."
+msgstr "Вижте по-долу за помощ при редактирането на тази страница."
+
+#: core/templates/changeform.tmpl:12
+msgid "Select"
+msgstr "Изберете"
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:226
+msgid "Select Wiki %1 to join"
+msgstr ""
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:18
+msgid "Select a new local file to update attachment"
+msgstr "Изберете нов локален фай, за да обновите притурката"
+
+#: PatternSkin/templates/renamebase.pattern.tmpl:22
+msgid "Select all"
+msgstr "Избор на всичко"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:71
+msgid "Select an earlier (left) and a later (right) revision to compare"
+msgstr ""
+
+#: core/templates/more.tmpl:102
+#, fuzzy
+msgid "Select topic parent"
+msgstr "Избери родителска страница:"
+
+#: PatternSkin/templates/edit.pattern.tmpl:64 core/templates/edit.tmpl:47
+msgid "Select, copy and paste your signature text to the bottom of your entry"
+msgstr ""
+"Изберете копирайте и вмъкнете подписа си в дъното на въведеното от вас."
+
+#: core/data/System/WebSearch.txt:109
+msgid "Selections apply to search in \"text body\""
+msgstr ""
+
+#: core/templates/more.tmpl:160
+msgid "Sequential"
+msgstr "Последователно"
+
+#: core/lib/Foswiki/Form/Checkbox.pm:37
+msgid "Set all"
+msgstr "Отбелязване на всички"
+
+#: core/templates/more.tmpl:106
+msgid "Set new parent"
+msgstr "Задай нов родител"
+
+#: core/templates/more.tmpl:95
+msgid "Set new topic parent"
+msgstr "Задай нов родител на страницата"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:80
+#, fuzzy
+msgid "Show"
+msgstr "Покажи помощ"
+
+#: PatternSkin/templates/renamebase.pattern.tmpl:11
+#: core/data/System/WebPreferencesHelp.txt:5
+msgid "Show help"
+msgstr "Покажи помощ"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:81
+msgid "Shrink edit box"
+msgstr "Смали кутийката за редакция"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:56 core/templates/more.tmpl:160
+msgid "Side by side"
+msgstr ""
+
+#: CompareRevisionsAddOn/templates/comparesidebyside.tmpl:3
+msgid "Side-by-side comparison of revisions"
+msgstr ""
+
+#: core/templates/attachtables.tmpl:4
+msgid "Size"
+msgstr "Размер"
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:141
+#: core/templates/registernotify.tmpl:15
+msgid "Some add schedule information and vacation notice."
+msgstr ""
+
+#: core/templates/messages.tmpl:382
+msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
+msgstr ""
+
+#: core/templates/messages.tmpl:321
+msgid ""
+"Some mail tools have an error that causes them to send the same request "
+"twice when you click on a link. It you did this, it is possible that you "
+"actually *have* registered successfully."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:140
+#: core/templates/registernotify.tmpl:14
+msgid ""
+"Some people turn it into a personal portal with favorite links, what they "
+"work on, what help they'd like, etc."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:14
+msgid "Sorry, Registration has been temporarily disabled"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/BulkRegistration.txt:83
+#: TopicUserMappingContrib/data/System/BulkResetPassword.txt:18
+msgid "Sorry, the password system is currently read only, please contact %1"
+msgstr ""
+
+#: core/data/System/WebSearch.txt:98
+msgid "Sort results by:"
+msgstr "Сортирай резултатите по:"
+
+#: core/templates/messages.tmpl:380
+msgid "Spaces are replaced by underscores"
+msgstr "паузите се заместват с подчертавки"
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:12
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:12
+#: PatternSkin/data/System/WebLeftBarExample.txt:13
+#: PatternSkin/data/_default/WebLeftBar.txt:11
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:11
+msgid "Statistics"
+msgstr "Статистика"
+
+#: JQueryPlugin/data/System/JQuerySimpleModal.txt:108
+#: JQueryPlugin/data/System/JQueryTextboxList.txt:31
+#: JQueryPlugin/data/System/JQueryValidate.txt:49
+#: JQueryPlugin/data/System/VarBUTTON.txt:28
+#: core/data/System/FrequentlyAskedQuestions.txt:78
+#: core/templates/messages.tmpl:217 core/templates/messages.tmpl:326
+msgid "Submit"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:152
+#: core/templates/registerfailednotremoved.tmpl:14
+#: core/templates/registerfailedremoved.tmpl:15
+#: core/templates/registernotify.tmpl:18
+#: core/templates/registernotifyadmin.tmpl:12
+msgid "Submitted content:"
+msgstr ""
+
+#: MailerContrib/templates/mailnotify.tmpl:47
+#: MailerContrib/templates/mailnotify.tmpl:79
+#: MailerContrib/templates/newsletter.tmpl:20
+msgid "Subscribe / Unsubscribe in:"
+msgstr ""
+
+#: core/templates/messages.tmpl:478
+msgid "Success adding users to group"
+msgstr ""
+
+#: core/templates/messages.tmpl:516
+msgid "Success removing users from group"
+msgstr ""
+
+#: core/data/System/WebSearch.txt:123
+msgid "Summaries"
+msgstr ""
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:81
+msgid "Switch to monotype or propotional font"
+msgstr ""
+
+#: core/data/System/SearchHelp.txt:5
+msgid ""
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
+msgstr ""
+"СЪВЕТ: за да търсите за страници, съдържащи =\"SOAP\"=, =\"WSDL\"=, буквален "
+"текст =\"web service\"=, но не =\"shampoo\"=, напишете:"
+
+#: core/templates/messages.tmpl:605
+msgid "Template %1 does not exist"
+msgstr "Шаблон %1 не съществува"
+
+#: core/data/System/WebSearch.txt:76 core/data/System/WebSearch.txt:90
+msgid "Text body"
+msgstr "Тялото на текста"
+
+#: core/templates/messages.tmpl:170 core/templates/messages.tmpl:210
+msgid "Thank you for registering"
+msgstr ""
+
+#: core/templates/registernotify.tmpl:8
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Please save this "
+"e-mail for future reference."
+msgstr ""
+
+#: core/templates/registerconfirm.tmpl:9
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Your "
+"verification code is %2."
+msgstr ""
+
+#: core/templates/messages.tmpl:623
+msgid "That user has already been activated "
+msgstr ""
+
+#: core/templates/messages.tmpl:290
+msgid ""
+"The %1 field must be your first and last name in %2, e.g. your capitalized "
+"first and last name with spaces removed."
+msgstr ""
+
+#: core/templates/messages.tmpl:284
+msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
+msgstr ""
+
+#: core/templates/messages.tmpl:68
+msgid "The %1 topic already exists"
+msgstr "Страницата %1 вече съществува"
+
+#. ($parent)
+#: core/lib/Foswiki/UI/Manage.pm:177 core/templates/messages.tmpl:582
+msgid "The %1 web does not exist"
+msgstr "Разделът %1 не съществува"
+
+#: core/data/Sandbox/WebHome.txt:3
+msgid ""
+"The %1 web is the sandbox you can use for testing. Everybody is welcome to "
+"add or delete some stuff. It is recommended to walk through the %2 to get a "
+"jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
+"page and sign and date it with your %4."
+msgstr ""
+
+#: core/data/Main/WebAtom.txt:4 core/data/Main/WebRss.txt:6
+#: core/data/Sandbox/WebAtom.txt:4 core/data/Sandbox/WebRss.txt:5
+#: core/data/System/WebAtom.txt:4 core/data/System/WebAtomBase.txt:29
+#: core/data/System/WebRss.txt:6 core/data/Trash/WebAtom.txt:3
+#: core/data/Trash/WebRss.txt:5 core/data/_default/WebAtom.txt:3
+#: core/data/_default/WebRss.txt:5
+#, fuzzy
+msgid "The %1 web of %2."
+msgstr "Разделът %1 не съществува"
+
+#: TWikiCompatibilityPlugin/data/TWiki/WebAtom.txt:4
+#: TWikiCompatibilityPlugin/data/TWiki/WebRss.txt:6
+msgid "The %1 web of Foswiki, the Free and Open Source Wiki."
+msgstr ""
+
+#: core/templates/messages.tmpl:440
+msgid "The =%1= script can only be called with POST method."
+msgstr ""
+
+#: core/templates/messages.tmpl:163
+msgid "The Administrator has disabled new user registration."
+msgstr ""
+
+#: core/data/System/WebPreferences.txt:12
+msgid "The Free and Open Source Wiki."
+msgstr ""
+
+#: core/templates/messages.tmpl:316
+msgid "The activation code %1 is invalid."
+msgstr ""
+
+#: core/templates/moveattachment.tmpl:48
+msgid "The attachment and any history will be moved to the new topic."
+msgstr ""
+
+#: core/templates/moveattachment.tmpl:26
+msgid ""
+"The attachment may be renamed (by appending a number to the name) if an "
+"attachment of that name already exists in the target topic."
+msgstr ""
+
+#: core/templates/renameattachmentdelete.tmpl:43
+msgid ""
+"The attachment may have to be renamed if an attachment called '%FILENAME%' "
+"already exists in the target topic."
+msgstr ""
+
+#: core/templates/messages.tmpl:538
+msgid ""
+"The chances are good that %1 has simply navigated away from the edit page "
+"without saving."
+msgstr ""
+
+#: core/templates/renamebase.tmpl:73
+msgid ""
+"The checkmarked topics will be updated (another form will appear which will "
+"_eventually_ allow you to rename any topics that were locked)"
+msgstr ""
+
+#: core/templates/messages.tmpl:308
+msgid "The e-mail address for this account is not valid."
+msgstr "Адресът за електронна поща на тази сметка е невалиден."
+
+#: core/templates/messages.tmpl:556
+msgid "The entry for user %1 was missing in the password system."
+msgstr "Записът за потребител %1 липсваше в системата за пароли."
+
+#: core/templates/messages.tmpl:375
+msgid "The file has been uploaded and attached properly to the %1 topic."
+msgstr ""
+
+#: core/templates/messages.tmpl:411
+msgid "The following topics are locked for edit, and cannot be moved:"
+msgstr ""
+
+#: core/templates/messages.tmpl:417
+msgid "The following topics refer to topics in this web, but are being edited:"
+msgstr ""
+
+#: core/templates/messages.tmpl:414
+msgid ""
+"The following topics refer to topics in this web, but you are denied access "
+"to them:"
+msgstr ""
+
+#: core/templates/messages.tmpl:353
+msgid "The form should be defined in the topic %1"
+msgstr "Формата трябва да е дефинирана в страницата %1"
+
+#: core/templates/messages.tmpl:536
+msgid "The lease on this topic expired %1 ago."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:161
+msgid "The login name you use to sign in."
+msgstr ""
+
+#: core/templates/messages.tmpl:93
+msgid "The name of the topic must not be empty."
+msgstr ""
+
+#: core/templates/moveattachment.tmpl:24
+msgid "The new topic chosen must already exist."
+msgstr "Новоизбраната страница трябва вече да съществува."
+
+#: core/templates/messages.tmpl:16
+msgid "The new web has been created"
+msgstr "Новият раздел бе създаден"
+
+#: core/templates/messages.tmpl:106
+msgid "The password you entered in the *old password* field is incorrect."
+msgstr ""
+
+#: core/templates/messages.tmpl:335
+msgid "The required field %1 was not filled in."
+msgstr ""
+
+#: core/templates/messages.tmpl:154
+msgid "The selected User System does not support new user registration."
+msgstr ""
+
+#: core/templates/messages.tmpl:356
+msgid "The topic is in an old format"
+msgstr ""
+
+#: core/templates/messages.tmpl:237
+msgid "The two passwords you entered do not match."
+msgstr ""
+
+#: core/templates/messages.tmpl:625
+msgid "The user %1 has already been activated, and should be able to log in."
+msgstr ""
+
+#: core/templates/messages.tmpl:407
+msgid "There are problems with renaming this web:"
+msgstr ""
+
+#: core/templates/messages.tmpl:244
+msgid "There has been a problem adding your user id to the Password system."
+msgstr ""
+
+#: core/templates/validate.tmpl:29
+msgid ""
+"There is a risk that someone may be trying to use your identity to change "
+"content on %1 without your knowledge."
+msgstr ""
+
+#: core/templates/messages.tmpl:359
+msgid "There should be a line that includes %1, look for %2 (or %3)"
+msgstr ""
+
+#: core/templates/messages.tmpl:468
+msgid "There were errors adding %1 to the %2 group. "
+msgstr ""
+
+#: core/templates/messages.tmpl:506
+msgid "There were errors removing %1 from the %2 group. "
+msgstr ""
+
+#: core/templates/messages.tmpl:366
+msgid "This can be automatically upgraded by:"
+msgstr ""
+
+#: core/templates/messages.tmpl:349
+msgid "This could be for several reasons:"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:14
+msgid ""
+"This form is used to change your registered e-mail addresses. Your "
+"registered e-mails are used by Foswiki for sending you e-mails, include "
+"notifications of password changes. The addresses you register via this form "
+"are kept secret and will *not* be published anywhere on this site."
+msgstr ""
+
+#: TWikiCompatibilityPlugin/data/TWiki/WebNotify.txt:3
+#: core/data/Main/WebNotify.txt:3 core/data/Sandbox/WebNotify.txt:2
+#: core/data/System/WebNotify.txt:3 core/data/Trash/WebNotify.txt:2
+#: core/data/_default/WebNotify.txt:2
+msgid ""
+"This is a subscription service to be automatically notified by e-mail when "
+"topics change in this %1 web. This is a convenient service, so you do not "
+"have to come back and check all the time if something has changed. To "
+"subscribe, please add a bullet with your %2 in alphabetical order to this "
+"list:"
+msgstr ""
+
+#: MailerContrib/templates/mailnotify.tmpl:7
+#: MailerContrib/templates/mailnotify.tmpl:71
+msgid "This is an automated e-mail from %1."
+msgstr ""
+
+#: core/templates/registerfailednotremoved.tmpl:8
+#: core/templates/registerfailedremoved.tmpl:8
+#: core/templates/registernotifyadmin.tmpl:8
+msgid "This is an automated e-mail notification of user registration in %1."
+msgstr ""
+
+#: core/data/Trash/WebHome.txt:2
+msgid ""
+"This is the Trash. Here you can undelete topics; deleted attachments are in "
+"TrashAttachment."
+msgstr ""
+
+#: WysiwygPlugin/lib/Foswiki/Plugins/WysiwygPlugin/TML2HTML.pm:115
+msgid "This is why the conversion is disabled:"
+msgstr ""
+
+#: core/templates/login.tmpl:28
+msgid ""
+"This is your name written as !WikiWord, for example: !JohnSmith. %BR% [[%1]"
+"[Register]] if you do not have an account yet."
+msgstr ""
+
+#: core/templates/renamedelete.tmpl:28
+msgid ""
+"This name has been chosen so it doesn't conflict with any other topics "
+"already in the %1 web."
+msgstr ""
+
+#: core/templates/messages.tmpl:364
+msgid "This requires the form definition to be present."
+msgstr ""
+
+#: core/data/System/DefaultPreferences.txt:40
+msgid "This site is powered by Foswiki"
+msgstr ""
+
+#: core/templates/messages.tmpl:302
+msgid "This site requires at least %1 character passwords"
+msgstr ""
+
+#: core/templates/viewprint.tmpl:13
+msgid "This topic:"
+msgstr ""
+
+#: core/templates/messages.tmpl:29
+msgid ""
+"Those changes have been merged with yours to create Rev %1. Text fields will "
+"have been merged, but other data such as form fields may have overwritten "
+"the other users changes. Please inspect the topic to make sure it is OK, "
+"especially if you made any changes to form fields."
+msgstr ""
+
+#: core/data/System/FrequentlyAskedQuestions.txt:64
+#, fuzzy
+msgid "Title"
+msgstr "Заглавие на страницата"
+
+#: core/templates/renameconfirm.tmpl:16
+#, fuzzy
+msgid "To attachment:"
+msgstr "Прикачени файлове към страницата"
+
+#: core/data/System/WebSearch.txt:164
+msgid ""
+"To display the above search results in a topic, copy-paste the following "
+"markup:"
+msgstr ""
+
+#: core/templates/oopsleaseconflict.tmpl:20
+msgid "To edit the topic anyway, click "
+msgstr "За да редактирате страницата, щракнете "
+
+#: core/templates/oopsleaseconflict.tmpl:16
+msgid "To see if %1 has finished editing yet, click "
+msgstr ""
+
+#: core/templates/renamebase.tmpl:29
+#, fuzzy
+msgid "To topic"
+msgstr "Към страница:"
+
+#: core/templates/renameconfirm.tmpl:13
+msgid "To topic:"
+msgstr "Към страница:"
+
+#: core/templates/renamebase.tmpl:22
+#, fuzzy
+msgid "To web"
+msgstr "Към раздел:"
+
+#: core/templates/renameconfirm.tmpl:9
+msgid "To web:"
+msgstr "Към раздел:"
+
+#: PatternSkin/data/Main/WebLeftBarExample.txt:5
+#: PatternSkin/data/Sandbox/WebLeftBarExample.txt:5
+#: PatternSkin/data/System/WebLeftBarExample.txt:5
+#: PatternSkin/data/Trash/WebLeftBarExample.txt:4
+#: PatternSkin/data/_default/WebLeftBar.txt:4
+#: TWikiCompatibilityPlugin/data/TWiki/WebLeftBarExample.txt:4
+msgid "Toolbox"
+msgstr ""
+
+#: core/data/System/TopicDoesNotExistViewTemplate.txt:6
+msgid "Topic %1 does not exist"
+msgstr "Страница %1 не съществува"
+
+#: core/templates/messages.tmpl:332
+msgid "Topic Save Error"
+msgstr "Грешка при Запис на Страницата"
+
+#: PatternSkin/templates/attachtables.pattern.tmpl:14
+msgid "Topic attachments"
+msgstr "Прикачени файлове към страницата"
+
+#: core/templates/messages.tmpl:362
+msgid "Topic can not be upgraded from old style category table"
+msgstr ""
+
+#: HistoryPlugin/templates/oopshistory.tmpl:29
+#: HistoryPlugin/templates/oopshistory.tmpl:40
+#, fuzzy
+msgid "Topic history"
+msgstr "Заглавие на страницата"
+
+#: core/data/Sandbox/WebHome.txt:15 core/data/System/WebSearch.txt:100
+msgid "Topic name"
+msgstr "Име на страницата"
+
+#: PatternSkin/data/System/PatternSkinWebCreateNewTopicTemplate.txt:53
+#: core/data/System/WebCreateNewTopicTemplate.txt:34
+msgid "Topic name:"
+msgstr "Име на страницата:"
+
+#: PatternSkin/data/System/PatternSkinWebCreateNewTopicTemplate.txt:60
+#: core/data/System/WebCreateNewTopicTemplate.txt:38
+msgid "Topic parent:"
+msgstr ""
+
+#: PatternSkin/templates/rdiff.pattern.tmpl:16
+#: PatternSkin/templates/view.pattern.tmpl:45
+#: PatternSkin/templates/view.pattern.tmpl:70 core/templates/viewprint.tmpl:14
+msgid "Topic revision:"
+msgstr "Версия на страницата"
+
+#: core/templates/oopssaveerr.tmpl:11
+msgid "Topic save error"
+msgstr "Грешка при запис на страницата"
+
+#: core/data/System/WebTemplateTopics.txt:3
+msgid "Topic templates in %1 Web"
+msgstr ""
+
+#: core/data/System/WebSearch.txt:77 core/data/System/WebSearch.txt:91
+msgid "Topic title"
+msgstr "Заглавие на страницата"
+
+#: core/templates/messages.tmpl:26
+msgid "Topic was merged"
+msgstr ""
+
+#: MailerContrib/templates/mailnotify.tmpl:14
+msgid "Topics in %1 web:"
+msgstr ""
+
+#: core/data/System/WebSearch.txt:129
+msgid "Topics per web"
+msgstr ""
+
+#: core/templates/renamewebbase.tmpl:29
+msgid "Topics which are currently being edited by other users in the %1 Web:"
+msgstr ""
+
+#: core/templates/renamewebbase.tmpl:32
+msgid ""
+"Topics which refer to this web and are are currently being edited by other "
+"users:"
+msgstr ""
+
+#: core/templates/renamewebbase.tmpl:35
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
+msgstr ""
+
+#: core/data/System/WebSearch.txt:124
+msgid "Total matches"
+msgstr "Общо съвпадения"
+
+#: core/templates/oopsleaseconflict.tmpl:17
+msgid "Try Again"
+msgstr "Опитай отново"
+
+#: core/templates/login.sudo.tmpl:5
+msgid "Unrecognised user and/or password"
+msgstr ""
+
+#: core/templates/messages.tmpl:40
+msgid "Unrecognized action command %1"
+msgstr "Непозната команда %1"
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:3
+msgid "Update attachment %1 on %2"
+msgstr "Обновяване на прикрепен файл %1 на %2"
+
+#: core/templates/renamebase.tmpl:49 core/templates/renamewebbase.tmpl:27
+msgid "Update links"
+msgstr "Връзки за обновяване"
+
+#: core/data/Main/GroupViewTemplate.txt:124
+msgid "Upgrade group topic"
+msgstr ""
+
+#: core/data/Main/GroupViewTemplate.txt:128
+msgid ""
+"Upgrade will adjust the format of this group topic to the new format with "
+"user management options"
+msgstr ""
+
+#: core/templates/messages.tmpl:485
+msgid "Upgraded Group"
+msgstr ""
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:26
+#: PatternSkin/templates/attachnew.pattern.tmpl:5
+#: core/templates/attachagain.tmpl:21 core/templates/attachnew.tmpl:9
+msgid "Upload file"
+msgstr "Качване"
+
+#: PatternSkin/templates/attach.pattern.tmpl:38
+msgid "Upload up to %1 KB."
+msgstr "Качване на файлове до %1 KB."
+
+#: core/templates/messages.tmpl:394
+msgid "Uploaded file %1 exceeds limit of %2 KB"
+msgstr "Каченият файл %1 надвишава ограничението от %2 KB"
+
+#: core/templates/messages.tmpl:393
+msgid "Uploaded file is too big"
+msgstr "Каченият файл е твърде голям"
+
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:14
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:34
+msgid "Use %1 instead."
+msgstr "Използвай %1 вместо това."
+
+#: core/data/Sandbox/WebHome.txt:22
+#, fuzzy
+msgid "Use a topic name in %SYSTEMWEB%.WikiNotation"
+msgstr "(За име на страница използвайте System.WikiНотацията)"
+
+#: PatternSkin/data/System/PatternSkinWebCreateNewTopicTemplate.txt:67
+#: core/data/System/WebCreateNewTopicTemplate.txt:43
+msgid "Use template:"
+msgstr "Използване на шаблон"
+
+#: core/templates/messages.tmpl:10
+msgid "User Account %1 Deleted"
+msgstr "Потребителска сметка %1 - Изтрита"
+
+#: PatternSkin/data/System/WebLeftBarExample.txt:16
+msgid "User Reference"
+msgstr "Потребителски Настройки"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:33
+#: HistoryPlugin/templates/oopshistory.tmpl:44
+#: PatternSkin/data/System/PatternSkinElements.txt:220
+#: core/templates/login.tmpl:40
+msgid "Username"
+msgstr "Потребителско име"
+
+#: PatternSkin/data/System/WebLeftBarExample.txt:6
+msgid "Users"
+msgstr "Потребители"
+
+#: core/templates/messages.tmpl:179
+msgid ""
+"Users with automatically generated passwords should proceed immediately to "
+"[[%1][change password]] to change their password to something memorable."
+msgstr ""
+
+#: core/templates/attachtables.tmpl:43
+msgid "Version"
+msgstr "Версия"
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:9
+msgid "Version history"
+msgstr "История на версиите"
+
+#: PatternSkin/templates/attachagain.pattern.tmpl:7
+msgid "Version history of %1"
+msgstr "История на версиите на %1"
+
+#: CompareRevisionsAddOn/templates/compare.tmpl:65
+msgid "View difference"
+msgstr "Виж разлики"
+
+#: core/templates/more.tmpl:163
+#, fuzzy
+msgid "View differences"
+msgstr "Виж разлики"
+
+#: core/templates/more.tmpl:138
+msgid "View previous topic revision"
+msgstr "Виж предната версия на страницата"
+
+#: core/templates/oopsleaseconflict.tmpl:28
+msgid "View raw text without formatting"
+msgstr "Преглед в суров текстов формат"
+
+#: core/templates/more.tmpl:145
+#, fuzzy
+msgid "View revision"
+msgstr "Виж версия"
+
+#: core/templates/more.tmpl:142
+msgid "View revision:"
+msgstr "Виж версия"
+
+#: core/data/System/WebCreateNewTopicTemplate.txt:62
+msgid "View templates"
+msgstr "Виж шаблоните"
+
+#: PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
+#: PatternSkin/templates/rdiff.pattern.tmpl:26
+#: core/templates/oopsleaseconflict.tmpl:28
+msgid "View topic"
+msgstr "Покажи страницата"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:92 core/templates/foswiki.tmpl:162
+msgid "View total topic history"
+msgstr "Изглед на цялата история на страницата"
+
+#: core/lib/Foswiki/OopsException.pm:46
+msgid "Warning"
+msgstr "ВНИМАНИЕ:"
+
+#: core/templates/validate.tmpl:20
+msgid "Warning! Confirmation required"
+msgstr ""
+
+#: EditTablePlugin/data/System/EditTablePlugin.txt:165
+msgid "Warning: 'include' topic does not exist!"
+msgstr "Внимание: 'include' страница не съществува"
+
+#: core/templates/messages.tmpl:553
+msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
+msgstr ""
+"Внимание: %1 не може да се ВМЪКНЕ(INCLUDE) отново, страницата е вече "
+"вмъкната. %2"
+
+#: core/templates/messages.tmpl:554
+msgid ""
+"Warning: Can't INCLUDE '%1', path is empty or contains illegal characters."
+msgstr ""
+
+#: core/templates/messages.tmpl:552
+#, fuzzy
+msgid "Warning: Can't find named section %3 in topic %1.%2"
+msgstr "Внимание: Страница %1 не може да бъде намерена.%2"
+
+#: core/templates/messages.tmpl:551
+msgid "Warning: Can't find topic %1.%2"
+msgstr "Внимание: Страница %1 не може да бъде намерена.%2"
+
+#: core/lib/Foswiki/UI/Register.pm:922
+msgid "Warning: Could not send confirmation email"
+msgstr "Внимание: Потвърдителното съобщение(email) не може да бъде изпратено"
+
+#: core/lib/Foswiki/UI/Register.pm:934
+msgid "Warning: Could not send confirmation email, email has been disabled"
+msgstr ""
+"Внимание: Потвърдителното съобщение(email) не може да бъде изпратено. "
+"Изпращането на електронна поща е изключено."
+
+#: core/templates/messages.tmpl:561
+msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
+msgstr "Внимание: Този сайт не разрешава %<nop>INCLUDE% на уеб-адреси"
+
+#: EditTablePlugin/lib/Foswiki/Plugins/EditTablePlugin/Core.pm:992
+#, fuzzy
+msgid "Warning: \\'include\\' topic does not exist!"
+msgstr "Внимание: 'include' страница не съществува"
+
+#: PatternSkin/data/System/WebLeftBarWebsList.txt:3
+msgid "Webs"
+msgstr "Раздели"
+
+#: core/data/Main/WebPreferences.txt:12
+msgid "Welcome to %1 ... meet people on this site"
+msgstr ""
+
+#: core/data/Sandbox/WebHome.txt:2 core/data/_default/WebHome.txt:2
+msgid "Welcome to the %1 web"
+msgstr "Добре дошли в раздел %1"
+
+#: core/templates/messages.tmpl:253
+msgid "While attempting to email <noautolink>%1</noautolink>."
+msgstr ""
+
+#: core/templates/attachtables.tmpl:4 core/templates/attachtables.tmpl:43
+msgid "Who"
+msgstr "Кой"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:59
+msgid "Whole page"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:152
+#, fuzzy
+msgid "Wiki name"
+msgstr "Име на страницата"
+
+#: core/data/System/WebSearch.txt:113
+#, fuzzy
+msgid "Word search"
+msgstr "Промяна на търсенето"
+
+#: core/templates/messages.tmpl:19
+msgid "Would you like to go to:"
+msgstr "Бихте ли желали да отидете в:"
+
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:19
+#, fuzzy
+msgid ""
+"You *must* have at least one valid registered e-mail to be able to reset "
+"your password. If none of your registered e-mail addresses is valid, and you "
+"have forgotten your password, contact %1."
+msgstr ""
+"*трябва* да имате поне един валиден e-mail-адрес, за да можете да нулирате "
+"паролата си. Ако нито един от регистрираните e-mail-адреси не е валиден, "
+"свържете се с %1."
+
+#: core/templates/messages.tmpl:272
+msgid "You are already registered"
+msgstr "Вие вече сте регистриран"
+
+#: core/templates/messages.tmpl:173
+msgid "You are also listed in the %1 topic"
+msgstr "Вие също сте в списъка на страница %1"
+
+#: core/templates/messages.tmpl:408
+msgid "You are denied access to the following topics in the web:"
+msgstr "На вас ви е отказан достъп до следните страници в раздела:"
+
+#: core/templates/messages.tmpl:540
+msgid ""
+"You are encouraged to go ahead and edit - unless you intend to change data "
+"in a form attached to the topic. If %1 actually _does_ save while you are "
+"editing, your changes will be merged, and nothing will be lost. Form data "
+"cannot easily be merged though, so in this case you are recommended to check "
+"with %1 first."
+msgstr ""
+
+#: PatternSkin/templates/view.pattern.tmpl:37
+msgid "You are here:"
+msgstr "Вие сте тук:"
+
+#: core/templates/messages.tmpl:115
+msgid ""
+"You are recommended to choose short names, preferably less than 10 "
+"characters, starting with an upper-case alphabetic character and using only "
+"alphanumeric characters. If you want to create a template web (a web just "
+"used as a base to create new webs) choose a name that starts with an "
+"underscore and has only alphanumeric characters."
+msgstr ""
+
+#: core/templates/messages.tmpl:618
+msgid "You are trying to %1 an attachment that does not exist."
+msgstr ""
+
+#: core/templates/messages.tmpl:606
+msgid "You are trying to create a topic from a template that does not exist."
+msgstr ""
+
+#: core/templates/messages.tmpl:601
+msgid ""
+"You are trying to perform an action on a topic that does not exist (action '%"
+"1')."
+msgstr ""
+
+#: core/templates/messages.tmpl:612
+msgid "You are trying to rename a topic that does not exist."
+msgstr "Опитвате се да преименувате страница, която не съществува."
+
+#: core/templates/messages.tmpl:591
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
+msgstr ""
+
+#: core/templates/messages.tmpl:143
+msgid ""
+"You can also use the names of the standard HTML colors (black, silver, gray, "
+"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
+"teal, or aqua)"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:149
+#: core/templates/registernotify.tmpl:24
+msgid "You can change your password at via %1"
+msgstr ""
+
+#: core/templates/renameweb.tmpl:20
+msgid "You can give this web a different name."
+msgstr ""
+
+#: core/templates/validate.tmpl:32
+msgid ""
+"You cannot manually confirm this change because either Cookies or Javascript "
+"are disabled in your browser."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:12
+msgid "You cannot register on this site."
+msgstr ""
+
+#: core/templates/messages.tmpl:273
+msgid "You cannot register twice, the name %1 is already registered."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:53
+msgid ""
+"You change your email address by setting the form field called Email in your "
+"user topic. If this form field does not exist it will look for a line like "
+"this:"
+msgstr ""
+
+#: core/templates/messages.tmpl:158 core/templates/messages.tmpl:167
+#: core/templates/messages.tmpl:248
+msgid "You have *not* been registered."
+msgstr "Вие *не* бяхте регистриран."
+
+#: core/templates/messages.tmpl:384
+msgid ""
+"You may be able to get your Wiki administrator to change the settings if "
+"they are inappropriate for your environment."
+msgstr ""
+
+#: core/templates/messages.tmpl:627
+msgid ""
+"You may have clicked a registration verification link that you had already "
+"visited."
+msgstr ""
+
+#: core/templates/messages.tmpl:188
+msgid "You may need to close your browser to make this change take effect."
+msgstr ""
+
+#: core/templates/messages.tmpl:92
+msgid "You must pass a topic name."
+msgstr ""
+
+#: core/templates/messages.tmpl:461
+msgid "You need to specify a valid Group name to add users to a Group."
+msgstr ""
+
+#: core/templates/messages.tmpl:499
+msgid "You need to specify a valid Group name to remove users from a Group."
+msgstr ""
+
+#: core/templates/messages.tmpl:456
+msgid "You need to specify a valid user to add to a Group."
+msgstr ""
+
+#: core/templates/messages.tmpl:494
+msgid "You need to specify a valid user to remove from a group."
+msgstr ""
+
+#: core/templates/registerconfirm.tmpl:11
+msgid ""
+"You now need to verify your e-mail address. You can do so by entering %1 in "
+"the form presented to you when this e-mail was sent, or by visiting %2"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:16
+msgid ""
+"You really ought to register a valid e-mail address. If Foswiki can't find a "
+"registered e-mail for you in the secret database, it will look in your user "
+"topic for a form field called Email. If this form field does not exist it "
+"will look for a line like this:"
+msgstr ""
+
+#: core/templates/messages.tmpl:371
+msgid "You will probably have to ask your administrator, %1, to do this."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:35
+#: TopicUserMappingContrib/data/System/ChangePassword.txt:24
+#: TopicUserMappingContrib/data/System/ResetPassword.txt:23
+msgid "Your %1.LoginName"
+msgstr ""
+
+#: core/templates/messages.tmpl:212
+msgid ""
+"Your activation code has been sent to %1.  Either click on the link in your "
+"e-mail or enter the code in the box below to activate your membership. (This "
+"code is of the form \"YourName.xxxxxxxxxx\")"
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:168
+msgid "Your email address will be kept confidential."
+msgstr ""
+
+#: core/templates/oopslanguagechanged.tmpl:16
+msgid ""
+"Your language will be changed to %1 from the next screen. You will be "
+"redirected to there right now. If you aren't, [[%2][click to proceed]]."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:153
+msgid ""
+"Your name as displayed online. Note, this must be a unique [[%SYSTEMWEB%."
+"WikiName][Wiki name]]. By default it is derived from your first and last "
+"name."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/DefaultUserRegistration.txt:175
+#, fuzzy
+msgid "Your password"
+msgstr "Вашата парола:"
+
+#: core/templates/mailresetpassword.tmpl:13
+msgid "Your password has been changed to %1."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ManagingUsers.txt:138
+#: core/templates/registernotify.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgstr ""
+
+#: core/templates/messages.tmpl:171
+msgid "Your personal Foswiki topic %1 has been created"
+msgstr "Вашата лична страница %1 бе създадена"
+
+#: core/templates/messages.tmpl:205
+msgid ""
+"Your registered e-mail address(es) are updated to: <noautolink>%1</"
+"noautolink>."
+msgstr ""
+
+#: TopicUserMappingContrib/data/System/ChangeEmailAddress.txt:51
+msgid ""
+"Your registered e-mails are used by Foswiki for sending you e-mails, include "
+"notifications of password changes."
+msgstr ""
+
+#: core/templates/messages.tmpl:255
+msgid ""
+"Your registration verification email has either failed, or is queued in the "
+"mail system."
+msgstr ""
+
+#: PatternSkin/templates/edit.pattern.tmpl:64
+msgid "Your signature to copy/paste"
+msgstr "Вашият подпис за copy/paste:"
+
+#: core/templates/edit.tmpl:47
+msgid "Your signature to copy/paste:"
+msgstr "Вашият подпис за copy/paste:"
+
+#: core/templates/messages.tmpl:196
+msgid ""
+"Your system may not support changing passwords through Foswiki. Check with "
+"your Wiki administrator."
+msgstr ""
+
+#: core/templates/messages.tmpl:11
+msgid "Your user name has been removed from the Authentication System."
+msgstr ""
+
+#: core/templates/messages.tmpl:13
+msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
+msgstr ""
+
+#: core/templates/messages.tmpl:358
+msgid "[[%1][Debug topic text]]."
+msgstr "[[%1][Дебъгване текста на страницатаt]]."
+
+#: core/templates/settings.tmpl:27
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgstr ""
+
+#: core/lib/Foswiki/I18N.pm:318
+msgid "_language_name"
+msgstr "Български"
+
+#: core/lib/Foswiki/Meta.pm:1694
+msgid "access denied on root"
+msgstr "достъпът до кореновата страница е отказан"
+
+#: core/lib/Foswiki/Meta.pm:1632
+msgid "access denied on topic"
+msgstr "достъпът до страницата е отказан"
+
+#: core/lib/Foswiki/Meta.pm:1667
+msgid "access denied on web"
+msgstr "достъпът до раздела е отказан"
+
+#: core/lib/Foswiki/Meta.pm:1704
+msgid "access not allowed on root"
+msgstr "достъпът до кореновата страница е забранен"
+
+#: core/lib/Foswiki/Meta.pm:1651
+msgid "access not allowed on topic"
+msgstr "достъпът до страницата е забранен"
+
+#: core/lib/Foswiki/Meta.pm:1679
+msgid "access not allowed on web"
+msgstr "достъпът до раздела е забранен"
+
+#: PatternSkin/templates/foswiki.pattern.tmpl:16
+msgid "accesskey='c'"
+msgstr "accesskey='c'"
+
+#: core/data/System/WikiSyntaxSummary.txt:18
+msgid "and"
+msgstr "и"
+
+#: PatternSkin/templates/search.pattern.tmpl:6 core/templates/search.tmpl:9
+msgid "by %1 "
+msgstr ""
+
+#: core/templates/attachtables.tmpl:12
+msgid "change, update, previous revisions, move, delete..."
+msgstr "промяна, обновяване, предишни версии, преместване, изтриване"
+
+#: PatternSkin/templates/renamebase.pattern.tmpl:22
+msgid "checkboxes of referenced topics"
+msgstr "Отметки на реферирани страници"
+
+#: core/templates/messages.tmpl:435
+msgid "don't forget to check your Topic Settings"
+msgstr "не забравяйте да проверите Настройките на Страницата си"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:36
+#: HistoryPlugin/templates/oopshistory.tmpl:46
+msgid "earlier"
+msgstr ""
+
+#: PatternSkin/templates/formtables.pattern.tmpl:28
+#: core/templates/formtables.tmpl:21
+msgid "edit"
+msgstr "редакция"
+
+#: core/templates/messages.tmpl:231
+msgid "fields are required."
+msgstr "полета са задължителни."
+
+#: HistoryPlugin/templates/oopshistory.tmpl:36
+#: HistoryPlugin/templates/oopshistory.tmpl:46
+msgid "first"
+msgstr ""
+
+#: core/templates/attach.tmpl:3
+msgid "has more information about attaching files."
+msgstr "има повече информация за прикачване на файлове."
+
+#: PatternSkin/templates/edit.pattern.tmpl:21
+#: PatternSkin/templates/edit.pattern.tmpl:24
+msgid "help"
+msgstr "помощ"
+
+#: core/data/System/WikiSyntaxSummary.txt:18
+msgid "hints on good style"
+msgstr "съвети за добър стил"
+
+#: core/templates/more.tmpl:142
+msgid "in raw text format"
+msgstr "в суров текстов формат"
+
+#: core/templates/form.tmpl:3
+msgid "indicates mandatory fields"
+msgstr "Указва задължителни полета"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:36
+#: HistoryPlugin/templates/oopshistory.tmpl:46
+msgid "last"
+msgstr ""
+
+#: HistoryPlugin/templates/oopshistory.tmpl:36
+#: HistoryPlugin/templates/oopshistory.tmpl:46
+#, fuzzy
+msgid "later"
+msgstr "Дата"
+
+#: core/templates/attachtables.tmpl:12
+msgid "manage"
+msgstr "управление"
+
+#: core/data/Trash/WebHome.txt:11
+msgid "more..."
+msgstr "още..."
+
+#: core/data/Main/GroupViewTemplate.txt:31
+msgid "no members"
+msgstr ""
+
+#: MailerContrib/templates/mailnotify.tmpl:16
+msgid "now %1"
+msgstr "сега %1"
+
+#: PatternSkin/data/System/PatternSkinHorizontalNavigationExample.txt:69
+#: PatternSkin/data/System/PatternSkinThemeFatWillyNavigation.txt:78
+#: PatternSkin/data/System/WebLeftBarLogin.txt:4
+#: PatternSkin/templates/attachagain.pattern.tmpl:22
+#: PatternSkin/templates/attachagain.pattern.tmpl:26
+#: PatternSkin/templates/attachnew.pattern.tmpl:5
+#: PatternSkin/templates/edit.pattern.tmpl:30
+#: PatternSkin/templates/preview.pattern.tmpl:17
+#: PatternSkin/templates/settings.pattern.tmpl:18
+#: core/templates/changeform.tmpl:12 core/templates/foswiki.tmpl:166
+#: core/templates/moveattachment.tmpl:55 core/templates/preview.tmpl:18
+#: core/templates/rename.tmpl:21 core/templates/renameattachmentdelete.tmpl:25
+#: core/templates/renameconfirm.tmpl:33 core/templates/renamedelete.tmpl:37
+#: core/templates/renameweb.tmpl:32 core/templates/renamewebconfirm.tmpl:15
+msgid "or"
+msgstr "или"
+
+#: core/templates/preview.tmpl:13 core/templates/preview.tmpl:9
+msgid "preview"
+msgstr "преглед"
+
+#: core/data/System/WebChanges.txt:3 core/templates/searchformat.tmpl:15
+msgid "retrieved at %1"
+msgstr "извелечена версия %1"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:86
+#, fuzzy
+msgid "revisions up to"
+msgstr "Версии"
+
+#: core/templates/viewtopicactionbuttons.tmpl:14
+msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
+msgstr ""
+"title='Прикачване на картинка или документ към страницата' "
+"accesskey='a'>Притурка"
+
+#: core/templates/viewtopicactionbuttons.tmpl:4
+msgid "title='Create new topic' accesskey='c'>&Create"
+msgstr "title='Създаване на нова страница' accesskey='c'>Създаване"
+
+#: core/templates/viewtopicactionbuttons.tmpl:17
+msgid ""
+"title='Delete or rename this topic; set parent topic; view and compare "
+"revisions' accesskey='m'>&More topic actions"
+msgstr ""
+"title='Изтриване или преименуване на страницата; задаване на родителска "
+"страница; преглед и сравнение' revisions' accesskey='m'>Още действия"
+
+#: core/templates/viewtopicactionbuttons.tmpl:9
+#, fuzzy
+msgid "title='Edit Wiki text' accesskey='w'>Edit &wiki text"
+msgstr "title='Редактиране текста на тази страница' accesskey='e'>Редкация"
+
+#: core/templates/viewtopicactionbuttons.tmpl:7
+msgid "title='Edit this topic text' accesskey='e'>&Edit"
+msgstr "title='Редактиране текста на тази страница' accesskey='e'>Редкация"
+
+#: CompareRevisionsAddOn/templates/compare.tmpl:71
+#, fuzzy
+msgid "title='Interwoven' accesskey='i'>&interwoven"
+msgstr "title='Виж страницата' accesskey='v'>Виж страницата"
+
+#: core/templates/viewtopicactionbuttons.tmpl:21
+msgid "title='Printable version of this topic' accesskey='p'>&Print version"
+msgstr "title='Версия за печат на тази страница' accesskey='p'>Версия за печат"
+
+#: core/templates/viewtopicactionbuttons.tmpl:28
+msgid ""
+"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
+msgstr ""
+"title='Търсете във всички раздели за страници, които сочат насам' "
+"accesskey='l'>Всички Раздели"
+
+#: core/templates/viewtopicactionbuttons.tmpl:30
+msgid ""
+"title='Search the %1 Web for topics that link to here' "
+"accesskey='b'>&Backlinks"
+msgstr ""
+"title='Търсете в раздел %1 страници, които сочат насам' "
+"accesskey='b'>Обратни връзки"
+
+#: core/templates/viewtopicactionbuttons.tmpl:26
+msgid ""
+"title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
+msgstr ""
+"title='Търсете в раздел %1 страници, които сочат насам' accesskey='b'>Раздел"
+
+#: CompareRevisionsAddOn/templates/compare.tmpl:68
+#, fuzzy
+msgid "title='Side by side' accesskey='s'>&side by side"
+msgstr "title='Виж страницата' accesskey='v'>Виж страницата"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:92
+#: core/templates/viewtopicactionbuttons.tmpl:11
+msgid "title='View topic' accesskey='v'>&View topic"
+msgstr "title='Виж страницата' accesskey='v'>Виж страницата"
+
+#: core/templates/viewtopicactionbuttons.tmpl:33
+#: core/templates/viewtopicactionbuttons.tmpl:35
+msgid "title='View total topic history' accesskey='h'>&History"
+msgstr "title='Цялата история на страницата' accesskey='h'>История"
+
+#: core/templates/viewtopicactionbuttons.tmpl:38
+#, fuzzy
+msgid "title='View without formatting' accesskey='r'>&View wiki text"
+msgstr "title='Суров текст без форматиране' accesskey='r'>Суров изглед"
+
+#: HistoryPlugin/templates/oopshistory.tmpl:63
+msgid "unchanged sections before and after each change"
+msgstr ""
+
+#: core/lib/Foswiki/Macros/GROUPS.pm:29
+msgid "user list truncated"
+msgstr "списъкът с потребителите е повреден"
+
+#: PatternSkin/templates/edit.pattern.tmpl:41
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Отказ' accesskey='c'"
+
+#: PatternSkin/templates/preview.pattern.tmpl:19
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Отмяна' accesskey='d'"
+
+#: PatternSkin/templates/edit.pattern.tmpl:39
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Преглед' accesskey='p'"
+
+#: PatternSkin/templates/edit.pattern.tmpl:35
+msgid "value='Quiet save' accesskey='q'"
+msgstr "value='Тих запис' accesskey='q'"
+
+#: PatternSkin/templates/edit.pattern.tmpl:37
+msgid "value='Save and Continue' accesskey='k'"
+msgstr "value='Запис и продължаване' accesskey='k'"
+
+#: PatternSkin/templates/edit.pattern.tmpl:33
+msgid "value='Save' accesskey='s'"
+msgstr "value='Запис' accesskey='s'"
+
+#: core/templates/attachtables.tmpl:48
+msgid "view"
+msgstr "виж"
+
+#: core/templates/validate.tmpl:43
+msgid "why you are being asked to confirm"
+msgstr ""
+
+#~ msgid "%1 - complete Foswiki documentation, Quick Start to Reference"
+#~ msgstr "%1 - Пълната документация на Foswiki"
+
+#~ msgid "%1 - just for me"
+#~ msgstr "%1 - само за мен"
+
+#~ msgid "%1 - starting points on Foswiki"
+#~ msgstr "%1 - първи стъпки с Foswiki"
+
+#~ msgid "%1 - try out Foswiki on your own"
+#~ msgstr "%1 - за да пробвате Foswiki"
+
+#~ msgid "%1 - view a short introductory presentation on Foswiki for beginners"
+#~ msgstr "%1 - вижте кратка уводна Foswiki-презентация, за начинаещи"
+
+#~ msgid "%1 for changing your email address"
+#~ msgstr "%1 за да промените вашия e-mail"
+
+#~ msgid "%1 for changing your password"
+#~ msgstr "%1 за да промените вашата парола"
+
+#~ msgid "%1 is a list of Foswiki user documentation"
+#~ msgstr "%1 съдържа документация за потребители на Foswiki."
+
+#~ msgid "%1 lists all Foswiki user tools"
+#~ msgstr "%1 предоставя списък с инструменти за потребители на Foswiki"
+
+#~ msgid "(how you log in) LoginName:"
+#~ msgstr "(име за вход) ИмеЗаВход :"
+
+#~ msgid "(identifies you to others) WikiName:"
+#~ msgstr "(име, видимо в сайта) WikiName :"
+
+#~ msgid "(optional)"
+#~ msgstr "(незадължително)"
+
+#~ msgid "(recommended)"
+#~ msgstr "(препоръчително)"
+
+#~ msgid "(search results)"
+#~ msgstr "(резултати от търсенето)"
+
+#~ msgid "Add your name to the list of users in the %1 topic in the %2 web."
+#~ msgstr ""
+#~ "Добавете вашето име към списъка от потребители на страница %1, в раздел %"
+#~ "2."
+
+#~ msgid "Advanced Search"
+#~ msgstr "Разширено Търсене"
+
+#~ msgid "Changed"
+#~ msgstr "Променен"
+
+#~ msgid "Comments:"
+#~ msgstr "Коментари:"
+
+#~ msgid "Create <nop>TestTopic###"
+#~ msgstr "Създай <nop>TestTopic###"
+
+#~ msgid "Create a new auto-numbered test topic:"
+#~ msgstr "Създаване на нова автоматично номерирана страница:"
+
+#~ msgid "Create a new document by name:"
+#~ msgstr "Създаване на документ по име"
+
+#~ msgid "Create by Name"
+#~ msgstr "Създаване по име"
+
+#~ msgid ""
+#~ "Create your personal %1 topic using your WikiName as topic name, and add "
+#~ "the data you submitted to the topic."
+#~ msgstr ""
+#~ "Създаде ваша лична %1 страница, чието име ще бъде вашето <nop>WikiИме и "
+#~ "ще добави данните, които изпращате сега на нея."
+
+#~ msgid ""
+#~ "Finish creating an account for you, so that you can start editing pages "
+#~ "using your WikiName."
+#~ msgstr ""
+#~ "Завърши процедурата по създаването на сметката и вие ще можете да "
+#~ "модифицирате страници, като ползвате вашето <nop>[[WikiName][WikiИме]]."
+
+#~ msgid ""
+#~ "If you already know the name of the topic, enter the name of the topic "
+#~ "into the [[%1][Jump box]] at the top"
+#~ msgstr ""
+#~ "Ако вече знаете името на страницата, въведете го в [[%1][полето \"Скок!"
+#~ "\"]] горе"
+
+#~ msgid "List all topics in the %1 web in alphabetical order"
+#~ msgstr "Списък на всички страници в раздел %1 в азбучен ред"
+
+#~ msgid "Local customisations of site-wide preferences"
+#~ msgstr "Локални настройки засягащи целия сайт"
+
+#~ msgid "Move attachment to web:"
+#~ msgstr "Преместване на притурка в раздел:"
+
+#~ msgid "My Links"
+#~ msgstr "Моите Връзки"
+
+#~ msgid "Once registered you can login using your %1 and password."
+#~ msgstr ""
+#~ "След като сте регистриран можете да влезете, използвайки вашето %1 и "
+#~ "парола."
+
+#~ msgid "Organisation URL:"
+#~ msgstr "URL на организацията:"
+
+#~ msgid "Other Country"
+#~ msgstr "Друга страна"
+
+#~ msgid "Personal Preferences"
+#~ msgstr "Лични настройки"
+
+#~ msgid "Raw edit"
+#~ msgstr "Редактиране на изходния код"
+
+#~ msgid ""
+#~ "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
+#~ msgstr ""
+#~ "Регистрираните потребители могат да [[%1][променят]] и [[%2][нулират]] "
+#~ "паролите си."
+
+#~ msgid "Related Topics"
+#~ msgstr "Подобни"
+
+#~ msgid "Rename/move topic..."
+#~ msgstr "Преименувай/премести страница..."
+
+#~ msgid "Rename/move/delete web..."
+#~ msgstr "Преименувай/премести/изтрий раздел..."
+
+#~ msgid "Retype password:"
+#~ msgstr "Въведете паролата отново:"
+
+#~ msgid "Send you a confirmation of your registration by e-mail."
+#~ msgstr "Изпращане на потвърждение за регистрацията по e-mail."
+
+#~ msgid "Simple search"
+#~ msgstr "Просто търсене"
+
+#~ msgid "Test Topics"
+#~ msgstr "Тестови страници"
+
+#~ msgid ""
+#~ "To edit pages on this Foswiki site, you must have a registered user name "
+#~ "and password."
+#~ msgstr ""
+#~ "За да модифицирате страници на този FoswikiSite, е необходимо да се "
+#~ "регистрирате."
+
+#~ msgid "To register as a new user, simply fill out this form:"
+#~ msgstr "За да се регистрирате, е достатъчно да попълните този формуляр."
+
+#~ msgid "Topic will be named: "
+#~ msgstr "Страницат ще бъде именувана: "
+
+#~ msgid "Topics in %1 web"
+#~ msgstr "Теми в раздел %1"
+
+#~ msgid "View"
+#~ msgstr "Виж"
+
+#~ msgid "Web Search"
+#~ msgstr "Уеб-Търсене"
+
+#~ msgid ""
+#~ "When %1 receives the form, it will mail an account activation code to the "
+#~ "e-mail address you gave above. Enter that activation code in the "
+#~ "following screen, or follow the link in the e-mail, to activate your "
+#~ "account. Once your account is activated, %1 will:"
+#~ msgstr ""
+#~ "Когато получи съдържанието на тази форма, %1 ще ви изпрати код за "
+#~ "активиране на e-mail адреса, който сте предоставили. За да активирате "
+#~ "вашата сметка, въведете кода на следващата страница или щракнете на "
+#~ "връзката в писмото, което сте получили. След като създаването на вашата "
+#~ "сметка приключи, %1 ще:"
+
+#~ msgid "advanced search"
+#~ msgstr "разширено търсене"
+
+#~ msgid "looking for references in _all public webs_"
+#~ msgstr "Търсене на връзки във всички _публични раздели_"
+
+#~ msgid "scans links in _%1 web_ only"
+#~ msgstr "(сканира връзки в раздел %1)"
+
+#~ msgid "scans links in _all public webs_"
+#~ msgstr "(сканира връзките във всички раздели)"
+
+#~ msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
+#~ msgstr ""
+#~ "title='Редактиране суровия текст на тази страница' "
+#~ "accesskey='w'>Редакция  суров текст"
+
+#~ msgid "Edit table"
+#~ msgstr "Редактиране на таблица"
+
+#~ msgid "%1 Web Home"
+#~ msgstr "Раздел %1 - Начало"
+
+#~ msgid "(oops)"
+#~ msgstr "(опаа)"
+
+#~ msgid "(semicolon =;= for and)"
+#~ msgstr "(точка и запетая =;= означава И)"
+
+#~ msgid "Create '%1'"
+#~ msgstr "Създаване на '%1'"
+
+#~ msgid "Create personal sidebar"
+#~ msgstr "Създаване на личен страничен панел"
+
+#~ msgid "Did you spell the %1 correctly?"
+#~ msgstr "Написали ли сте правилно %1 ?"
+
+#~ msgid "Do show:"
+#~ msgstr "Покажи:"
+
+#~ msgid "Do you wish to create the topic %1?"
+#~ msgstr "Желаете ли да създадете страницата %1?"
+
+#~ msgid ""
+#~ "Enter your System.LoginName. (Typically First name and last name, no "
+#~ "space, no dots, capitalized, e.g. !JohnSmith, unless you chose "
+#~ "otherwise). Visit %SYSTEMWEB%.UserRegistration if you do not have one."
+#~ msgstr ""
+#~ "Въведете вашето System.LoginName. (Обикновено Първото име и фмилията "
+#~ "слети, без паузи и точки с първите букви главни, например !JohnSmith, "
+#~ "Освен ако не сте избрали друго). Посетете %SYSTEMWEB%.UserRegistration "
+#~ "ако нямате такова."
+
+#~ msgid "List more similar topic in this web"
+#~ msgstr "Списък на подобни страници в този раздел"
+
+#~ msgid "Note: This topic does not exist"
+#~ msgstr "Забележка: тази страница не съществува"
+
+#~ msgid "Opens page in new window"
+#~ msgstr "Отваряне на страницата в нов прозорец"
+
+#~ msgid "Remember me"
+#~ msgstr "Запомни ме"
+
+#~ msgid "Remember, a %1 is case sensitive."
+#~ msgstr "Запомнете, %1 е яувствително към регистъра на буквите."
+
+#~ msgid "about !BookView"
+#~ msgstr "за !BookView"
+
+#~ msgid "about regular expression search"
+#~ msgstr "за търсенето с регулярни изрази"
+
+#~ msgid "looking for references in _%1 web_ only"
+#~ msgstr "Търсене на връзки само в _раздел %1_"
+
+#~ msgid "All topics in %1"
+#~ msgstr "Всички страници от %1"
+
+#~ msgid "or %1"
+#~ msgstr "или %1"
+
+#~ msgid "&WYSIWYG"
+#~ msgstr "&WYSIWYG"
+
+#~ msgid ""
+#~ "Please see <a target='Macros' onclick=\"return launchWindow('%"
+#~ "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
+#~ "information about attaching files."
+#~ msgstr ""
+#~ "Моля вижте <a target='Macros' onclick=\"return launchWindow('%"
+#~ "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> за "
+#~ "повече информация относно прикрепване на файлове."
+
+#~ msgid "WYSIWYG"
+#~ msgstr "WYSIWYG"
+
+#~ msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
+#~ msgstr ""
+#~ "title='Създаване на тази страница' accesskey='w'>Създаване (&WYSIWYG)"
+
+#~ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
+#~ msgstr "title='Редактиране текста на тази страница' accesskey='w'>&WYSIWYG"
+
+#~ msgid "value='Checkpoint' accesskey='k'"
+#~ msgstr "value='Прилагане' accesskey='k'"

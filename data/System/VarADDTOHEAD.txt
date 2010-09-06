@@ -1,0 +1,7 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="Macros"}%
+#VarADDTOHEAD
+---+++ ADDTOHEAD
+
+This macro is deprecated. Please use VarADDTOZONE instead.
+It effecively is a shortcut for =%<nop>ADDTOZONE{"head" ...}%=

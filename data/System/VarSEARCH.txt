@@ -1,0 +1,57 @@
+%META:TOPICINFO{author="ProjectContributor" date="1231502400" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="Macros"}%
+#VarSEARCH
+
+---+++ SEARCH{"text"} -- search content
+   * Inline search, shows a search result embedded in a topic
+   * Syntax: =%<nop>SEARCH{"text" ...}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="text"= | Search term. Is a keyword search, literal search, regular expression search, or query, depending on the =type= parameter. SearchHelp has more | required |
+     | =search="text"= | (Alternative to above) | N/A |
+     | =web="Name"= <br /> =web="%USERSWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. You can specifically *exclude* webs from an =all= search using a minus sign - for example, =web="all,-Secretweb"=. The special word =all= means all webs that do *not* have the =NOSEARCHALL= preference set to =on= in their %WEBPREFSTOPIC%. Note that [[AccessControl][AccessControls]] are respected when searching webs; it is *much* better to use them than =NOSEARCHALL=. Wildcards are not currently supported for web names. | Current web |
+     | =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. *Note* this is a list of *topic names* and must *not* include web names. | All topics in a web |
+     | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. *Note* this is a list of *topic names* and must *not* include web names. | None |
+     | =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (title and body) | ="text"= |
+     | =type="keyword"= <br /> =type="word"= <br /> =type="literal"= <br /> =type="regex"= <br /> =type="query"= | Control how the search is performed when =scope="text"= or =scope="all"= <hr /> =keyword=: use Google-like controls as in =soap "web service" -shampoo=; searches word parts: using the example, topics with "soapsuds" will be found as well, but topics with "shampoos" will be excluded <hr /> =word=: identical to =keyword= but searches whole words: topics with "soapsuds" will not be found, and topics with "shampoos" will not be excluded <hr /> =literal=: search for the exact string, like =web service= <hr /> =regex=: use a RegularExpression search like =soap;web service;!shampoo=; to search on whole words use =\bsoap\b= <hr /> =query=: [[query search]] of form fields and other meta-data, like =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[DefaultPreferences][preferences]] setting (%SEARCHVARDEFAULTTYPE%) |
+     | =order="topic"= <br /> =order="created"= <br />  =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor's WikiName, or named field of DataForms. The sorting is done web by web; if you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort. Note that dates are sorted most recent date *last* (i.e at the bottom of the table). | Sort by topic name |
+     | =limit="all"= <br /> =limit="16"= | Limit the number of topics from which results will be returned. This is done after sorting if =order= is specified. Note that this does not limit the number of hits from the same topic when you have multiple="on". | All results |
+     | =date="..."= | limits the results to those pages with latest edit time in the given [[TimeSpecifications#TimeIntervals][time interval]].  | All results |
+     | =reverse="on"= | Reverse the direction of the search | Ascending search |
+     | =casesensitive="on"= | Case sensitive search | Ignore case |
+     | =bookview="on"= | BookView search, e.g. show complete topic text. Very resource demanding. Use only with small result sets | Show entire topic content. |
+     | =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on"= | Off |
+     | =nosummary="on"= | Show topic title only | Show topic summary |
+     | =nosearch="on"= | Suppress search string | Show search string |
+     | =noheader="on"= | Suppress default search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span>, unless a =header= is explicitly specified  | Show default search header, unless search is inline and a format is specified (Cairo compatibility) |
+     | =nototal="on"= | Do not show number of topics found | Show number |
+     | =zeroresults="off"= <br /> or =zeroresults="..."= | Suppress/replace _all_ output if there are no hits - can also be set to a *[[FormattedSearch]]* string to customise the output | =zeroresults="on"= - displays the summary, and number of topics found. "Number of topics: 0" |
+     | =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
+     | =header="..."= <br /> =format="..."= <br /> =footer="..."= | Custom format results: see *[[FormattedSearch]]* for usage &amp; examples | Results in table |
+     | =expandvariables="on"= | Expand embedded macros before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
+     | =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
+     | =nofinalnewline="on"= | If =on=, the search variable does not end in a line by itself. Any text continuing immediately after the SEARCH macro on the same line will be rendered as part of the table generated by the search, if appropriate. This feature is only active when format is defined. | =on= |
+     | =recurse="on"= | Recurse into subwebs, if subwebs are enabled. Note: recurse will currently search subwebs of explicitly excluded webs. =(web="all, -Sandbox" recurse="on")= will still search subwebs of =Sandbox=. This behavior is likely to change in a future release. | =off= |
+     | =separator=", "= | Line separator _between_ search hits (only used when format= is set) uses FormatTokens. <br />If =separator= is not defined, the default is "$n" (newline). Not defining the separator will additionally cause a newline to be added after a header and before a footer. | ="$n"= (Newline) |
+     | =newline="%<nop>BR%"= | Line separator _within_ a search hit. Useful if you want to put multi-line content into a table cell, for example if the format="" parameter contains a $pattern() that captures more than one line. | ="$n"= (Newline) |
+     | =pagesize="25"= | number of items to show per page | ="25"= |
+     | =showpage="1"= | Page of items to show (starts at 1) (over-ridden by the value specified by the URL parameter hash from =$previousurl= and =$nexturl=) | ="1"= |
+     | =pager="on"= | appends the pager to the footer format (the quickest way to add paging to your SEARCHes is to just add =pager="on"=) %BR% \
+                      _Note:_ the default pager (when =pagerformat= is not defined) requires the parameters to the SEARCH to not change while paging, as it uses =$previousurl= and =$nexturl= which use a hash of the Macro's parameters to override the value of =showpage=. If you use time variable parameters, you will need to define your own =pagerformat=. | ="off"= |
+     | =pagerformat="text"= | Custom format results: see *[[FormattedSearch]]* for usage &amp; examples | filled from skin template |
+     | =groupby="none"= | _Warning: this option is liable to change dramatically (and potentially incompatibly) in the next major release of foswiki._ Setting to ="none"= applies only to multi-web SEARCHs, and means the =header= and =footer= are only output _once_ - at the beginning and end of the list of results, and the =order= parameter is applied over the entire set of results (this setting removes the legacy that results are always partitioned by web) see %SYSTEMWEB%.SiteChanges for an example. | ="web"= |
+
+   * *Example:* <verbatim class="tml">%SEARCH{"wiki" web="%USERSWEB%" scope="topic"}%</verbatim>
+   * *Example with format:* <verbatim class="tml">
+%SEARCH{
+    "FAQ"
+    nonoise="on"
+    header="| *Topic: * | *Summary: * |"
+    format="| $topic    | $summary    |"
+}%</verbatim> _(displays results in a table with header - [[FormattedSearch#SearchTable][details]])_
+
+<blockquote class="foswikiHelp">%T% The appearance of the table emitted by the [[VarSEARCH][SEARCH]] may be controlled with TablePlugin's =%<nop>TABLE{}%= macro placed just before the =%<nop>SEARCH{}%=.  Example: =%<nop>TABLE{ tablewidth="90%" }%= </blockquote>
+
+---
+*Related topics:* FormattedSearch, QuerySearch, SearchHelp, SearchPatternCookbook, RegularExpression, [[%IF{"'%INCLUDINGTOPIC%'='Macros'" then="#"}%VarTOPICLIST][TOPICLIST]], [[%IF{"'%INCLUDINGTOPIC%'='Macros'" then="#"}%VarWEBLIST][WEBLIST]]
+<!-- %JQREQUIRE{"chili"}% -->
