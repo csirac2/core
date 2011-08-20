@@ -4,46 +4,8 @@
 
 ---+ package Foswiki::Store
 
-This class is a pure virtual base class that specifies the interface
-between the actual store implementation and the rest of the Foswiki
-system.
-
-Subclasses of this class (known as "store implementations") are
-responsible for checking for topic existance, access permissions, and
-all the other general admin tasks required of a store.
-
-This class knows *nothing* about how the data is actually _stored_ -
-that knowledge is entirely encapsulated in the implementation.
-
-The general contract for methods in the class requires that errors
-are signalled using exceptions. Foswiki::AccessControlException is
-used for access control exceptions, and Error::Simple for all other
-types of error.
-
-Reference implementations of this base class are =Foswiki::Store::RcsWrap=
-and =Foswiki::Store::RcsLite= (these are both implemented in terms of
-VC::Store, which is an abstract implementation of a store based on a
-version control system).
-
-Methods of this class and all subclasses should *only* be called from
-=Foswiki= and =Foswiki::Meta=. All other system components must delegate
-store interactions via =Foswiki::Meta=.
-
-For readers who are familiar with Foswiki version 1.0.0, this class
-_describes_ the interface to the old =Foswiki::Store= without actually
-_implementing_ it.
-
-Note that most methods are passed a Foswiki::Meta object. This pattern is
-employed to reinforce the encapsulation of a "path" in a meta object, and
-also to allow the store to modify META fields in the object, something it
-would be unable to do if passed $web, $topic.
-
-Version numbers are required to be positive, non-zero integers. When
-passing in version numbers to the methods of a store implementation, 0, 
-undef and '' are treated as referring to the *latest* (most recent)
-revision of the object. Version numbers are required to increase (later
-version numbers are greater than earlier) but are *not* required to be
-sequential.
+The Foswiki::Store singleton is a factory object that manipulates data objects (traditionally called webs, topic and attachments)
+by delegating requests to specific store implementations
 
 =cut
 
