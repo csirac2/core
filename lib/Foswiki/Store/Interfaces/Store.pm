@@ -2,14 +2,14 @@
 
 =begin TML
 
----+ package Foswiki::Store
+---+ package Foswiki::Store::Interfaces::Store
 
 The Foswiki::Store singleton is a factory object that manipulates data objects (traditionally called webs, topic and attachments)
 by delegating requests to specific store implementations
 
 =cut
 
-package Foswiki::Store;
+package Foswiki::Store::Interfaces::Store;
 
 use strict;
 use warnings;
