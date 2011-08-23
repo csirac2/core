@@ -61,6 +61,7 @@ Examples:
        ./pseudo-install.pl -A developer
        ./pseudo-install.pl -e git@github.com:/me/MyPlugin.git
 EOM
+my %generated_files;
 my $install;
 my $basedir;
 my $CAN_LINK;
@@ -853,21 +854,23 @@ sub satisfyDependency {
 
 sub linkOrCopy {
     my ( $moduleDir, $source, $target, $link ) = @_;
+    my $srcfile = File::Spec->catfile($moduleDir, $source);
+    my $dstfile = File::Spec->catfile($moduleDir, $target);
 
     trace '...'
       . ( $link ? 'link' : 'copy' )
-      . " $moduleDir/$source to $moduleDir/$target";
+      . " $srcfile to $dstfile";
     if ($link) {
         symlink(
-            _cleanPath("$moduleDir/$source"),
-            _cleanPath("$moduleDir/$target")
+            _cleanPath($srcfile),
+            _cleanPath($dstfile)
           )
-          or die "Failed to link $moduleDir/$source as $moduleDir/$target: $!";
+          or die "Failed to link $srcfile as $dstfile: $!";
         print "Linked $source as $target\n";
     }
     else {
-        if ( -e "$moduleDir/$source" ) {
-            File::Copy::copy( "$moduleDir/$source", $target )
+        if ( -e $srcfile ) {
+            File::Copy::copy( $srcfile, $target )
               || die "Couldn't install $target: $!";
         }
         print "Copied $source as $target\n";
@@ -881,33 +884,37 @@ sub linkOrCopy {
 sub generateAlternateVersion {
     my ( $moduleDir, $dir, $file, $link ) = @_;
     my $found = 0;
-    trace "$moduleDir/$file not found";
     my $compress = 0;
+    trace File::Spec->catfile($moduleDir, $file) . ' not found';
 
-    if ( !$found && $file =~ /(.*)\.gz$/ ) {
+    if ( not $found and $file =~ /(.*)\.gz$/ ) {
         $file     = $1;
-        $found    = ( -f "$moduleDir/$1" );
+        $found    = ( -f File::Spec->catfile($moduleDir, $1) );
         $compress = 1;
     }
-    if (  !$found
-        && $file =~ /^(.+)(\.(?:un)?compressed|_src)(\..+)$/
-        && -f "$moduleDir/$1$3" )
+    if (  not $found
+        and $file =~ /^(.+)(\.(?:un)?compressed|_src)(\..+)$/
+        and -f File::Spec->catfile($moduleDir, $1 . $3 ) )
     {
-        linkOrCopy $moduleDir, $file, "$1$3", $link;
+        linkOrCopy $moduleDir, $file, $1 . $3, $link;
+        $generated_files{$moduleDir}{$file} = 1;
         $found++;
     }
-    elsif ( !$found && $file =~ /^(.+)(\.[^\.]+)$/ ) {
+    elsif ( not $found and $file =~ /^(.+)(\.[^\.]+)$/ ) {
         my ( $src, $ext ) = ( $1, $2 );
         for my $kind (qw( .uncompressed .compressed _src )) {
-            if ( -f "$moduleDir/$src$kind$ext" ) {
-                linkOrCopy $moduleDir, "$src$kind$ext", $file, $link;
+            my $srcfile = $src . $kind . $ext;
+
+            if ( -f File::Spec->catfile($moduleDir, $srcfile) ) {
+                linkOrCopy $moduleDir, $srcfile, $file, $link;
+                $generated_files{$moduleDir}{$file} = 1;
                 $found++;
                 last;
             }
         }
     }
-    if ( $found && $compress ) {
-        trace "...compressed $file to create $file.gz";
+    if ( $found and $compress ) {
+        trace "...compressing $file to create $file.gz";
         if ($internal_gzip) {
             open( my $if, '<', _cleanPath($file) )
               or die "Failed to open $file to read: $!";
@@ -922,6 +929,7 @@ sub generateAlternateVersion {
             binmode $of;
             print $of $text;
             close($of);
+            $generated_files{$moduleDir}{$file} = 1;
         }
         else {
 
@@ -1251,11 +1259,98 @@ sub exec_opts {
     return;
 }
 
+sub merge_gitignore {
+    my ($input_files, $old_rules) = @_;
+    my @merged_rules;
+    my @match_rules;
+
+    ASSERT(ref($input_files) eq 'HASH');
+    ASSERT(ref($old_rules) eq 'ARRAY');
+    foreach my $old_rule (@{$old_rules}) {
+        if ($old_rule and not $old_rule =~ /^#/) {
+            $old_rule =~ s/^\s*//;
+            $old_rule =~ s/\s*$//;
+            if ($old_rule =~ /[\/\\]$/) {
+                $old_rule .= '*';
+            }
+            if ($old_rule =~ /\*/) {
+                $old_rule =~ s/^\!\s*(.*?)$/$1/;
+                push(@match_rules, $old_rule);
+            }
+        }
+    }
+    foreach my $old_rule (@{$old_rules}) {
+        push(@merged_rules, $old_rule);
+        if ($old_rule and not $old_rule =~ /^#/ and $old_rule =~ /\w/) {
+            $old_rule =~ s/^\s*\!\s*(.*?)\s*$/$1/;
+            if ($old_rule =~ /\*/) {
+                # It's a wildcard
+                push(@match_rules, $old_rule);
+            } else {
+                # It's a file
+                if (exists $input_files->{$old_rule}) {
+                    delete $input_files->{$old_rule};
+                }
+            }
+        }
+    }
+    # input_files should only contain new files which don't match an existing
+    # wildcard
+    foreach my $new_file (keys %{$input_files}) {
+        my $nmatch_rules = scalar(@match_rules);
+        my $matched;
+        my $i = 0;
+
+        while (not $matched and $i < $nmatch_rules) {
+            my $regex = $match_rules[$i];
+
+            $regex =~ s/\*/.\*/g;
+            $matched = ($new_file =~ /^$regex$/);
+            $i += 1;
+        }
+        if (not $matched) {
+            push(@merged_rules, $new_file);
+        }
+    }
+
+    return @merged_rules;
+}
+
+sub update_gitignore_files {
+    while (my ($moduleDir, $files) = each %generated_files) {
+        my $ignorefile = File::Spec->catfile($moduleDir, '.gitignore');
+        my @ignorelist;
+
+        if (File::Spec->catdir($moduleDir, '.git')) {
+            foreach my $file ( values %{$files} ) {
+                push(@ignorelist, $file);
+            }
+        }
+        if (open(my $fh, '<', $ignorefile)) {
+            my @output;
+            while ( my $line = <$fh> ) {
+                push(@output, $line);
+            }
+            close($fh);
+            if (open(my $fh, '>', $ignorefile)) {
+                foreach my $ignored (@ignorelist) {
+                }
+                close($fh) or error("Couldn't close $ignorefile");
+            } else {
+                error("Couldn't open $ignorefile for writing, $OS_ERROR");
+            }
+        } else {
+            error("Couldn't open $ignorefile for reading, $OS_ERROR");
+        }
+    }
+}
+
 init();
 exec_opts();
 init_config();
 init_extensions_path();
 run();
+update_gitignore_files();
 
 __END__
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
