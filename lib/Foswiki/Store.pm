@@ -34,6 +34,32 @@ use Error qw( :try );
 use Assert;
 
 use Foswiki::Address;
+my $singleton;
+
+=pod
+
+=head2 new
+
+  my $object = Foswiki::Store->new(
+      stores => (
+                {module => 'Foswiki::Store::RcsWrap', root=>$Foswiki::cfg{dataDir}},
+                ),
+      access => $session->access()
+  );
+
+The C<new> constructor lets you create a new B<Foswiki::Store> object.
+
+So no big surprises there...
+
+Returns a new B<Foswiki::Store> or dies on error.
+
+=cut
+
+sub new {
+	my $class = shift;
+	$singleton  ||= bless { @_ }, $class;
+	return $singleton;
+}
 
 =pod
 
@@ -44,7 +70,9 @@ use Foswiki::Address;
       * Foswiki::Address
       * Foswiki::Object impl
    * cuid=>$cuid (canonical user id) - if undefined, presume 'admin' (or no perms check) access
-   * create=>1
+   * create=>1 (need to send 'create from?' or is create a blank as Foswiki::obj of some random tyle :(
+     TODO: or should it be create=>'Foswiki::Object::Web', and er, from what?
+     TODO: or kill create=> and use some kind of 'copy' with defered commit
    * writeable=>1
    
 
@@ -58,6 +86,7 @@ so it might be better to write it all as a switchboard..
 sub load {
     my %args = @_;
 
+    #TODO: or can I delay this to the point where its not needed at all?
     %args{address} = Foswiki::Address->new(%args{address}) unless (%args{address}->isa('Foswiki::Address'));
     my $access_type = $args{writeable}?'CHANGE':'VIEW';
     
@@ -65,9 +94,10 @@ sub load {
     throw AccessException() unless Foswiki::Permissions::hasAccess(%args{address}, $access_type,  $args{cuid}, dontload=>1) if (defined($args{cuid})); 
 
     #$cfg::Foswiki{Stores} is an ordered list, managed by configure that prioritises the cache stores first.
-    foreach my $impl (@{$cfg::Foswiki{Stores}}) {
+    foreach my $impl (@{$singleton{stores}}) {
         #the impl is also able to throw exceptions - as there might be a store based permissions impl
-        my $object = $impl::impl->load(%args);
+        $impl->{impl} ||= $impl->new($impl, %args) || next;
+        my $object = $impl->{impl}->load(%args);
         last if ($defined($object));
     }
     if (not defined($object) and $args{create}) {
@@ -76,6 +106,8 @@ sub load {
     throw DoesNotExist() unless (defined($object);
     
     foreach my $impl (@{$cfg::Foswiki{ListenerStores}}) {
+        #a listener for load events.
+        #TODO: kill this and replace with call to logger, which stores can choose to consume!
         $impl::impl->loaded(%args{address}, $object);
     }
     #can't do any better with the __current__ ACL impl, but there should be a call before the readData for real store-fastening
@@ -86,7 +118,7 @@ sub load {
 
 =pod
 
-=head2 ClassMethod save(object=>$address, cuid=>$cuid, create=>1, writeable=>1, forcenewrevision=>0, ...) -> $integer?
+=head2 ClassMethod save(object=>$object, cuid=>$cuid, create=>1, writeable=>1, forcenewrevision=>0, ...) -> $integer?
    * =object=>$object= - (required) Foswiki::Object impl
    * cuid=>$cuid (canonical user id) - if undefined, presume 'admin' (or no perms check) access
 
