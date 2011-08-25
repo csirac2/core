@@ -43,6 +43,7 @@ my $singleton;
 =head2 new
 
   my $result = Foswiki::Store->new(
+        #an ordered list of store implementations - can probably have several rcs stores with different root dirs.
       stores => (
                 {module => 'Foswiki::Store::RcsWrap', root=>$Foswiki::cfg{dataDir}},
                 #last entry is the 'default' store that new webs would be created in
@@ -51,9 +52,7 @@ my $singleton;
       cuid =>   $session->{user}        # the default user - can be over-ridden in each call?
   );
 
-The C<new> constructor lets you create a new B<Foswiki::Store> object.
-
-So no big surprises there...
+The C<new> constructor returns the singleton B<Foswiki::Store> object - must have a =stores= hash when initially called.
 
 Returns a new B<Foswiki::Store> or dies on error.
 
@@ -62,6 +61,7 @@ Returns a new B<Foswiki::Store> or dies on error.
 sub new {
     my $class = shift;
     $singleton ||= bless {@_}, $class;
+    ASSERT(defined($singleton->{stores})) if DEBUG; #make sure we're not creating a Store that contains nothing.
     die if ( not defined( $singleton->{stores} ) );
     return $singleton;
 }
