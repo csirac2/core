@@ -8,12 +8,12 @@ Foswiki::Store - Factory for Foswiki Data Objects - webs, topics, attachments...
 
 =head1 SYNOPSIS
 
-  my $object = Foswiki::Store->new(
+  my $result = Foswiki::Store->new(
       foo  => 'bar',
       flag => 1,
   );
   
-  $object->dummy;
+  $result->dummy;
 
 =head1 DESCRIPTION
 
@@ -40,11 +40,13 @@ my $singleton;
 
 =head2 new
 
-  my $object = Foswiki::Store->new(
+  my $result = Foswiki::Store->new(
       stores => (
                 {module => 'Foswiki::Store::RcsWrap', root=>$Foswiki::cfg{dataDir}},
+                #last entry is the 'default' store that new webs would be created in
                 ),
-      access => $session->access()
+      access => $session->access(),
+      cuid =>   $session->{user}        # the default user - can be over-ridden in each call?
   );
 
 The C<new> constructor lets you create a new B<Foswiki::Store> object.
@@ -56,12 +58,21 @@ Returns a new B<Foswiki::Store> or dies on error.
 =cut
 
 sub new {
-	my $class = shift;
-	$singleton  ||= bless { @_ }, $class;
-	return $singleton;
+    my $class = shift;
+    $singleton ||= bless {@_}, $class;
+    die if ( not defined( $singleton->{stores} ) );
+    return $singleton;
 }
 
 =pod
+
+=head2 ClassMethod changeDefaultUser($cuid)
+
+=cut
+
+sub changeDefaultUser {
+    $singleton->{cuid} = shift;
+}
 
 =head2 ClassMethod load(address=>$address, cuid=>$cuid, create=>1, writeable=>1) -> $dataObject
    * =address=>$address= - (required) address of object - can be:
@@ -84,42 +95,36 @@ so it might be better to write it all as a switchboard..
 =cut
 
 sub load {
-    my %args = @_;
-
-    #TODO: or can I delay this to the point where its not needed at all?
-    %args{address} = Foswiki::Address->new(%args{address}) unless (%args{address}->isa('Foswiki::Address'));
-    my $access_type = $args{writeable}?'CHANGE':'VIEW';
-    
-    #see if we are _able_ to test permissions using just an unloaded topic, if not, fall through to load&then test
-    throw AccessException() unless Foswiki::Permissions::hasAccess(%args{address}, $access_type,  $args{cuid}, dontload=>1) if (defined($args{cuid})); 
-
-    #$cfg::Foswiki{Stores} is an ordered list, managed by configure that prioritises the cache stores first.
-    foreach my $impl (@{$singleton{stores}}) {
-        #the impl is also able to throw exceptions - as there might be a store based permissions impl
-        $impl->{impl} ||= $impl->new($impl, %args) || next;
-        my $object = $impl->{impl}->load(%args);
-        last if ($defined($object));
-    }
-    if (not defined($object) and $args{create}) {
-       $object = create(%args);
-    }
-    throw DoesNotExist() unless (defined($object);
-    
-    foreach my $impl (@{$cfg::Foswiki{ListenerStores}}) {
-        #a listener for load events.
-        #TODO: kill this and replace with call to logger, which stores can choose to consume!
-        $impl::impl->loaded(%args{address}, $object);
-    }
-    #can't do any better with the __current__ ACL impl, but there should be a call before the readData for real store-fastening
-    throw AccessException() unless Foswiki::Permissions::hasAccess($object, $access_type,  $args{cuid}) if (defined($args{cuid})); 
-    return $object;
+    return template_function( 'load', @_ );
 }
-
 
 =pod
 
-=head2 ClassMethod save(object=>$object, cuid=>$cuid, create=>1, writeable=>1, forcenewrevision=>0, ...) -> $integer?
-   * =object=>$object= - (required) Foswiki::Object impl
+=head2 ClassMethod create(address=>$address, cuid=>$cuid, writeable=>1) -> $dataObject
+   * =address=>$address= - (required) address of object - can be:
+      * ($web, $topic, $attachment, $rev) list
+      * 'web.topic@4' style
+      * Foswiki::Address
+      * Foswiki::Object impl
+   * from=>address (like copy, but without commit)
+   * cuid=>$cuid (canonical user id) - if undefined, presume 'admin' (or no perms check) access
+   * writeable=>1
+
+returns an object of the appropriate type from the Foswiki::Object:: hieracy
+
+TODO: note that most of the methods here will have the same codepath as load(), 
+so it might be better to write it all as a switchboard..
+
+=cut
+
+sub create {
+    return template_function( 'create', @_ );
+}
+
+=pod
+
+=head2 ClassMethod save(object=>$result, cuid=>$cuid, create=>1, writeable=>1, forcenewrevision=>0, ...) -> $integer?
+   * =object=>$result= - (required) Foswiki::Object impl
    * cuid=>$cuid (canonical user id) - if undefined, presume 'admin' (or no perms check) access
 
 Save a topic or attachment _without_ invoking plugin handlers.
@@ -136,8 +141,8 @@ Returns the new revision identifier.
 =cut
 
 sub save {
+    return template_function( 'save', @_ );
 }
-
 
 =pod
 
@@ -152,17 +157,18 @@ delete a topic or attachment _without_ invoking plugin handlers.
 =cut
 
 sub delete {
+    return template_function( 'delete', @_ );
 }
 
 =pod
 
-=head2 ClassMethod move(from=>$address, to=>$address, cuid=>$cuid) -> success?
+=head2 ClassMethod move(from=>$address, address=>$address, cuid=>$cuid) -> success?
    * =from=>$address= - (required) address of object - can be:
       * ($web, $topic, $attachment, $rev) list
       * 'web.topic@4' style
       * Foswiki::Address
       * Foswiki::Object impl
-   * =to=>$address= - (required) address of object - can be:
+   * =address=>$address= - (required) address of object - can be:
       * ($web, $topic, $attachment, $rev) list
       * 'web.topic@4' style
       * Foswiki::Address
@@ -172,18 +178,18 @@ sub delete {
 =cut
 
 sub move {
+    return template_function( 'move', @_ );
 }
-
 
 =pod
 
-=head2 ClassMethod copy(from=>$address, to=>$address, cuid=>$cuid) -> success?
+=head2 ClassMethod copy(from=>$address, address=>$address, cuid=>$cuid) -> success?
    * =from=>$address= - (required) address of object - can be:
       * ($web, $topic, $attachment, $rev) list
       * 'web.topic@4' style
       * Foswiki::Address
       * Foswiki::Object impl
-   * =to=>$address= - (required) address of object - can be:
+   * =address=>$address= - (required) address of object - can be:
       * ($web, $topic, $attachment, $rev) list
       * 'web.topic@4' style
       * Foswiki::Address
@@ -193,8 +199,8 @@ sub move {
 =cut
 
 sub copy {
+    return template_function( 'copy', @_ );
 }
-
 
 =pod
 
@@ -209,6 +215,7 @@ sub copy {
 =cut
 
 sub exists {
+    return template_function( 'exists', @_ );
 }
 
 =pod
@@ -229,6 +236,7 @@ if there are no versions, we probably return an empty itr
 =cut
 
 sub getRevisionHistory {
+    return template_function( 'getRevisionHistory', @_ );
 }
 
 =pod
@@ -243,12 +251,13 @@ for the revision that we will create when we next save.
 
 # SMELL: There's an inherent race condition with doing this, but it's always
 # been there so I guess we can live with it.
-sub getNextRevision{
+sub getNextRevision {
+    return template_function( 'getNextRevision{', @_ );
 }
 
 =pod
 
-=head2 ClassMethod getRevisionDiff(from=>$address, to=>$address, cuid=>$cuid, contextLines=>$contextLines) -> \@diffArray
+=head2 ClassMethod getRevisionDiff(from=>$address, address=>$address, cuid=>$cuid, contextLines=>$contextLines) -> \@diffArray
 
 Get difference between two versions of the same topic. The differences are
 computed over the embedded store form.
@@ -259,7 +268,7 @@ Return reference to an array of differences
       * 'web.topic@4' style
       * Foswiki::Address
       * Foswiki::Object impl
-   * =to=>$address= - (required) address of object - can be:
+   * =address=>$address= - (required) address of object - can be:
       * ($web, $topic, $attachment, $rev) list
       * 'web.topic@4' style
       * Foswiki::Address
@@ -278,11 +287,12 @@ Each difference is of the form [ $type, $right, $left ] where
 =cut
 
 sub getRevisionDiff {
+    return template_function( 'getRevisionDiff', @_ );
 }
 
 =pod
 
-=head2 ClassMethod getVersionInfo(address=>$addres, cuid=>$cuid) -> \%info
+=head2 ClassMethod getVersionInfo(address=>$address, cuid=>$cuid) -> \%info
 
    * =address=>$address= - (required) address of object - can be:
       * ($web, $topic, $attachment, $rev) list
@@ -301,23 +311,23 @@ Return %info with at least:
 
 # Formerly know as getRevisionInfo.
 sub getVersionInfo {
+    return template_function( 'getVersionInfo', @_ );
 }
 
 =pod
 
-=head2 ClassMethod atomicLockInfo( $topicObject ) -> ($cUID, $time)
+=head2 ClassMethod atomicLockInfo( address=>$address ) -> ($cUID, $time)
 If there is a lock on the topic, return it.
 
 =cut
 
 sub atomicLockInfo {
-    my ( $this, $topicObject ) = @_;
-    die "Abstract base class";
+    return template_function( 'atomicLockInfo', @_ );
 }
 
 =pod
 
-=head2 ClassMethod atomicLock( $topicObject, $cUID )
+=head2 ClassMethod atomicLock( address=>$address, cuid=>$cuid )
 
    * =$topicObject= - Foswiki::Meta topic object
    * =$cUID= cUID of user doing the locking
@@ -326,13 +336,12 @@ Grab a topic lock on the given topic.
 =cut
 
 sub atomicLock {
-    my ( $this, $topicObject, $cUID ) = @_;
-    die "Abstract base class";
+    return template_function( 'atomicLock', @_ );
 }
 
 =pod
 
-=head2 ClassMethod atomicUnlock( $topicObject )
+=head2 ClassMethod atomicUnlock( address=>$address, cuid=>$cuid )
 
    * =$topicObject= - Foswiki::Meta topic object
 Release the topic lock on the given topic. A topic lock will cause other
@@ -347,13 +356,12 @@ _note_ the locks used when a topic is edited; those are Leases
 =cut
 
 sub atomicUnlock {
-    my ( $this, $topicObject ) = @_;
-    die "Abstract base class";
+    return template_function( 'atomicUnlock', @_ );
 }
 
 =pod
 
-=head2 ClassMethod getApproxRevTime (  $web, $topic  ) -> $epochSecs
+=head2 ClassMethod getApproxRevTime (  address=>$address, cuid=>$cuid  ) -> $epochSecs
 
 Get an approximate rev time for the latest rev of the topic. This method
 is used to optimise searching. Needs to be as fast as possible.
@@ -361,13 +369,12 @@ is used to optimise searching. Needs to be as fast as possible.
 =cut
 
 sub getApproxRevTime {
-    my ( $this, $web, $topic ) = @_;
-    die "Abstract base class";
+    return template_function( 'getApproxRevTime', @_ );
 }
 
 =pod
 
-=head2 ClassMethod eachChange( $web, $time ) -> $iterator
+=head2 ClassMethod eachChange( address=>$address, $time ) -> $iterator
 
 Get an iterator over the list of all the changes in the given web between
 =$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
@@ -375,11 +382,12 @@ guaranteed to return any changes that occurred before (now -
 {Store}{RememberChangesFor}). Changes are returned in most-recent-first
 order.
 
+TODO: remove and replace with logger API?
+
 =cut
 
 sub eachChange {
-    my ( $this, $web, $time ) = @_;
-    die "Abstract base class";
+    return template_function( 'eachChange', @_ );
 }
 
 =pod
@@ -402,11 +410,12 @@ for this)
 =cut
 
 sub query {
+    return template_function( 'query', @_ );
 }
 
 =pod
 
-=head2 ClassMethod getRevisionAtTime( $topicObject, $time ) -> $rev
+=head2 ClassMethod getRevisionAtTime( address=>$address, $time ) -> $rev
 
    * =$topicObject= - topic
    * =$time= - time (in epoch secs) for the rev
@@ -418,13 +427,12 @@ Returns a single-digit rev number or undef if it couldn't be determined
 =cut
 
 sub getRevisionAtTime {
-    my ( $this, $topicObject, $time ) = @_;
-    die "Abstract base class";
+    return template_function( 'getRevisionAtTime', @_ );
 }
 
 =pod
 
-=head2 ClassMethod getLease( $topicObject ) -> $lease
+=head2 ClassMethod getLease( address=>$address ) -> $lease
 
    * =$topicObject= - topic
 
@@ -438,13 +446,12 @@ another user is already editing a topic.
 =cut
 
 sub getLease {
-    my( $this, $topicObject ) = @_;
-    die "Abstract base class";
+    return template_function( 'getLease', @_ );
 }
 
 =pod
 
-=head2 ClassMethod setLease( $topicObject, $length )
+=head2 ClassMethod setLease( address=>$address, cuid=>$cuid, $length )
 
    * =$topicObject= - Foswiki::Meta topic object
 Take out an lease on the given topic for this user for $length seconds.
@@ -454,13 +461,12 @@ See =getLease= for more details about Leases.
 =cut
 
 sub setLease {
-    my( $this, $topicObject, $lease ) = @_;
-    die "Abstract base class";
+    return template_function( 'setLease', @_ );
 }
 
 =pod
 
-=head2 ClassMethod removeSpuriousLeases( $web )
+=head2 ClassMethod removeSpuriousLeases( address=>$address )
 
 Remove leases that are not related to a topic. These can get left behind in
 some store implementations when a topic is created, but never saved.
@@ -468,8 +474,70 @@ some store implementations when a topic is created, but never saved.
 =cut
 
 sub removeSpuriousLeases {
-    #my( $this, $web ) = @_;
-    # default is a no-op
+    return template_function( 'removeSpuriousLeases', @_ );
+}
+
+=pod
+
+=head2 ClassMethod template_function( functionname )
+
+a switchboard function that contains the implementation to delegate to the stores
+
+=cut
+
+sub template_function {
+    my $functionname = shift;
+
+    #default cuid from the singleton
+    my %args = ( cuid=>$singleton->{cuid}, @_ );
+    $args{functionname} = $functionname;
+
+    #TODO: or can I delay this to the point where its not needed at all?
+    %args{address} = Foswiki::Address->new( %args{address} )
+      unless ( %args{address}->isa('Foswiki::Address') );
+    my $access_type = $args{writeable} ? 'CHANGE' : 'VIEW';
+
+#see if we are _able_ to test permissions using just an unloaded topic, if not, fall through to load&then test
+    throw AccessException( store()->{access}->getReason() )
+      unless store()->{access}
+          ->haveAccess( %args{address}, $access_type, $args{cuid},
+              dontload => 1 )
+          if ( defined( $args{cuid} ) );
+
+    if ( defined( $args{from} ) ) {
+
+        #load will throw exceptions if things go wrong
+        $args{from} = load( address => $args{from} )
+          unless ( %args{from}->isa('Foswiki::Address') );
+    }
+
+#$cfg::Foswiki{Stores} is an ordered list, managed by configure that prioritises the cache stores first.
+    foreach my $impl ( @{ $singleton{stores} } ) {
+
+#the impl is also able to throw exceptions - as there might be a store based permissions impl
+        $impl->{impl} ||= $impl->new( store => $impl ) || next;
+        my $result = $impl->{impl}->$functionname(%args);
+        last if ( defined($result) );
+    }
+    if ( not defined($result) and $args{create} ) {
+        $result = create(%args);
+    }
+    throw DoesNotExist()
+      unless ( defined($result) );
+
+    foreach my $impl ( @{ $singleton{stores} } ) {
+        $impl->{impl} ||= $impl->new( store => $impl ) || next;
+
+#a listener for load events.
+#TODO: kill this and replace with call to logger, which stores can choose to consume!
+        $impl->{impl}->log( %args, return => $result );
+    }
+
+#can't do any better with the __current__ ACL impl, but there should be a call before the readData for real store-fastening
+    throw AccessException( store()->{access}->getReason() )
+      unless store()->{access}->haveAccess( $result, $access_type, $args{cuid} )
+          if ( defined( $args{cuid} ) );
+    return $result;
 }
 
 1;
