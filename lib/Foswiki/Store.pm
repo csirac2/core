@@ -8,12 +8,14 @@ Foswiki::Store - Factory for Foswiki Data Objects - webs, topics, attachments...
 
 =head1 SYNOPSIS
 
+  #don't set the cuid, so we don't need Foswiki::Access and don't check ACLs
   my $result = Foswiki::Store->new(
-      foo  => 'bar',
-      flag => 1,
+      stores=>(
+                {module=>'Foswiki::Store::RcsWrap', root=>'foswiki/data'}
+            )
   );
   
-  $result->dummy;
+  $result->load(address=>'Main.WebHome');
 
 =head1 DESCRIPTION
 
@@ -72,6 +74,9 @@ sub new {
 
 sub changeDefaultUser {
     $singleton->{cuid} = shift;
+    ASSERT((not defined($singleton->{cuid}))
+                or 
+           (defined($singleton->{cuid}) and defined($singleton->{access}))) if DEBUG;
 }
 
 =head2 ClassMethod load(address=>$address, cuid=>$cuid, create=>1, writeable=>1) -> $dataObject
