@@ -585,6 +585,29 @@ sub removeSpuriousLeases {
     my $handler = $this->getHandler($web);
     $handler->removeSpuriousLeases();
 }
+############################################################################
+# new foswiki 2.0 API methods
+
+sub exists {
+    my $this = shift;
+    my %args = @_;
+    ASSERT($args{address}) if DEBUG;
+    my $type = $args{address}->type();
+    ASSERT($type) if DEBUG;
+    if ($type eq 'web') {
+        return $this->webExists($args{address}->web);
+    } elsif ($type eq 'topic') {
+        return $this->topicExists($args{address}->web, $args{address}->topic);
+    } 
+    die "can't call exists($type)" if DEBUG;
+}
+
+sub log {
+    my $self = shift;
+    #IMPLEMENTME
+}
+
+
 
 1;
 __END__

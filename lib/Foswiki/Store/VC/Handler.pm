@@ -54,7 +54,7 @@ Note that $web, $topic and $attachment must be untainted!
 sub new {
     my ( $class, $store, $web, $topic, $attachment ) = @_;
 
-    ASSERT( $store->isa('Foswiki::Store') ) if DEBUG;
+    ASSERT( $store->isa('Foswiki::Store::Interfaces::Store') ) if DEBUG;
 
     if ( UNIVERSAL::isa( $web, 'Foswiki::Meta' ) ) {
 
