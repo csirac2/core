@@ -35,7 +35,7 @@ our $VERSION = '0.01';
 use Error qw( :try );
 use Assert;
 
-use Foswiki::Address;
+use Foswiki::Address();
 my $singleton;
 
 =pod
