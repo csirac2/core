@@ -1686,9 +1686,18 @@ sub new {
     $this->{prefs}   = $prefs;
     $this->{plugins} = new Foswiki::Plugins($this);
 
-    eval "require $Foswiki::cfg{Store}{Implementation}";
-    ASSERT( !$@, $@ ) if DEBUG;
-    $this->{store} = $Foswiki::cfg{Store}{Implementation}->new();
+#    eval "require $Foswiki::cfg{Store}{Implementation}";
+#    ASSERT( !$@, $@ ) if DEBUG;
+#    $this->{store} = $Foswiki::cfg{Store}{Implementation}->new();
+    $this->{store} = Foswiki::Store->new(
+              stores => (
+                        {module =>  $Foswiki::cfg{Store}{Implementation}, root=>$Foswiki::cfg{dataDir}},
+                        #last entry is the 'default' store that new webs would be created in
+                        ),
+              access => $session->access(),
+              #don't know the cuid yet - run as admin at this point?
+              #cuid =>   $session->{user}        # the default user - can be over-ridden in each call?
+          );
 
     #Monitor::MARK("Created store");
 
@@ -1855,6 +1864,7 @@ sub new {
 
     # SMELL: what happens if we move this into the Foswiki::Users::new?
     $this->{user} = $this->{users}->initialiseUser( $this->{remoteUser} );
+    $this->store->changeDefaultUser($this->{user});
 
     #Monitor::MARK("Initialised user");
 
