@@ -257,7 +257,7 @@ for the revision that we will create when we next save.
 # SMELL: There's an inherent race condition with doing this, but it's always
 # been there so I guess we can live with it.
 sub getNextRevision {
-    return template_function( 'getNextRevision{', @_ );
+    return template_function( 'getNextRevision', @_ );
 }
 
 =pod
