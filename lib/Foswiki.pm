@@ -1694,7 +1694,7 @@ sub new {
                         {module =>  $Foswiki::cfg{Store}{Implementation}, root=>$Foswiki::cfg{dataDir}},
                         #last entry is the 'default' store that new webs would be created in
                         ),
-              access => $session->access(),
+              access => $this->access(),
               #don't know the cuid yet - run as admin at this point?
               #cuid =>   $session->{user}        # the default user - can be over-ridden in each call?
           );

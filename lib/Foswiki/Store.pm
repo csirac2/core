@@ -498,30 +498,31 @@ sub template_function {
     $args{functionname} = $functionname;
 
     #TODO: or can I delay this to the point where its not needed at all?
-    %args{address} = Foswiki::Address->new( %args{address} )
-      unless ( %args{address}->isa('Foswiki::Address') );
+    $args{address} = Foswiki::Address->new( $args{address} )
+      unless ( $args{address}->isa('Foswiki::Address') );
     my $access_type = $args{writeable} ? 'CHANGE' : 'VIEW';
 
 #see if we are _able_ to test permissions using just an unloaded topic, if not, fall through to load&then test
     throw AccessException( store()->{access}->getReason() )
-      unless store()->{access}
-          ->haveAccess( %args{address}, $access_type, $args{cuid},
-              dontload => 1 )
-          if ( defined( $args{cuid} ) );
-
+      if (  defined( $args{cuid} )  and 
+            not (store()->{access}
+          ->haveAccess( $args{address}, $access_type, $args{cuid},
+              dontload => 1 ) ));
+      
     if ( defined( $args{from} ) ) {
 
         #load will throw exceptions if things go wrong
         $args{from} = load( address => $args{from} )
-          unless ( %args{from}->isa('Foswiki::Address') );
+          unless ( $args{from}->isa('Foswiki::Address') );
     }
 
 #$cfg::Foswiki{Stores} is an ordered list, managed by configure that prioritises the cache stores first.
-    foreach my $impl ( @{ $singleton{stores} } ) {
+    my $result;
+    foreach my $impl ( @{ $singleton->{stores} } ) {
 
 #the impl is also able to throw exceptions - as there might be a store based permissions impl
         $impl->{impl} ||= $impl->new( store => $impl ) || next;
-        my $result = $impl->{impl}->$functionname(%args);
+        $result = $impl->{impl}->$functionname(%args);
         last if ( defined($result) );
     }
     if ( not defined($result) and $args{create} ) {
@@ -530,7 +531,7 @@ sub template_function {
     throw DoesNotExist()
       unless ( defined($result) );
 
-    foreach my $impl ( @{ $singleton{stores} } ) {
+    foreach my $impl ( @{ $singleton->{stores} } ) {
         $impl->{impl} ||= $impl->new( store => $impl ) || next;
 
 #a listener for load events.
@@ -540,8 +541,9 @@ sub template_function {
 
 #can't do any better with the __current__ ACL impl, but there should be a call before the readData for real store-fastening
     throw AccessException( store()->{access}->getReason() )
-      unless store()->{access}->haveAccess( $result, $access_type, $args{cuid} )
-          if ( defined( $args{cuid} ) );
+      if (  defined( $args{cuid} )  and 
+            not (store()->{access}
+          ->haveAccess( $args{address}, $access_type, $args{cuid} ) ));
     return $result;
 }
 
