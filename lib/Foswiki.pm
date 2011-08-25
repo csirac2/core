@@ -1690,12 +1690,12 @@ sub new {
 #    ASSERT( !$@, $@ ) if DEBUG;
 #    $this->{store} = $Foswiki::cfg{Store}{Implementation}->new();
     $this->{store} = Foswiki::Store->new(
-              stores => (
+              stores => [
                         {module =>  $Foswiki::cfg{Store}{Implementation}, root=>$Foswiki::cfg{dataDir}},
                         #last entry is the 'default' store that new webs would be created in
-                        ),
+                        ],
               access => $this->access(),
-              #don't know the cuid yet - run as admin at this point?
+              #don't know the cuid yet - run as admin at this point
               #cuid =>   $session->{user}        # the default user - can be over-ridden in each call?
           );
 

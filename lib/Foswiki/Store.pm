@@ -44,10 +44,10 @@ my $singleton;
 
   my $result = Foswiki::Store->new(
         #an ordered list of store implementations - can probably have several rcs stores with different root dirs.
-      stores => (
+      stores => [
                 {module => 'Foswiki::Store::RcsWrap', root=>$Foswiki::cfg{dataDir}},
                 #last entry is the 'default' store that new webs would be created in
-                ),
+                ],
       access => $session->access(),
       cuid =>   $session->{user}        # the default user - can be over-ridden in each call?
   );
@@ -492,14 +492,17 @@ a switchboard function that contains the implementation to delegate to the store
 
 sub template_function {
     my $functionname = shift;
-
+    shift if (ref($_[0]) eq 'Foswiki::Store');
+    
     #default cuid from the singleton
     my %args = ( cuid=>$singleton->{cuid}, @_ );
     $args{functionname} = $functionname;
 
     #TODO: or can I delay this to the point where its not needed at all?
     $args{address} = Foswiki::Address->new( $args{address} )
-      unless ( $args{address}->isa('Foswiki::Address') );
+      if (ref($args{address}) eq '');   #justa string/scalar
+    $args{address} = Foswiki::Address->new( @{$args{address}} )
+      if (ref($args{address}) eq 'ARRAY');
     my $access_type = $args{writeable} ? 'CHANGE' : 'VIEW';
 
 #see if we are _able_ to test permissions using just an unloaded topic, if not, fall through to load&then test
@@ -521,7 +524,12 @@ sub template_function {
     foreach my $impl ( @{ $singleton->{stores} } ) {
 
 #the impl is also able to throw exceptions - as there might be a store based permissions impl
-        $impl->{impl} ||= $impl->new( store => $impl ) || next;
+        if (not defined($impl->{impl})) {
+            eval "require ".$impl->{module};
+            ASSERT( !$@, $@ ) if DEBUG;
+            $impl->{impl} = $Foswiki::cfg{Store}{Implementation}->new();
+        }
+        #$impl->{impl} ||= $impl.'::new'( store => $impl ) || next;
         $result = $impl->{impl}->$functionname(%args);
         last if ( defined($result) );
     }
@@ -532,7 +540,11 @@ sub template_function {
       unless ( defined($result) );
 
     foreach my $impl ( @{ $singleton->{stores} } ) {
-        $impl->{impl} ||= $impl->new( store => $impl ) || next;
+        if (not defined($impl->{impl})) {
+            eval "require ".$impl->{module};
+            ASSERT( !$@, $@ ) if DEBUG;
+            $impl->{impl} = $Foswiki::cfg{Store}{Implementation}->new();
+        }
 
 #a listener for load events.
 #TODO: kill this and replace with call to logger, which stores can choose to consume!

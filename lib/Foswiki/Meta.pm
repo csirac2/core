@@ -111,6 +111,8 @@ the function or parameter.
 =cut
 
 package Foswiki::Meta;
+use Foswiki::Address ();
+our @ISA = ('Foswiki::Address');
 
 use strict;
 use warnings;
@@ -701,10 +703,10 @@ sub existsInStore {
         $this->addDependency();
 
         return $this->{_session}->{store}
-          ->topicExists( $this->{_web}, $this->{_topic} );
+          ->exists(address=>[ $this->{_web}, $this->{_topic} ]);
     }
     elsif ( defined $this->{_web} ) {
-        return $this->{_session}->{store}->webExists( $this->{_web} );
+        return $this->{_session}->{store}->exists(address=> $this->{_web} );
     }
     else {
         return 1;    # the root always exists
@@ -806,14 +808,14 @@ sub populateNewWeb {
                   . ' - Hierarchical webs are disabled' );
         }
 
-        unless ( $session->webExists($parent) ) {
+        unless ( $session->exists(address=>$parent) ) {
             throw Error::Simple( 'Parent web ' . $parent . ' does not exist' );
         }
     }
 
     # Validate that template web exists, or error should be thrown
     if ($templateWeb) {
-        unless ( $session->webExists($templateWeb) ) {
+        unless ( $session->exists(address=>$templateWeb) ) {
             throw Error::Simple(
                 'Template web ' . $templateWeb . ' does not exist' );
         }
@@ -822,8 +824,9 @@ sub populateNewWeb {
     # Make sure there is a preferences topic; this is how we know it's a web
     my $prefsTopicObject;
     if (
-        !$session->topicExists(
+        !$session->exists(address=>[
             $this->{_web}, $Foswiki::cfg{WebPrefsTopicName}
+        ]
         )
       )
     {
@@ -1970,7 +1973,7 @@ sub saveAs {
 
         # Don't verify web existance for WebPreferences, as saving
         # WebPreferences creates the web.
-        unless ( $this->{_session}->{store}->webExists( $this->{_web} ) ) {
+        unless ( $this->{_session}->{store}->exists(address=> $this->{_web}  )) {
             throw Error::Simple( 'Unable to save topic '
                   . $this->{_topic}
                   . ' - web '
@@ -2179,7 +2182,7 @@ sub move {
     else {
 
         # Move web
-        ASSERT( !$this->{_session}->{store}->webExists( $to->{_web} ),
+        ASSERT( !$this->{_session}->{store}->exists(address=> $to->{_web} ),
             "$to->{_web} does not exist" )
           if DEBUG;
         $this->_atomicLock($cUID);
@@ -2405,11 +2408,11 @@ sub removeFromStore {
     my $store = $this->{_session}->{store};
     ASSERT( $this->{_web}, 'this is not a removable object' ) if DEBUG;
 
-    if ( !$store->webExists( $this->{_web} ) ) {
+    if ( !$store->exists(address=> $this->{_web}  )) {
         throw Error::Simple( 'No such web ' . $this->{_web} );
     }
     if ( $this->{_topic}
-        && !$store->topicExists( $this->{_web}, $this->{_topic} ) )
+        && !$store->exists(address=>[ $this->{_web}, $this->{_topic} ] ))
     {
         throw Error::Simple(
             'No such topic ' . $this->{_web} . '.' . $this->{_topic} );

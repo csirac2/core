@@ -33,8 +33,8 @@ package Foswiki::Store::VC::Store;
 use strict;
 use warnings;
 
-use Foswiki::Store ();
-our @ISA = ('Foswiki::Store');
+use Foswiki::Store::Interfaces::Store ();
+our @ISA = ('Foswiki::Store::Interfaces::Store');
 
 use Assert;
 use Error qw( :try );
