@@ -25,41 +25,47 @@ by default). The default path includes current working directory & its parent.
 
 Usage: pseudo-install.pl -[G|C][feA][l|c|u] [all|default|developer|<module>
                                             |git://a.git/url, a@g.it:/url etc.]
-   -C[onfig]    - path to config file (default $HOME/.buildcontrib, or envar
-                                               $FOSWIKI_PSEUDOINSTALL_CONFIG)
-   -G[enerate]  - generate default psuedo-install config in $HOME/.buildcontrib
-   -f[orce]     - force an action to complete even if there are warnings
-   -e[nable]    - automatically enable installed plugins in LocalSite.cfg
-                  (default)
-   -m[anual]    - do not automatically enable installed plugins in LocalSite.cfg
-   -l[ink]      - create links %linkByDefault%
-   -c[opy]      - copy instead of linking %copyByDefault%
-   -u[ninstall] - self explanatory (doesn't remove dirs)
-   core         - install core (create and link derived objects)
-   all          - install core + all extensions (big job)
-   default      - install core + extensions listed in lib/MANIFEST
-   developer    - core + default + key developer environment
-   <module>...  - one or more extensions to install (by name or git URL)
-   -[A]utoconf  - make a simplistic LocalSite.cfg, using just the defaults in lib/Foswiki.spec
+  -C[onfig]    - path to config file (default $HOME/.buildcontrib, or envar
+                                              $FOSWIKI_PSEUDOINSTALL_CONFIG)
+  -G[enerate]  - generate default psuedo-install config in $HOME/.buildcontrib
+  -f[orce]     - force an action to complete even if there are warnings
+  -e[nable]    - automatically enable installed plugins in LocalSite.cfg
+                 (default)
+  -m[anual]    - do not automatically enable installed plugins in LocalSite.cfg
+  -l[ink]      - create links %linkByDefault%
+  -c[opy]      - copy instead of linking %copyByDefault%
+  -u[ninstall] - self explanatory (doesn't remove dirs)
+  core         - install core (create and link derived objects)
+  all          - install core + all extensions (big job)
+  default      - install core + extensions listed in lib/MANIFEST
+  developer    - core + default + key developer environment
+  <module>...  - one or more extensions to install (by name or git URL)
+  -[A]utoconf  - make a simplistic LocalSite.cfg, using just the defaults in lib/Foswiki.spec
 
 Examples:
-   softlink and enable FirstPlugin and SomeContrib
-       perl pseudo-install.pl -force -enable -link FirstPlugin SomeContrib
+  softlink and enable FirstPlugin and SomeContrib
+      perl pseudo-install.pl -force -enable -link FirstPlugin SomeContrib
    
-   check out a new trunk, create a default LocalSite.cfg, install and enable
-   all the plugins for the default distribution (and then run the unit tests)
-       svn co http://svn.foswiki.org/trunk
-       cd trunk/core
-       ./pseudo-install.pl -A developer
-       cd test/unit
-       ../bin/TestRunner.pl -clean FoswikiSuite.pm
+  Check out a new trunk, create a default LocalSite.cfg, install and enable
+  all the plugins for the default distribution (and then run the unit tests)
+      svn co http://svn.foswiki.org/trunk
+      cd trunk/core
+      ./pseudo-install.pl -A developer
+      cd test/unit
+      ../bin/TestRunner.pl -clean FoswikiSuite.pm
 
-   check out a new trunk using git, then install and enable an extension from
-   an abritrary git repository
-       git clone git://github.com/foswiki/core.git
-       cd core
-       ./pseudo-install.pl -A developer
-       ./pseudo-install.pl -e git@github.com:/me/MyPlugin.git
+  Creating a git-repo-per-extension checkout: start by cloning core,
+      git clone git://github.com/foswiki/core.git
+      cd core
+  Then, install developer extensions. Missing extensions are automatically
+  cloned from github.com/foswiki/<module>, & configured automatically for
+  git-svn use against svn.foswiki.org. 'master' branch is svn's trunk.
+      ./pseudo-install.pl developer
+  Install & enable an extension from an abritrary git repo
+      ./pseudo-install.pl -e git@github.com:/me/MyPlugin.git
+
+  NOTE: "Generated" files (eg. pub/....css.gz) are added to a .gitignore file in
+  the root of each module. See http://foswiki.org/Development/GitAndPseudoInstall
 EOM
 my %generated_files;
 my $install;
@@ -880,7 +886,7 @@ sub generateAlternateVersion {
     my ( $moduleDir, $dir, $file, $link ) = @_;
     my $found    = 0;
     my $compress = 0;
-    trace File::Spec->catfile( $moduleDir, $file ) . ' not found';
+    trace( File::Spec->catfile( $moduleDir, $file ) . ' not found' );
 
     if ( not $found and $file =~ /(.*)\.gz$/ ) {
         $file     = $1;
@@ -924,7 +930,7 @@ sub generateAlternateVersion {
             binmode $of;
             print $of $text;
             close($of);
-            $generated_files{$moduleDir}{$file} = 1;
+            $generated_files{$moduleDir}{"$file.gz"} = 1;
         }
         else {
 
@@ -935,6 +941,7 @@ sub generateAlternateVersion {
               . _cleanPath($file) . ".gz";
             local $ENV{PATH} = untaint( $ENV{PATH} );
             trace `$command`;
+            $generated_files{$moduleDir}{"$file.gz"} = 1;
         }
     }
 
@@ -1264,8 +1271,8 @@ sub merge_gitignore {
     my @merged_rules;
     my @match_rules;
 
-    ASSERT( ref($input_files) eq 'HASH' );
-    ASSERT( ref($old_rules)   eq 'ARRAY' );
+    die unless ( ref($input_files) eq 'HASH' );
+    die unless ( ref($old_rules)   eq 'ARRAY' );
 
     # Extract a list of wildcard expressions into @match_rules
     foreach my $old_rule ( @{$old_rules} ) {
@@ -1331,31 +1338,30 @@ sub merge_gitignore {
 
 sub update_gitignore_files {
     while ( my ( $moduleDir, $files ) = each %generated_files ) {
-        my $ignorefile = File::Spec->catfile( $moduleDir, '.gitignore' );
-        my @ignorelist;
 
-        if ( File::Spec->catdir( $moduleDir, '.git' ) ) {
-            foreach my $file ( values %{$files} ) {
-                push( @ignorelist, $file );
+        # Only create a .gitignore if we're really in a git repo.
+        if (   -d File::Spec->catdir( $moduleDir, '.git' )
+            or -d File::Spec->catdir( $moduleDir, '..', '.git' ) )
+        {
+            my $ignorefile = File::Spec->catfile( $moduleDir, '.gitignore' );
+            my @lines;
+
+            if ( open( my $fh, '<', $ignorefile ) ) {
+                while ( my $line = <$fh> ) {
+                    push( @lines, $line );
+                }
+                close($fh);
             }
-        }
-        if ( open( my $fh, '<', $ignorefile ) ) {
-            my @output;
-            while ( my $line = <$fh> ) {
-                push( @output, $line );
-            }
-            close($fh);
+            @lines = merge_gitignore( $files, \@lines );
             if ( open( my $fh, '>', $ignorefile ) ) {
-                foreach my $ignored (@ignorelist) {
+                foreach my $line (@lines) {
+                    print $fh $line . "\n";
                 }
                 close($fh) or error("Couldn't close $ignorefile");
             }
             else {
                 error("Couldn't open $ignorefile for writing, $OS_ERROR");
             }
-        }
-        else {
-            error("Couldn't open $ignorefile for reading, $OS_ERROR");
         }
     }
 }
