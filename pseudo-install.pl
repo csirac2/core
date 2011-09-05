@@ -854,17 +854,12 @@ sub satisfyDependency {
 
 sub linkOrCopy {
     my ( $moduleDir, $source, $target, $link ) = @_;
-    my $srcfile = File::Spec->catfile($moduleDir, $source);
-    my $dstfile = File::Spec->catfile($moduleDir, $target);
+    my $srcfile = File::Spec->catfile( $moduleDir, $source );
+    my $dstfile = File::Spec->catfile( $moduleDir, $target );
 
-    trace '...'
-      . ( $link ? 'link' : 'copy' )
-      . " $srcfile to $dstfile";
+    trace '...' . ( $link ? 'link' : 'copy' ) . " $srcfile to $dstfile";
     if ($link) {
-        symlink(
-            _cleanPath($srcfile),
-            _cleanPath($dstfile)
-          )
+        symlink( _cleanPath($srcfile), _cleanPath($dstfile) )
           or die "Failed to link $srcfile as $dstfile: $!";
         print "Linked $source as $target\n";
     }
@@ -883,18 +878,18 @@ sub linkOrCopy {
 # So that file.js.gz and file.uncompressed.js get created
 sub generateAlternateVersion {
     my ( $moduleDir, $dir, $file, $link ) = @_;
-    my $found = 0;
+    my $found    = 0;
     my $compress = 0;
-    trace File::Spec->catfile($moduleDir, $file) . ' not found';
+    trace File::Spec->catfile( $moduleDir, $file ) . ' not found';
 
     if ( not $found and $file =~ /(.*)\.gz$/ ) {
         $file     = $1;
-        $found    = ( -f File::Spec->catfile($moduleDir, $1) );
+        $found    = ( -f File::Spec->catfile( $moduleDir, $1 ) );
         $compress = 1;
     }
-    if (  not $found
+    if (    not $found
         and $file =~ /^(.+)(\.(?:un)?compressed|_src)(\..+)$/
-        and -f File::Spec->catfile($moduleDir, $1 . $3 ) )
+        and -f File::Spec->catfile( $moduleDir, $1 . $3 ) )
     {
         linkOrCopy $moduleDir, $file, $1 . $3, $link;
         $generated_files{$moduleDir}{$file} = 1;
@@ -905,7 +900,7 @@ sub generateAlternateVersion {
         for my $kind (qw( .uncompressed .compressed _src )) {
             my $srcfile = $src . $kind . $ext;
 
-            if ( -f File::Spec->catfile($moduleDir, $srcfile) ) {
+            if ( -f File::Spec->catfile( $moduleDir, $srcfile ) ) {
                 linkOrCopy $moduleDir, $srcfile, $file, $link;
                 $generated_files{$moduleDir}{$file} = 1;
                 $found++;
@@ -1259,57 +1254,75 @@ sub exec_opts {
     return;
 }
 
+# input_files: a lookup hashref keyed by files relative to some moduleDir
+# old_rules: arrayref of lines in the exisiting moduleDir/.gitignore file
+# returns: array of old_rules appended with new files to ignore (that hopefully
+#          don't match any wildcard expressions in existing .gitignore)
+
 sub merge_gitignore {
-    my ($input_files, $old_rules) = @_;
+    my ( $input_files, $old_rules ) = @_;
     my @merged_rules;
     my @match_rules;
 
-    ASSERT(ref($input_files) eq 'HASH');
-    ASSERT(ref($old_rules) eq 'ARRAY');
-    foreach my $old_rule (@{$old_rules}) {
-        if ($old_rule and not $old_rule =~ /^#/) {
+    ASSERT( ref($input_files) eq 'HASH' );
+    ASSERT( ref($old_rules)   eq 'ARRAY' );
+
+    # Extract a list of wildcard expressions into @match_rules
+    foreach my $old_rule ( @{$old_rules} ) {
+        if ( $old_rule and not $old_rule =~ /^#/ ) {
             $old_rule =~ s/^\s*//;
             $old_rule =~ s/\s*$//;
-            if ($old_rule =~ /[\/\\]$/) {
+            if ( $old_rule =~ /[\/\\]$/ ) {
                 $old_rule .= '*';
             }
-            if ($old_rule =~ /\*/) {
+            if ( $old_rule =~ /\*/ ) {
                 $old_rule =~ s/^\!\s*(.*?)$/$1/;
-                push(@match_rules, $old_rule);
+                push( @match_rules, $old_rule );
             }
         }
     }
-    foreach my $old_rule (@{$old_rules}) {
-        push(@merged_rules, $old_rule);
-        if ($old_rule and not $old_rule =~ /^#/ and $old_rule =~ /\w/) {
+
+    # @merged_rules is a version of @{$old_rules}, with any new files not
+    # matching existing wildcards, added to it
+    foreach my $old_rule ( @{$old_rules} ) {
+        push( @merged_rules, $old_rule );
+
+        # If the line contains a rule
+        if ( $old_rule and not $old_rule =~ /^#/ and $old_rule =~ /\w/ ) {
+
+            # Normalise the rule
             $old_rule =~ s/^\s*\!\s*(.*?)\s*$/$1/;
-            if ($old_rule =~ /\*/) {
+            if ( $old_rule =~ /\*/ ) {
+
                 # It's a wildcard
-                push(@match_rules, $old_rule);
-            } else {
-                # It's a file
-                if (exists $input_files->{$old_rule}) {
+                push( @match_rules, $old_rule );
+            }
+            else {
+
+                # It's a file; remove from input list
+                if ( exists $input_files->{$old_rule} ) {
                     delete $input_files->{$old_rule};
                 }
             }
         }
     }
+
     # input_files should only contain new files which don't match an existing
     # wildcard
-    foreach my $new_file (keys %{$input_files}) {
+    foreach my $new_file ( keys %{$input_files} ) {
         my $nmatch_rules = scalar(@match_rules);
         my $matched;
         my $i = 0;
 
-        while (not $matched and $i < $nmatch_rules) {
+        while ( not $matched and $i < $nmatch_rules ) {
             my $regex = $match_rules[$i];
 
-            $regex =~ s/\*/.\*/g;
-            $matched = ($new_file =~ /^$regex$/);
             $i += 1;
+            $regex =~ s/\*/\.\*/g;
+            $matched = ( $new_file =~ /^$regex$/ );
         }
-        if (not $matched) {
-            push(@merged_rules, $new_file);
+        if ( not $matched ) {
+            push( @merged_rules, $new_file );
         }
     }
 
@@ -1317,29 +1330,31 @@ sub merge_gitignore {
 }
 
 sub update_gitignore_files {
-    while (my ($moduleDir, $files) = each %generated_files) {
-        my $ignorefile = File::Spec->catfile($moduleDir, '.gitignore');
+    while ( my ( $moduleDir, $files ) = each %generated_files ) {
+        my $ignorefile = File::Spec->catfile( $moduleDir, '.gitignore' );
         my @ignorelist;
 
-        if (File::Spec->catdir($moduleDir, '.git')) {
+        if ( File::Spec->catdir( $moduleDir, '.git' ) ) {
             foreach my $file ( values %{$files} ) {
-                push(@ignorelist, $file);
+                push( @ignorelist, $file );
             }
         }
-        if (open(my $fh, '<', $ignorefile)) {
+        if ( open( my $fh, '<', $ignorefile ) ) {
             my @output;
             while ( my $line = <$fh> ) {
-                push(@output, $line);
+                push( @output, $line );
             }
             close($fh);
-            if (open(my $fh, '>', $ignorefile)) {
+            if ( open( my $fh, '>', $ignorefile ) ) {
                 foreach my $ignored (@ignorelist) {
                 }
                 close($fh) or error("Couldn't close $ignorefile");
-            } else {
+            }
+            else {
                 error("Couldn't open $ignorefile for writing, $OS_ERROR");
             }
-        } else {
+        }
+        else {
             error("Couldn't open $ignorefile for reading, $OS_ERROR");
         }
     }
