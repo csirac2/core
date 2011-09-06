@@ -2350,7 +2350,7 @@ Also does not ensure consistency of the store
 
 =cut
 
-sub removeFromStore {
+sub DELETE_USE_STORE_DIRECTLYremoveFromStore {
     my ( $this, $attachment ) = @_;
     
     ASSERT( $this->{web}, 'this is not a removable object' ) if DEBUG;

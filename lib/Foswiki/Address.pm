@@ -69,7 +69,7 @@ use Foswiki::Meta();
 
 #use Data::Dumper;
 use constant TRACE  => 0;    # Don't forget to uncomment dumper
-use constant TRACE2 => 1;
+use constant TRACE2 => 0;
 
 my %atomiseAs = (
     web     => \&_atomiseAsWeb,

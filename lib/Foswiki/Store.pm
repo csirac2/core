@@ -60,6 +60,7 @@ Returns a new B<Foswiki::Store> or dies on error.
 
 sub new {
     my $class = shift;
+
     $singleton ||= bless {@_}, $class;
     ASSERT(defined($singleton->{stores})) if DEBUG; #make sure we're not creating a Store that contains nothing.
     die if ( not defined( $singleton->{stores} ) );

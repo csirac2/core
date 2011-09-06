@@ -506,7 +506,7 @@ sub remove {
     ASSERT( $args{address}->web ) if DEBUG;
 
     my $handler = $this->getHandler( $args{address}, $args{attachment} );
-    $handler->remove();
+    my $result = $handler->remove();
 
     $this->tellListeners(
         verb          => 'remove',
@@ -522,6 +522,8 @@ sub remove {
     elsif ($args{attachment}) {
         $handler->recordChange( $args{cuid}, 0, 'Deleted attachment ' . $args{attachment} );
     }
+    
+    return (defined($result)?$result:1);    #return true unless handler returns false.
 }
 
 sub query {
