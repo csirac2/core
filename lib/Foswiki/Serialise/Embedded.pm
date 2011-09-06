@@ -82,7 +82,7 @@ sub read {
     
     #correct the META for which there can be only one. (ignore all but first)
     map {
-         $output{$_} = $output{$_}[0] if (defined($output{$_}));
+         $output{$_} = [$output{$_}[0]] if (defined($output{$_}));
      } qw(TOPICINFO TOPICPARENT TOPICMOVED);
     
     $output{_text} = $result;
