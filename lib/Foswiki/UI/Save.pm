@@ -303,8 +303,7 @@ sub buildNewTopic {
 
             # Load the prev rev again, so we can do a 3 way merge
             my $prevTopicObject =
-              Foswiki::Meta->load( $session, $topicObject->web,
-                $topicObject->topic );
+                Foswiki::Store->load(address=>{web=>$topicObject->web, topic=>$topicObject->topic} );
 
             require Foswiki::Merge;
 
@@ -333,8 +332,7 @@ sub buildNewTopic {
 
                 # common ancestor; we can 3-way merge
                 my $ancestorMeta =
-                  Foswiki::Meta->load( $session, $topicObject->web,
-                    $topicObject->topic, $ancestorRev );
+                  Foswiki::Store->load( address=>{web=>$topicObject->web, topic=>$topicObject->topic, rev=>$ancestorRev});
                 $session->{plugins}->dispatch(
                     'beforeMergeHandler', $text,
                     $info->{version},     $prevTopicObject->text,
@@ -463,7 +461,7 @@ WARN
 
     $topic = expandAUTOINC( $session, $web, $topic );
 
-    my $topicObject = Foswiki::Meta->new( $session, $web, $topic );
+    my $topicObject = Foswiki::Store->load( create=>1, address=>{web=>$web, topic=>$topic} );
 
     if ( $saveaction eq 'cancel' ) {
         my $lease = $topicObject->getLease();
@@ -688,7 +686,7 @@ WARN
 __END__
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-Copyright (C) 2008-2010 Foswiki Contributors. Foswiki Contributors
+Copyright (C) 2008-2011 Foswiki Contributors. Foswiki Contributors
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
 

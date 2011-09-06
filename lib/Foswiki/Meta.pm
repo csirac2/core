@@ -494,7 +494,7 @@ TODO: this is insane. load() can fail - but it will give you a seemingly fine Me
 
 =cut
 
-sub load {
+sub DELETE_THIS_load {
     my $proto = shift;
     my $this;
     my $rev;

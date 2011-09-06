@@ -87,7 +87,7 @@ sub changeDefaultUser {
 
 =head2 ClassMethod load(address=>$address, cuid=>$cuid, create=>1, writeable=>1) -> $dataObject
    * =address=>$address= - (required) address of object - can be:
-      * ($web, $topic, $attachment, $rev) list
+      * {web->$web, topic=>$topic, attachment=>$attachment, rev=>$rev}
       * 'web.topic@4' style
       * Foswiki::Address
       * Foswiki::Object impl
@@ -662,6 +662,7 @@ sub template_function {
         }
         if (
                     ($functionname eq 'exists') or 
+                    ($functionname eq 'getLease') or 
                     ($functionname eq 'atomicLockInfo') or 
                     ($functionname eq 'atomicLock')
                     ) {
