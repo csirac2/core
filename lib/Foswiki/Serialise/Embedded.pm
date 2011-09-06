@@ -18,6 +18,9 @@ use Foswiki       ();
 use Foswiki::Meta ();
 use Assert;
 
+#debug!
+    use Data::Dumper;
+
 =begin TML
 
 ---++ ClassMethod new( $class,  ) -> $cereal
@@ -40,13 +43,53 @@ sub write {
 
 #really awkward - setEmbeddedStoreForm interleaves reading from text and calling Meta calls to update cache information
 #need to separate these out in a performant way.
-sub read {
-    die 'not implemented';
+sub DELETEMEread {
     my $module = shift;
     my ( $session, $result ) = @_;
 
-    ASSERT( $result->isa('Foswiki::Meta') ) if DEBUG;
-    return setEmbeddedStoreForm($result);
+    my @elements = split(/^(%META:.*)%\n/, $result);   
+
+    print STDERR "-elements --- = ".Dumper(@elements)."\n";
+
+
+    #split(/(\%META:.*\%\n)/, $result);
+    my %output;
+    foreach my $element (@elements) {
+            #1.0 compatibility
+            #$text =~ s/^%META:([^{]+){(.*)}%\n/ ..... /gem
+            #$text =~ s/^(%META:([^{]+){(.*)}%\n)/ ..... /gem
+        
+        #if ($element =~ /%META:([A..Z0..9]*)({.*})%/ ) {
+        if ($element =~ /^%META/ ) {
+            #TODO: find the marco parsing code?
+            print STDERR "Meta $1 - params $2\n"
+        } else {
+            print STDERR "text - $element\n";
+            ASSERT(not defined($output{text})) if DEBUG;
+            $output{text} = $element;
+        }
+    }
+    print STDERR "-complete --- = ".Dumper(%output)."\n";
+    die;
+    return \%output;
+}
+sub read {
+    my $module = shift;
+    my ( $session, $result ) = @_;
+
+    my %output;
+    $result =~ s/^%META:([^{]+){(.*)}%\n/push(@{$output{$1}}, _readKeyValues($2));''/gem;
+    
+    #correct the META for which there can be only one. (ignore all but first)
+    map {
+         $output{$_} = $output{$_}[0] if (defined($output{$_}));
+     } qw(TOPICINFO TOPICPARENT TOPICMOVED);
+    
+    $output{_text} = $result;
+
+    #die "-complete --- = ".Dumper(\%output)."\n";
+
+    return \%output;
 }
 
 =begin TML
@@ -70,7 +113,7 @@ TODO: can we move this code into Foswiki::Serialise ?
 sub getEmbeddedStoreForm {
     my $this = shift;
 
-    ASSERT( $this->{_web} && $this->{_topic}, 'this is not a topic object' )
+    ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
     $this->{_text} ||= '';
 
@@ -129,6 +172,11 @@ sub _writeTypes {
         next if ($type =~ /^_/ );
         my $data = $this->{$type};
         next if !defined $data;
+        
+        #HACK. DELETE and replace with serialise only registered tpes?
+        next unless (ref($data) eq 'ARRAY');    #data from Foswiki::Address
+        next if ($type eq 'webpath');
+        
         foreach my $item (@$data) {
             next if ($item =~ /^_/ );
             my $sep = '';
@@ -177,6 +225,41 @@ sub dataEncode {
 
     $datum =~ s/([%"\r\n{}])/'%'.sprintf('%02x',ord($1))/ge;
     return $datum;
+}
+
+=begin TML
+
+---++ StaticMethod dataDecode( $encoded ) -> $decoded
+
+Decode escapes in a string that was encoded using dataEncode
+
+The encoding has to be exported because Foswiki (and plugins) use
+encoded field data in other places e.g. RDiff, mainly as a shorthand
+for the properly parsed meta object. Some day we may be able to
+eliminate that....
+
+=cut
+
+sub dataDecode {
+    my $datum = shift;
+
+    $datum =~ s/%([\da-f]{2})/chr(hex($1))/gei;
+    return $datum;
+}
+
+
+# STATIC Build a hash by parsing name=value comma separated pairs
+# SMELL: duplication of Foswiki::Attrs, using a different
+# system of escapes :-(
+sub _readKeyValues {
+    my ($args) = @_;
+    my %res;
+
+    # Format of data is name='value' name1='value1' [...]
+    $args =~ s/\s*([^=]+)="([^"]*)"/
+      $res{$1} = dataDecode( $2 ), ''/ge;
+
+    return \%res;
 }
 
 1;

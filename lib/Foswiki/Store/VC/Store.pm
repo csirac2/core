@@ -42,6 +42,7 @@ use Error qw( :try );
 use Foswiki          ();
 use Foswiki::Meta    ();
 use Foswiki::Sandbox ();
+use Foswiki::Serialise();
 
 BEGIN {
 
@@ -72,44 +73,44 @@ sub finish {
 # Get a handler for the given object in the store.
 sub getHandler {
 
-    #my ( $this, $web, $topic, $attachment ) = @_;
+    #my ( $this, $web, $topic, $args{attachment} ) = @_;
     ASSERT( 0, "Must be implemented by subclasses" ) if DEBUG;
 }
 
 sub readTopic {
-    my ( $this, $topicObject, $version ) = @_;
+    my ( $this, %args ) = @_;
 
-    my ( $gotRev, $isLatest ) = $this->askListeners($topicObject, $version);
+    my ( $gotRev, $isLatest ) = $this->askListeners($args{address}, $args{rev});
 
     if ( defined($gotRev) and ( $gotRev > 0 or ($isLatest)) ) {
         return ( $gotRev, $isLatest );
     }
     ASSERT( not $isLatest ) if DEBUG;
 
-    my $handler = $this->getHandler($topicObject);
+    my $handler = $this->getHandler($args{address});
     $isLatest = 0;
 
     # check that the requested revision actually exists
-    if ( defined $version ) {
-        if ( !$version || !$handler->revisionExists($version) ) {
-            $version = $handler->getLatestRevisionID();
+    if ( defined $args{rev} ) {
+        if ( !$args{rev} || !$handler->revisionExists($args{rev}) ) {
+            $args{rev} = $handler->getLatestRevisionID();
         }
     }
 
-    ( my $text, $isLatest ) = $handler->getRevision($version);
+    ( my $text, $isLatest ) = $handler->getRevision($args{rev});
     unless ( defined $text ) {
         ASSERT( not $isLatest ) if DEBUG;
         return ( undef, $isLatest );
     }
 
     $text =~ s/\r//g;    # Remove carriage returns
-    $topicObject->setEmbeddedStoreForm($text);
+    $args{address}->setEmbeddedStoreForm($text);
 
-    $gotRev = $version;
+    $gotRev = $args{rev};
     unless ( defined $gotRev ) {
 
         # First try the just-loaded text for the revision
-        my $ri = $topicObject->get('TOPICINFO');
+        my $ri = $args{address}->get('TOPICINFO');
         if ( defined($ri) ) {
 
             # SMELL: this can end up overriding a correct rev no (the one
@@ -127,9 +128,9 @@ sub readTopic {
     # Add attachments that are new from reading the pub directory.
     # Only check the currently requested topic.
     if (   $Foswiki::cfg{RCS}{AutoAttachPubFiles}
-        && $topicObject->isSessionTopic() )
+        && $args{address}->isSessionTopic() )
     {
-        my @knownAttachments = $topicObject->find('FILEATTACHMENT');
+        my @knownAttachments = $args{address}->find('FILEATTACHMENT');
         my @attachmentsFoundInPub =
           $handler->synchroniseAttachmentsList( \@knownAttachments );
         my @validAttachmentsFound;
@@ -145,20 +146,20 @@ sub readTopic {
 
                 print STDERR 'AutoAttachPubFiles ignoring '
                   . $foundAttachment->{name} . ' in '
-                  . $topicObject->getPath()
+                  . $args{address}->getPath()
                   . ' - not a valid Foswiki Attachment filename';
             }
             else {
                 push @validAttachmentsFound, $foundAttachment;
                 $this->tellListeners(
                     verb          => 'autoattach',
-                    newmeta       => $topicObject,
+                    newmeta       => $args{address},
                     newattachment => $foundAttachment
                 );
             }
         }
 
-        $topicObject->putAll( 'FILEATTACHMENT', @validAttachmentsFound )
+        $args{address}->putAll( 'FILEATTACHMENT', @validAttachmentsFound )
           if @validAttachmentsFound;
     }
 
@@ -167,249 +168,247 @@ sub readTopic {
 }
 
 sub moveAttachment {
-    my ( $this, $oldTopicObject, $oldAttachment, $newTopicObject,
-        $newAttachment, $cUID )
+    my ( $this, %args )
       = @_;
 
-    my $handler = $this->getHandler( $oldTopicObject, $oldAttachment );
+    my $handler = $this->getHandler( $args{from}, $args{fromattachment} );
     if ( $handler->storedDataExists() ) {
-        $handler->moveAttachment( $this, $newTopicObject->web,
-            $newTopicObject->topic, $newAttachment );
+        $handler->moveAttachment( $this, $args{address}->web,
+            $args{address}->topic, $args{attachment} );
         $this->tellListeners(
             verb          => 'update',
-            oldmeta       => $oldTopicObject,
-            oldattachment => $oldAttachment,
-            newmeta       => $newTopicObject,
-            newattachment => $newAttachment
+            oldmeta       => $args{from},
+            oldattachment => $args{fromattachment},
+            newmeta       => $args{address},
+            newattachment => $args{attachment}
         );
-        $handler->recordChange( $cUID, 0 );
+        $handler->recordChange( $args{cuid}, 0 );
     }
 }
 
 sub copyAttachment {
-    my ( $this, $oldTopicObject, $oldAttachment, $newTopicObject,
-        $newAttachment, $cUID )
+    my ( $this, %args )
       = @_;
 
-    my $handler = $this->getHandler( $oldTopicObject, $oldAttachment );
+    my $handler = $this->getHandler( $args{from}, $args{fromattachment} );
     if ( $handler->storedDataExists() ) {
-        $handler->copyAttachment( $this, $newTopicObject->web,
-            $newTopicObject->topic, $newAttachment );
+        $handler->copyAttachment( $this, $args{address}->web,
+            $args{address}->topic, $args{attachment} );
         $this->tellListeners(
             verb          => 'insert',
-            newmeta       => $newTopicObject,
-            newattachment => $newAttachment
+            newmeta       => $args{address},
+            newattachment => $args{attachment}
         );
-        $handler->recordChange( $cUID, 0 );
+        $handler->recordChange( $args{cuid}, 0 );
     }
 }
 
 sub attachmentExists {
-    my ( $this, $topicObject, $att ) = @_;
-    my $handler = $this->getHandler( $topicObject, $att );
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler( $args{address}, $args{attachment} );
     return $handler->storedDataExists();
 }
 
 sub moveTopic {
-    my ( $this, $oldTopicObject, $newTopicObject, $cUID ) = @_;
-    ASSERT($cUID) if DEBUG;
+    my ( $this, %args ) = @_;
+    ASSERT($args{cuid}) if DEBUG;
 
-    my $handler = $this->getHandler( $oldTopicObject, '' );
-    my $rev = $handler->getLatestRevisionID();
+    my $handler = $this->getHandler( $args{from}, '' );
+    $args{rev} = $handler->getLatestRevisionID();
 
-    $handler->moveTopic( $this, $newTopicObject->web, $newTopicObject->topic );
+    $handler->moveTopic( $this, $args{address}->web, $args{address}->topic );
 
     $this->tellListeners(
         verb    => 'update',
-        oldmeta => $oldTopicObject,
-        newmeta => $newTopicObject
+        oldmeta => $args{from},
+        newmeta => $args{address}
     );
 
-    if ( $newTopicObject->web ne $oldTopicObject->web ) {
+    if ( $args{address}->web ne $args{from}->web ) {
 
         # Record that it was moved away
-        $handler->recordChange( $cUID, $rev );
+        $handler->recordChange( $args{cuid}, $args{rev} );
     }
 
-    $handler = $this->getHandler( $newTopicObject, '' );
-    $handler->recordChange( $cUID, $rev );
+    $handler = $this->getHandler( $args{address}, '' );
+    $handler->recordChange( $args{cuid}, $args{rev} );
 }
 
 sub moveWeb {
-    my ( $this, $oldWebObject, $newWebObject, $cUID ) = @_;
-    ASSERT($cUID) if DEBUG;
+    my ( $this, %args ) = @_;
+    ASSERT($args{cuid}) if DEBUG;
 
-    my $handler = $this->getHandler($oldWebObject);
-    $handler->moveWeb( $newWebObject->web );
+    my $handler = $this->getHandler($args{from});
+    $handler->moveWeb( $args{address}->web );
 
     $this->tellListeners(
         verb    => 'update',
-        oldmeta => $oldWebObject,
-        newmeta => $newWebObject
+        oldmeta => $args{from},
+        newmeta => $args{address}
     );
 
     # We have to log in the new web, otherwise we would re-create the dir with
     # a useless .changes. See Item9278
-    $handler = $this->getHandler($newWebObject);
-    $handler->recordChange( $cUID, 0, 'Moved from ' . $oldWebObject->web );
+    $handler = $this->getHandler($args{address});
+    $handler->recordChange( $args{cuid}, 0, 'Moved from ' . $args{from}->web );
 }
 
 sub testAttachment {
-    my ( $this, $topicObject, $attachment, $test ) = @_;
-    my $handler = $this->getHandler( $topicObject, $attachment );
-    return $handler->test($test);
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler( $args{address}, $args{attachment} );
+    return $handler->test($args{test});
 }
 
 sub openAttachment {
-    my ( $this, $topicObject, $att, $mode, @opts ) = @_;
+    my ( $this, %args ) = @_;
 
-    my $handler = $this->getHandler( $topicObject, $att );
-    return $handler->openStream( $mode, @opts );
+    my $handler = $this->getHandler( $args{address}, $args{attachment} );
+    return $handler->openStream( $args{mode}, %args );
 }
 
 sub getRevisionHistory {
-    my ( $this, $topicObject, $attachment ) = @_;
+    my ( $this, %args ) = @_;
     
-    my $itr = $this->askListenersRevisionHistory($topicObject, $attachment);
+    my $itr = $this->askListenersRevisionHistory($args{address}, $args{attachment});
 
     if ( defined($itr) ) {
         return $itr;
     }
 
-    my $handler = $this->getHandler( $topicObject, $attachment );
+    my $handler = $this->getHandler( $args{address}, $args{attachment} );
     return $handler->getRevisionHistory();
 }
 
 sub getNextRevision {
-    my ( $this, $topicObject ) = @_;
-    my $handler = $this->getHandler($topicObject);
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler($args{address});
     return $handler->getNextRevisionID();
 }
 
 sub getRevisionDiff {
-    my ( $this, $topicObject, $rev2, $contextLines ) = @_;
-    ASSERT( defined($contextLines) ) if DEBUG;
+    my ( $this, %args ) = @_;
+    ASSERT( defined($args{contextLines}) ) if DEBUG;
 
-    my $rcs = $this->getHandler($topicObject);
-    return $rcs->revisionDiff( $topicObject->getLoadedRev(), $rev2,
-        $contextLines );
+    my $rcs = $this->getHandler($args{address});
+    return $rcs->revisionDiff( $args{address}->getLoadedRev(), $args{rev},
+        $args{contextLines} );
 }
 
 sub getAttachmentVersionInfo {
-    my ( $this, $topicObject, $rev, $attachment ) = @_;
-    my $handler = $this->getHandler( $topicObject, $attachment );
-    return $handler->getInfo( $rev || 0 );
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler( $args{address}, $args{attachment} );
+    return $handler->getInfo( $args{rev} || 0 );
 }
 
 sub getVersionInfo {
-    my ( $this, $topicObject ) = @_;
-    my $handler = $this->getHandler($topicObject);
-    return $handler->getInfo( $topicObject->getLoadedRev() );
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler($args{address});
+    return $handler->getInfo( $args{address}->getLoadedRev() );
 }
 
 sub saveAttachment {
-    my ( $this, $topicObject, $name, $stream, $cUID ) = @_;
-    my $handler    = $this->getHandler( $topicObject, $name );
+    my ( $this, %args ) = @_;
+    my $handler    = $this->getHandler( $args{address}, $args{name} );
     my $currentRev = $handler->getLatestRevisionID();
     my $nextRev    = $currentRev + 1;
-    my $verb = ( $topicObject->hasAttachment($name) ) ? 'update' : 'insert';
-    $handler->addRevisionFromStream( $stream, 'save attachment', $cUID );
+    my $verb = ( $args{address}->hasAttachment($args{name}) ) ? 'update' : 'insert';
+    $handler->addRevisionFromStream( $args{stream}, 'save attachment', $args{cuid} );
     $this->tellListeners(
         verb          => $verb,
-        newmeta       => $topicObject,
-        newattachment => $name
+        newmeta       => $args{address},
+        newattachment => $args{name}
     );
-    $handler->recordChange( $cUID, $nextRev );
+    $handler->recordChange( $args{cuid}, $nextRev );
     return $nextRev;
 }
 
 sub saveTopic {
-    my ( $this, $topicObject, $cUID, $options ) = @_;
-    ASSERT( $topicObject->isa('Foswiki::Meta') ) if DEBUG;
-    ASSERT($cUID) if DEBUG;
+    my ( $this, %args, $options ) = @_;
+    ASSERT( $args{address}->isa('Foswiki::Meta') ) if DEBUG;
+    ASSERT($args{cuid}) if DEBUG;
 
-    my $handler = $this->getHandler($topicObject);
+    my $handler = $this->getHandler($args{address});
 
-    my $verb = ( $topicObject->existsInStore() ) ? 'update' : 'insert';
+    my $verb = ( $args{address}->existsInStore() ) ? 'update' : 'insert';
 
-    $handler->addRevisionFromText( $topicObject->getEmbeddedStoreForm(),
-        'save topic', $cUID, $options->{forcedate} );
+    $handler->addRevisionFromText( $args{address}->getEmbeddedStoreForm(),
+        'save topic', $args{cuid}, $options->{forcedate} );
 
     # just in case they are not sequential
     my $nextRev = $handler->getLatestRevisionID();
 
     my $extra = $options->{minor} ? 'minor' : '';
-    $handler->recordChange( $cUID, $nextRev, $extra );
+    $handler->recordChange( $args{cuid}, $nextRev, $extra );
 
-    $this->tellListeners( verb => $verb, newmeta => $topicObject );
+    $this->tellListeners( verb => $verb, newmeta => $args{address} );
 
     return $nextRev;
 }
 
 sub repRev {
-    my ( $this, $topicObject, $cUID, %options ) = @_;
-    ASSERT( $topicObject->isa('Foswiki::Meta') ) if DEBUG;
-    ASSERT($cUID) if DEBUG;
+    my ( $this, %args, %options ) = @_;
+    ASSERT( $args{address}->isa('Foswiki::Meta') ) if DEBUG;
+    ASSERT($args{cuid}) if DEBUG;
 
-    my $info    = $topicObject->getRevisionInfo();
-    my $handler = $this->getHandler($topicObject);
-    $handler->replaceRevision( $topicObject->getEmbeddedStoreForm(),
+    my $info    = $args{address}->getRevisionInfo();
+    my $handler = $this->getHandler($args{address});
+    $handler->replaceRevision( $args{address}->getEmbeddedStoreForm(),
         'reprev', $info->{author}, $info->{date} );
-    my $rev = $handler->getLatestRevisionID();
-    $handler->recordChange( $cUID, $rev, 'minor, reprev' );
+    $args{rev} = $handler->getLatestRevisionID();
+    $handler->recordChange( $args{cuid}, $args{rev}, 'minor, reprev' );
 
-    $this->tellListeners( verb => 'update', newmeta => $topicObject );
+    $this->tellListeners( verb => 'update', newmeta => $args{address} );
 
-    return $rev;
+    return $args{rev};
 }
 
 sub delRev {
-    my ( $this, $topicObject, $cUID ) = @_;
-    ASSERT( $topicObject->isa('Foswiki::Meta') ) if DEBUG;
-    ASSERT($cUID) if DEBUG;
+    my ( $this, %args ) = @_;
+    ASSERT( $args{address}->isa('Foswiki::Meta') ) if DEBUG;
+    ASSERT($args{cuid}) if DEBUG;
 
-    my $handler = $this->getHandler($topicObject);
-    my $rev     = $handler->getLatestRevisionID();
-    if ( $rev <= 1 ) {
+    my $handler = $this->getHandler($args{address});
+    $args{rev}     = $handler->getLatestRevisionID();
+    if ( $args{rev} <= 1 ) {
         throw Error::Simple( 'Cannot delete initial revision of '
-              . $topicObject->web . '.'
-              . $topicObject->topic );
+              . $args{address}->web . '.'
+              . $args{address}->topic );
     }
     $handler->deleteRevision();
 
     # restore last topic from repository
-    $handler->restoreLatestRevision($cUID);
+    $handler->restoreLatestRevision($args{cuid});
 
     # reload the topic object
-    $topicObject->unload();
-    $topicObject->loadVersion();
+    $args{address}->unload();
+    $args{address}->loadVersion();
 
-    $this->tellListeners( verb => 'update', newmeta => $topicObject );
+    $this->tellListeners( verb => 'update', newmeta => $args{address} );
 
-    $handler->recordChange( $cUID, $rev );
+    $handler->recordChange( $args{cuid}, $args{rev} );
 
-    return $rev;
+    return $args{rev};
 }
 
 sub atomicLockInfo {
-    my ( $this, $topicObject ) = @_;
-    my $handler = $this->getHandler($topicObject);
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler($args{address});
     return $handler->isLocked();
 }
 
 # It would be nice to use flock to do this, but the API is unreliable
 # (doesn't work on all platforms)
 sub atomicLock {
-    my ( $this, $topicObject, $cUID ) = @_;
-    my $handler = $this->getHandler($topicObject);
-    $handler->setLock( 1, $cUID );
+    my ( $this, %args ) = @_;
+    my $handler = $this->getHandler($args{address});
+    $handler->setLock( 1, $args{cuid} );
 }
 
 sub atomicUnlock {
-    my ( $this, $topicObject, $cUID ) = @_;
+    my ( $this, %args ) = @_;
 
-    my $handler = $this->getHandler($topicObject);
-    $handler->setLock( 0, $cUID );
+    my $handler = $this->getHandler($args{address});
+    $handler->setLock( 0, $args{cuid} );
 }
 
 # A web _has_ to have a preferences topic to be a web.
@@ -436,7 +435,7 @@ sub webExists {
 
 sub topicExists {
     my ( $this, $web, $topic ) = @_;
-
+    
     return 0 unless defined $web && $web ne '';
     $web =~ s#\.#/#go;
     return 0 unless defined $topic && $topic ne '';
@@ -460,9 +459,9 @@ sub eachChange {
 }
 
 sub eachAttachment {
-    my ( $this, $topicObject ) = @_;
+    my ( $this, %args ) = @_;
 
-    my $handler = $this->getHandler($topicObject);
+    my $handler = $this->getHandler($args{address});
     my @list    = $handler->getAttachmentList();
     require Foswiki::ListIterator;
     return new Foswiki::ListIterator( \@list );
@@ -503,25 +502,25 @@ sub eachWeb {
 }
 
 sub remove {
-    my ( $this, $cUID, $topicObject, $attachment ) = @_;
-    ASSERT( $topicObject->web ) if DEBUG;
+    my ( $this, %args ) = @_;
+    ASSERT( $args{address}->web ) if DEBUG;
 
-    my $handler = $this->getHandler( $topicObject, $attachment );
+    my $handler = $this->getHandler( $args{address}, $args{attachment} );
     $handler->remove();
 
     $this->tellListeners(
         verb          => 'remove',
-        oldmeta       => $topicObject,
-        oldattachment => $attachment
+        oldmeta       => $args{address},
+        oldattachment => $args{attachment}
     );
 
     # Only log when deleting topics or attachment, otherwise we would re-create
     # an empty directory with just a .changes. See Item9278
-    if ( my $topic = $topicObject->topic ) {
-        $handler->recordChange( $cUID, 0, 'Deleted ' . $topic );
+    if ( my $topic = $args{address}->topic ) {
+        $handler->recordChange( $args{cuid}, 0, 'Deleted ' . $topic );
     }
-    elsif ($attachment) {
-        $handler->recordChange( $cUID, 0, 'Deleted attachment ' . $attachment );
+    elsif ($args{attachment}) {
+        $handler->recordChange( $args{cuid}, 0, 'Deleted attachment ' . $args{attachment} );
     }
 }
 
@@ -559,25 +558,25 @@ sub query {
 }
 
 sub getRevisionAtTime {
-    my ( $this, $topicObject, $time ) = @_;
+    my ( $this, %args ) = @_;
 
-    my $handler = $this->getHandler($topicObject);
-    return $handler->getRevisionAtTime($time);
+    my $handler = $this->getHandler($args{address});
+    return $handler->getRevisionAtTime($args{time});
 }
 
 sub getLease {
-    my ( $this, $topicObject ) = @_;
+    my ( $this, %args ) = @_;
 
-    my $handler = $this->getHandler($topicObject);
+    my $handler = $this->getHandler($args{address});
     my $lease   = $handler->getLease();
     return $lease;
 }
 
 sub setLease {
-    my ( $this, $topicObject, $lease ) = @_;
+    my ( $this, %args ) = @_;
 
-    my $handler = $this->getHandler($topicObject);
-    $handler->setLease($lease);
+    my $handler = $this->getHandler($args{address});
+    $handler->setLease($args{lease});
 }
 
 sub removeSpuriousLeases {
@@ -588,18 +587,87 @@ sub removeSpuriousLeases {
 ############################################################################
 # new foswiki 2.0 API methods
 
+sub save {
+    my $this = shift;
+    my %args = @_;
+    ASSERT($args{address}) if DEBUG;
+    my $type = $args{address}->type();
+#    ASSERT($type) if DEBUG;
+    if ($type eq 'webpath') {
+        return $this->saveWeb($args{address}->web);
+    } elsif ($type eq 'topic') {
+        return $this->saveTopic(%args);
+    } 
+    die "can't call save(".$args{address}->getPath().")" if DEBUG;
+}
+
 sub exists {
     my $this = shift;
     my %args = @_;
     ASSERT($args{address}) if DEBUG;
     my $type = $args{address}->type();
-    ASSERT($type) if DEBUG;
-    if ($type eq 'web') {
+#    ASSERT($type) if DEBUG;
+    if ($type eq 'webpath') {
         return $this->webExists($args{address}->web);
     } elsif ($type eq 'topic') {
         return $this->topicExists($args{address}->web, $args{address}->topic);
     } 
-    die "can't call exists($type)" if DEBUG;
+    die "can't call exists(".$args{address}->getPath().") cos its type = $type " if DEBUG;
+}
+
+sub create {
+    my $this = shift;
+    my %args = @_;
+    ASSERT($args{address}) if DEBUG;
+    my $type = $args{address}->type();
+    ASSERT($type) if DEBUG;
+    if ($type eq 'webpath') {
+        my $newResource =  Foswiki::Meta->NEWnew( @_ );
+        return $newResource;
+    } elsif ($type eq 'topic') {
+        my $newResource =  Foswiki::Meta->NEWnew( @_ );
+        return $newResource;
+    } 
+    die "can't call load($type)" if DEBUG;
+}
+
+sub load {
+    my $this = shift;
+    my %args = @_;
+    ASSERT($args{address}) if DEBUG;
+    my $type = $args{address}->type();
+    ASSERT($type) if DEBUG;
+    if ($type eq 'webpath') {
+        my $newResource =  Foswiki::Meta->NEWnew( @_ );
+        return $newResource;
+    } elsif ($type eq 'topic') {
+        my $handler = $this->getHandler($args{address});
+
+        # check that the requested revision actually exists
+        $args{rev} = $args{address}->rev();
+        if ( defined $args{rev} ) {
+            if ( !$args{rev} || !$handler->revisionExists($args{rev}) ) {
+                $args{rev} = $handler->getLatestRevisionID();
+            }
+        }
+
+        #read the raw text file.
+        my ( $text, $isLatest ) = $handler->getRevision($args{rev});
+        unless ( defined $text ) {
+            ASSERT( not $isLatest ) if DEBUG;
+            return undef;
+        }
+
+        #parse it into a hash so we can use it to create a new Foswiki::Object
+        #$text =~ s/\r//g;    # Remove carriage returns
+        #$args{address}->setEmbeddedStoreForm($text);
+        my $parsedObj = Foswiki::Serialise::deserialise( $Foswiki::Plugins::SESSION, $text, 'embedded' );
+      
+#        return $this->topicExists($args{address}->web, $args{address}->topic);
+        my $newResource =  Foswiki::Meta->NEWnew( data=>$parsedObj, @_ );
+        return $newResource;
+    } 
+    die "can't call load($type)" if DEBUG;
 }
 
 sub log {

@@ -1006,7 +1006,7 @@ sub _createUserTopic {
         # Use the default version
         $fromWeb = $Foswiki::cfg{SystemWebName};
     }
-    my $tobj = Foswiki::Meta->load( $session, $fromWeb, $template );
+    my $tobj = Foswiki::Store::load(address=>{web=>$fromWeb, topic=>$template});
 
     my $log =
         $b1
@@ -1035,8 +1035,7 @@ sub _writeRegistrationDetailsToTopic {
 
     my $user = $data->{WikiName};
 
-    my $topicObject =
-      Foswiki::Meta->new( $session, $Foswiki::cfg{UsersWebName}, $user );
+    my $topicObject = Foswiki::Store::create(address=>{web=>$Foswiki::cfg{UsersWebName}, topic=>$user});
     my $log;
     my $addText;
 

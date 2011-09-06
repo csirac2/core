@@ -344,16 +344,20 @@ prototype object (which must be type Foswiki::Meta).
 
 =cut
 
-sub new {
+sub OLDnew {
     my ( $class, $session, $web, $topic, $text ) = @_;
-
+die 'no';
     if ( $session->isa('Foswiki::Meta') ) {
-
+#die 'ke';
         # Prototype
         ASSERT( !defined($web) && !defined($topic) && !defined($text) )
           if DEBUG;
         return $class->new( $session->session, $session->web, $session->topic );
     }
+
+    ASSERT(( caller(0) )[3] eq 'load') if DEBUG;
+    #die 'asdf';
+    
 
     my $this = (ref($class) || $class)->SUPER::new( web=>$web, topic=>$topic );
 #    my $this = bless(
@@ -409,6 +413,52 @@ sub new {
 
     return $this;
 }
+
+sub new {
+    my ( $class, $session, $web, $topic, $text ) = @_;
+
+    if ( $session->isa('Foswiki::Meta') ) {
+#die 'ke';
+        # Prototype
+        ASSERT( !defined($web) && !defined($topic) && !defined($text) )
+          if DEBUG;
+        return $class->new( $session->session, $session->web, $session->topic );
+    }
+
+    #ASSERT(( caller(0) )[3] eq 'load') if DEBUG;
+    #die 'asdf';
+    
+
+    #my $this = (ref($class) || $class)->SUPER::new( web=>$web, topic=>$topic );
+    
+    my $metaObject = Foswiki::Store::load(address=>{web=>$web, topic=>$topic});
+    return $metaObject;
+}
+
+#should only be called by the store..
+sub NEWnew {
+    my $class = shift;
+    use Data::Dumper;
+    die Dumper(\@_) unless (defined($_[2]));
+    my %args = @_;
+    
+    #copy the Foswiki::Address obj (which by this time it is :/)
+    my $this = (ref($class) || $class)->SUPER::new( $args{address} );
+    #TODO: fix the Foswiki::Address constructor to allow inheritance
+    @{$this}{keys(%{$args{data}})} = values(%{$args{data}}) if (defined($args{data}));
+    
+    #TODO: remove this.
+    $this->{_session} = $Foswiki::Plugins::SESSION;
+    # Index keyed on top level type mapping entry names to their
+    # index within the data array.
+    $this->{_indices} = undef;
+    $this->{FILEATTACHMENT} = [];
+    
+    #die "-complete NEWnew --- = ".Dumper($this)."\n";
+    
+    return $this;
+}
+
 
 =begin TML
 
@@ -547,7 +597,7 @@ sub finish {
     #someone keeps adding random references to Meta so to shake them out..
     #if its an intentional ref to an object, please add it to the undef's above.
 
-#SMELL: Sven noticed during development that something is adding a $this->{store} to a meta obj - havn't found it yet
+#SMELL: Sven noticed during development that something is adding a Foswiki::Store to a meta obj - havn't found it yet
 #ASSERT(not defined($this->{store})) if DEBUG;
 
         use Scalar::Util qw(blessed);
@@ -573,36 +623,6 @@ sub session {
 
 =begin TML
 
----++ ObjectMethod web([$name])
-   * =$name= - optional, change the web name in the object
-      * *Since* 28 Nov 2008
-Get/set the web name associated with the object.
-
-=cut
-
-sub web {
-    my ( $this, $web ) = @_;
-    $this->{web} = $web if defined $web;
-    return $this->{web};
-}
-
-=begin TML
-
----++ ObjectMethod topic([$name])
-   * =$name= - optional, change the topic name in the object
-      * *Since* 28 Nov 2008
-Get/set the topic name associated with the object.
-
-=cut
-
-sub topic {
-    my ( $this, $topic ) = @_;
-    $this->{topic} = $topic if defined $topic;
-    return $this->{topic};
-}
-
-=begin TML
-
 ---++ ObjectMethod getPath() -> $objectpath
 
 Get the canonical content access path for the object. For example,
@@ -611,7 +631,7 @@ access path "Myweb/Subweb.MyTopic"
 
 =cut
 
-sub getPath {
+sub OLDgetPath {
     my $this = shift;
     my $path = $this->{web};
 
@@ -707,11 +727,10 @@ sub existsInStore {
         # only checking for a topic existence already establishes a dependency
         $this->addDependency();
 
-        return $this->{_session}->{store}
-          ->exists(address=>$this);
+        return Foswiki::Store->exists(address=>$this);
     }
     elsif ( defined $this->{web} ) {
-        return $this->{_session}->{store}->exists(address=> $this );
+        return Foswiki::Store->exists(address=> $this );
     }
     else {
         return 1;    # the root always exists
@@ -820,7 +839,7 @@ sub populateNewWeb {
 
     # Validate that template web exists, or error should be thrown
     if ($templateWeb) {
-        unless ( $session->exists(address=>$templateWeb) ) {
+        unless ( Foswiki::Store->exists(address=>{web=>$templateWeb}) ) {
             throw Error::Simple(
                 'Template web ' . $templateWeb . ' does not exist' );
         }
@@ -829,16 +848,14 @@ sub populateNewWeb {
     # Make sure there is a preferences topic; this is how we know it's a web
     my $prefsTopicObject;
     if (
-        !$session->exists(address=>[
-            $this->{web}, $Foswiki::cfg{WebPrefsTopicName}
-        ]
+        !Foswiki::Store->exists(address=>{web=>
+            $this->{web}, topic=>$Foswiki::cfg{WebPrefsTopicName} }
         )
       )
     {
         my $prefsText = 'Preferences';
-        $prefsTopicObject =
-          $this->new( $this->{_session}, $this->{web},
-            $Foswiki::cfg{WebPrefsTopicName}, $prefsText );
+        $prefsTopicObject = Foswiki::Store::create(address=>{web=>$this->{web},
+            topic=>$Foswiki::cfg{WebPrefsTopicName}}, data=>{_text=>$prefsText} );
         $prefsTopicObject->save();
     }
 
@@ -912,8 +929,7 @@ Returns an Foswiki::Search::InfoCache iterator
 
 sub query {
     my ( $query, $inputTopicSet, $options ) = @_;
-    return $Foswiki::Plugins::SESSION->{store}
-      ->query( $query, $inputTopicSet, $Foswiki::Plugins::SESSION, $options );
+    return Foswiki::Store->query( $query, $inputTopicSet, $Foswiki::Plugins::SESSION, $options );
 }
 
 =begin TML
@@ -933,7 +949,7 @@ sub eachWeb {
 
     # Works on the root, so {web} may be undef
     ASSERT( !$this->{topic}, 'this object may not contain webs' ) if DEBUG;
-    return $this->{_session}->{store}->eachWeb( $this, $all );
+    return Foswiki::Store->eachWeb( address=>$this, all=>$all );
 
 }
 
@@ -955,7 +971,7 @@ sub eachTopic {
         require Foswiki::ListIterator;
         return new Foswiki::ListIterator( [] );
     }
-    return $this->{_session}->{store}->eachTopic($this);
+    return Foswiki::Store->eachTopic(address=>$this);
 }
 
 =begin TML
@@ -975,7 +991,7 @@ sub eachAttachment {
     my ($this) = @_;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
-    return $this->{_session}->{store}->eachAttachment($this);
+    return Foswiki::Store->eachAttachment(address=>$this);
 }
 
 =begin TML
@@ -998,81 +1014,11 @@ sub eachChange {
     # not valid at root level
     ASSERT( $this->{web} && !$this->{topic}, 'this is not a web object' )
       if DEBUG;
-    return $this->{_session}->{store}->eachChange( $this, $time );
+    return Foswiki::Store->eachChange( address=>$this, from=>$time, to=>time());
 }
 
 ############# TOPIC METHODS #############
 
-=begin TML
-
----++ ObjectMethod loadVersion($rev) -> $version
-
-Load the object from the store. The object must not be already loaded
-with a different rev (verified by an ASSERT)
-
-See =getLoadedRev= to determine what revision is currently being viewed.
-   * =$rev= - revision to load. If undef, 0, '' or > max available rev, will
-     load the latest rev. If the revision is in range but does not exist,
-     then will return an unloaded meta object (getLoadedRev() will be undef)
-
-Returns the version identifier for the loaded revision. (and undef if it failed to load)
-
-WARNING: see notes on revision numbers under =getLoadedRev=
-
-=cut
-
-sub loadVersion {
-    my ( $this, $rev ) = @_;
-
-    return unless $this->{topic};
-
-    # If no specific rev was requested, check that the latest rev is
-    # loaded.
-    if ( !defined $rev || !$rev ) {
-
-        # Trying to load the latest
-        if ( $this->{_latestIsLoaded} ) {
-
-            #TODO: these asserts trip up Comment Plugin
-            #ASSERT(defined($this->{_loadedRev})) if DEBUG;
-            #ASSERT($rev == $this->{_loadedRev}) if DEBUG;
-            return;
-        }
-        ASSERT( not( $this->{_loadedRev} ) ) if DEBUG;
-    }
-    elsif ( defined( $this->{_loadedRev} ) ) {
-
-        # Cannot load a different rev into an already-loaded
-        # Foswiki::Meta object
-        $rev = -1 unless defined $rev;
-        ASSERT( 0, "Attempt to reload $rev over version $this->{_loadedRev}" );
-    }
-
-    # Is it already loaded?
-    ASSERT( !($rev) or $rev =~ /^\s*\d+\s*/ ) if DEBUG;    # looks like a number
-    return $this->{_loadedRev}
-      if ( $rev && $this->{_loadedRev} && $rev == $this->{_loadedRev} );
-
-    ASSERT( not( $this->{_loadedRev} ) ) if DEBUG;
-
-    ( $this->{_loadedRev}, $this->{_latestIsLoaded} ) =
-      $this->{_session}->{store}->readTopic( $this, $rev );
-    if ( defined( $this->{_loadedRev} ) ) {
-
-        # Make sure text always has a value once loadVersion has been called
-        # once.
-        $this->{_text} = '' unless defined $this->{_text};
-
-        $this->addDependency();
-    }
-    else {
-
-        #we didn't load, so how could it be latest?
-        ASSERT( not $this->{_latestIsLoaded} ) if DEBUG;
-    }
-
-    return $this->{_loadedRev};
-}
 
 =begin TML
 
@@ -1087,16 +1033,11 @@ Be warned - it can return undef - when a topic exists but has no topicText.
 
 sub text {
     my ( $this, $val ) = @_;
+
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
     if ( defined($val) ) {
         $this->{_text} = $val;
-    }
-    else {
-
-        # Lazy load. Reload with no params will reload the _loadedRev,
-        # or load the latest if that is not defined.
-        $this->loadVersion() unless defined( $this->{_text} );
     }
     return $this->{_text};
 }
@@ -1259,6 +1200,7 @@ sub get {
             return $data->[ $indices->{$name} ];
         }
         else {
+            ASSERT(ref($data) eq 'ARRAY', $data) if DEBUG;
             return $data->[0];
         }
     }
@@ -1375,6 +1317,12 @@ sub copyFrom {
     if ($type) {
         return if $type =~ /^_/;
         my @data;
+        
+        #HACK. DELETE and replace with serialise only registered tpes?
+        return unless (ref($other->{$type}) eq 'ARRAY');    #data from Foswiki::Address
+        return if ($type eq 'webpath');
+
+        
         foreach my $item ( @{ $other->{$type} } ) {
             if ( !$filter
                 || ( $item->{name} && $item->{name} =~ /$filter/ ) )
@@ -1505,7 +1453,7 @@ sub getRevisionInfo {
     else {
 
         # Delegate to the store
-        $info = $this->{_session}->{store}->getVersionInfo($this);
+        $info = Foswiki::Store->getVersionInfo(address=>$this);
 
         # cache the result
         $this->setRevisionInfo(%$info);
@@ -1902,7 +1850,7 @@ sub save {
     my $signal;
     my $newRev;
     try {
-        $newRev = $this->saveAs( $this->{web}, $this->{topic}, %opts );
+        $newRev = $this->__internal_save( %opts );
     }
     catch Error::Simple with {
         $signal = shift;
@@ -1935,11 +1883,10 @@ sub save {
 
 =begin TML
 
----++ ObjectMethod saveAs( $web, $topic, %options  ) -> $rev
+---++ ObjectMethod __internal_save( %options  ) -> $rev
 
 Save the current topic to a store location. Only works on topics.
 *without* invoking plugins handlers.
-   * =$web.$topic= - where to move to
    * =%options= - Hash of options, may include:
       * =forcenewrevision= - force an increment in the revision number,
         even if content doesn't change.
@@ -1960,17 +1907,13 @@ Returns the saved revision number.
 
 # SMELL: arguably save should only be permitted if the loaded rev
 # of the object is the same as the latest rev.
-sub saveAs {
+sub __internal_save {
     my $this = shift;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
-    my $newWeb   = shift;
-    my $newTopic = shift;
     ASSERT( scalar(@_) % 2 == 0 ) if DEBUG;
     my %opts = @_;
     my $cUID = $opts{author} || $this->{_session}->{user};
-    $this->{web}   = $newWeb   if $newWeb;
-    $this->{topic} = $newTopic if $newTopic;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
 
@@ -1978,7 +1921,7 @@ sub saveAs {
 
         # Don't verify web existance for WebPreferences, as saving
         # WebPreferences creates the web.
-        unless ( $this->{_session}->{store}->exists(address=> $this->{web}  )) {
+        unless ( Foswiki::Store->exists(address=> {web=> $this->web()}  )) {
             throw Error::Simple( 'Unable to save topic '
                   . $this->{topic}
                   . ' - web '
@@ -1988,19 +1931,18 @@ sub saveAs {
     }
 
     $this->_atomicLock($cUID);
-    my $i = $this->{_session}->{store}->getRevisionHistory($this);
+    my $i = Foswiki::Store->getRevisionHistory(address=>$this);
     my $currentRev = $i->hasNext() ? $i->next() : 1;
     try {
         if ( $currentRev && !$opts{forcenewrevision} ) {
 
             # See if we want to replace the existing top revision
             my $mtime1 =
-              $this->{_session}->{store}
-              ->getApproxRevTime( $this->{web}, $this->{topic} );
+              Foswiki::Store->getApproxRevTime( address=>$this );
             my $mtime2 = time();
             my $dt     = abs( $mtime2 - $mtime1 );
             if ( $dt < $Foswiki::cfg{ReplaceIfEditedAgainWithin} ) {
-                my $info = $this->{_session}->{store}->getVersionInfo($this);
+                my $info = Foswiki::Store->getVersionInfo(address=>$this);
 
                 # same user?
                 if ( $info->{author} eq $cUID ) {
@@ -2011,13 +1953,13 @@ sub saveAs {
                     $info->{reprev} = $info->{version};
                     $info->{date} = $opts{forcedate} || time();
                     $this->setRevisionInfo(%$info);
-                    $this->{_session}->{store}->repRev( $this, $cUID, %opts );
+                    Foswiki::Store->repRev( address=>$this, cuid=>$cUID, %opts );
                     $this->{_loadedRev} = $currentRev;
                     return $currentRev;
                 }
             }
         }
-        my $nextRev = $this->{_session}->{store}->getNextRevision($this);
+        my $nextRev = Foswiki::Store->getNextRevision(address=>$this);
         $this->setRevisionInfo(
             date => $opts{forcedate} || time(),
             author  => $cUID,
@@ -2025,7 +1967,7 @@ sub saveAs {
         );
 
         my $checkSave =
-          $this->{_session}->{store}->saveTopic( $this, $cUID, \%opts );
+          Foswiki::Store->save( address=>$this, cuid=>$cUID, %opts );
         ASSERT( $checkSave == $nextRev, "$checkSave != $nextRev" ) if DEBUG;
         $this->{_loadedRev} = $nextRev;
     }
@@ -2053,7 +1995,7 @@ sub _atomicLock {
         my $logger = $this->{_session}->logger();
         while (1) {
             my ( $user, $time ) =
-              $this->{_session}->{store}->atomicLockInfo($this);
+              Foswiki::Store->atomicLockInfo(address=>$this);
             last if ( !$user || $cUID eq $user );
             $logger->log( 'warning',
                     'Lock on '
@@ -2067,7 +2009,7 @@ sub _atomicLock {
             if ( time() - $time > 2 * 60 ) {
                 $logger->log( 'warning',
                     $cUID . " broke ${user}s lock on " . $this->getPath() );
-                $this->{_session}->{store}->atomicUnlock( $this, $cUID );
+                Foswiki::Store->atomicUnlock( address=>$this, cuid=>$cUID );
                 last;
             }
 
@@ -2076,7 +2018,7 @@ sub _atomicLock {
         }
 
         # Topic
-        $this->{_session}->{store}->atomicLock( $this, $cUID );
+        Foswiki::Store->atomicLock( address=>$this, cuid=>$cUID );
     }
     else {
 
@@ -2099,7 +2041,7 @@ sub _atomicLock {
 sub _atomicUnlock {
     my ( $this, $cUID ) = @_;
     if ( $this->{topic} ) {
-        $this->{_session}->{store}->atomicUnlock($this);
+        Foswiki::Store->atomicUnlock(address=>$this);
     }
     else {
         my $it = $this->eachWeb();
@@ -2172,7 +2114,7 @@ sub move {
                 $this->{web}, $this->{topic},
                 dontlog => 1, # no statistics
             );
-            $from->{_session}->{store}->moveTopic( $from, $to, $cUID );
+            Foswiki::Store->moveTopic( from=>$from, address=>$to, cuid=>$cUID );
             $to->loadVersion();
             ASSERT( defined($to) and defined( $to->{_loadedRev} ) ) if DEBUG;
         }
@@ -2187,11 +2129,11 @@ sub move {
     else {
 
         # Move web
-        ASSERT( !$this->{_session}->{store}->exists(address=> $to ),
+        ASSERT( !Foswiki::Store->exists(address=> $to ),
             "$to->{web} does not exist" )
           if DEBUG;
         $this->_atomicLock($cUID);
-        $this->{_session}->{store}->moveWeb( $this, $to, $cUID );
+        Foswiki::Store->moveWeb( from=>$this, address=>$to, cuid=>$cUID );
 
         # No point in unlocking $this - it's moved!
         $to->_atomicUnlock($cUID);
@@ -2228,7 +2170,7 @@ sub deleteMostRecentRevision {
 
     $this->_atomicLock($cUID);
     try {
-        $rev = $this->{_session}->{store}->delRev( $this, $cUID );
+        $rev = Foswiki::Store->delRev( address=>$this, cuid=>$cUID );
     }
     finally {
         $this->_atomicUnlock($cUID);
@@ -2291,7 +2233,7 @@ sub replaceMostRecentRevision {
     $this->setRevisionInfo(%$info);
 
     try {
-        $this->{_session}->{store}->repRev( $this, $cUID, @_ );
+        Foswiki::Store->repRev( address=>$this, cuid=>$cUID, @_ );
     }
     finally {
         $this->_atomicUnlock($cUID);
@@ -2332,7 +2274,7 @@ sub getRevisionHistory {
 #        return new Foswiki::Iterator::NumberRangeIterator( $this->{_loadedRev}, 1 );
 #    }
 
-    return $this->{_session}->{store}->getRevisionHistory( $this, $attachment );
+    return Foswiki::Store->getRevisionHistory( address=>$this, attachment=>$attachment );
 }
 
 =begin TML
@@ -2410,14 +2352,14 @@ Also does not ensure consistency of the store
 
 sub removeFromStore {
     my ( $this, $attachment ) = @_;
-    my $store = $this->{_session}->{store};
+    
     ASSERT( $this->{web}, 'this is not a removable object' ) if DEBUG;
 
-    if ( !$store->exists(address=> $this->{web}  )) {
+    if ( !Foswiki::Store->exists(address=> {web=>$this->{web}}  )) {
         throw Error::Simple( 'No such web ' . $this->{web} );
     }
     if ( $this->{topic}
-        && !$store->exists(address=>[ $this->{web}, $this->{topic} ] ))
+        && !Foswiki::Store->exists(address=>$this ))
     {
         throw Error::Simple(
             'No such topic ' . $this->{web} . '.' . $this->{topic} );
@@ -2431,7 +2373,7 @@ sub removeFromStore {
               . $attachment );
     }
 
-    $store->remove( $this->{_session}->{user}, $this, $attachment );
+    Foswiki::Store->remove( address=>$this, attachment=>$attachment );
 }
 
 =begin TML
@@ -2457,8 +2399,7 @@ sub getDifferences {
     my ( $this, $rev2, $contextLines ) = @_;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
-    return $this->{_session}->{store}
-      ->getRevisionDiff( $this, $rev2, $contextLines );
+    return Foswiki::Store->getRevisionDiff( from=>$this, address=>$rev2, contextLines=>$contextLines );
 }
 
 =begin TML
@@ -2476,7 +2417,7 @@ sub getRevisionAtTime {
     my ( $this, $time ) = @_;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
-    return $this->{_session}->{store}->getRevisionAtTime( $this, $time );
+    return Foswiki::Store->getRevisionAtTime( address=>$this, time=>$time );
 }
 
 =begin TML
@@ -2499,7 +2440,7 @@ sub setLease {
         expires => $t + $length,
         taken   => $t
     };
-    return $this->{_session}->{store}->setLease( $this, $lease );
+    return Foswiki::Store->setLease( address=>$this, length=>$lease );
 }
 
 =begin TML
@@ -2519,7 +2460,7 @@ sub getLease {
     my $this = shift;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
-    return $this->{_session}->{store}->getLease($this);
+    return Foswiki::Store->getLease(address=>$this);
 }
 
 =begin TML
@@ -2540,7 +2481,7 @@ sub clearLease {
           . ( $this->{topic} || 'undef' )
           . ' this is not a topic object'
     ) if DEBUG;
-    $this->{_session}->{store}->setLease($this);
+    Foswiki::Store->setLease(address=>$this);
 }
 
 =begin TML
@@ -2576,7 +2517,7 @@ sub onTick {
 
         # Clean up spurious leases that may have been left behind
         # during cancelled topic creation
-        $this->{_session}->{store}->removeSpuriousLeases( $this->getPath() )
+        Foswiki::Store->removeSpuriousLeases( address=>$this )
           if $this->getPath();
     }
     else {
@@ -2605,8 +2546,8 @@ sub getAttachmentRevisionInfo {
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
 
-    return $this->{_session}->{store}
-      ->getAttachmentVersionInfo( $this, $fromrev, $attachment );
+    return Foswiki::Store
+      ->getAttachmentVersionInfo( address=>$this, rev=>$fromrev, attachment=>$attachment );
 }
 
 =begin TML
@@ -2757,9 +2698,9 @@ sub attach {
 
         my $error;
         try {
-            $this->{_session}->{store}
-              ->saveAttachment( $this, $opts{name}, $opts{stream},
-                $opts{author} || $this->{_session}->{user} );
+            Foswiki::Store
+              ->saveAttachment( address=>$this, attachment=>$opts{name}, stream=>$opts{stream},
+                cuid=>($opts{author} || $this->{_session}->{user}) );
         }
         finally {
             $this->fireDependency();
@@ -2828,7 +2769,7 @@ sub hasAttachment {
     my ( $this, $name ) = @_;
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
-    return $this->{_session}->{store}->attachmentExists( $this, $name );
+    return Foswiki::Store->attachmentExists( address=>$this, attachment=>$name );
 }
 
 =begin TML
@@ -2880,8 +2821,8 @@ sub testAttachment {
     }
 
     return
-      return $this->{_session}->{store}
-      ->testAttachment( $this, $attachment, $test );
+      return Foswiki::Store
+      ->testAttachment( address=>$this, attachment=>$attachment, test=>$test );
 }
 
 =begin TML
@@ -2913,8 +2854,8 @@ sub openAttachment {
     ASSERT( $this->{web} && $this->{topic}, 'this is not a topic object' )
       if DEBUG;
 
-    return $this->{_session}->{store}
-      ->openAttachment( $this, $attachment, $mode, @opts );
+    return Foswiki::Store
+      ->openAttachment( address=>$this, attachment=>$attachment, mode=>$mode, @opts );
 
 }
 
@@ -2947,8 +2888,8 @@ sub moveAttachment {
     $to->_atomicLock($cUID);
 
     try {
-        $this->{_session}->{store}
-          ->moveAttachment( $this, $name, $to, $newName, $cUID );
+        Foswiki::Store
+          ->moveAttachment( from=>$this, fromattachment=>$name, address=>$to, toattachment=>$newName, cuid=>$cUID );
 
         # Modify the cache of the old topic
         my $fileAttachment = $this->get( 'FILEATTACHMENT', $name );
@@ -3037,8 +2978,8 @@ sub copyAttachment {
     $to->_atomicLock($cUID);
 
     try {
-        $from->{_session}->{store}
-          ->copyAttachment( $from, $name, $to, $newName, $cUID );
+        Foswiki::Store
+          ->copyAttachment( from=>$from, fromattachment=>$name, address=>$to, toattachment=>$newName, cuid=>$cUID );
 
         # Add file attachment to new topic by copying the old one
         my $fileAttachment = { %{ $from->get( 'FILEATTACHMENT', $name ) } };

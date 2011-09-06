@@ -69,7 +69,7 @@ use Foswiki::Meta();
 
 #use Data::Dumper;
 use constant TRACE  => 0;    # Don't forget to uncomment dumper
-use constant TRACE2 => 0;
+use constant TRACE2 => 1;
 
 my %atomiseAs = (
     web     => \&_atomiseAsWeb,
@@ -251,9 +251,26 @@ documentation for =parse()=.</blockquote>
 =cut
 
 sub new {
-    my ( $class, %opts ) = @_;
+    my $class = shift;
     my $this;
-
+    
+    if (ref($_[0]) and $_[0]->isa('Foswiki::Address')) {
+#print STDERR "COPY CONCTRUCTOR ($class, $_[0])\n";
+        #need a copy construtor 
+        #TODO: Paul -  help?
+        $this = bless(             {
+                    webpath => $_[0]->{webpath},
+                    web => $_[0]->web(),
+                    topic   => $_[0]->{topic},
+                    tompath => $_[0]->{tompath},
+                    rev     => $_[0]->{rev},
+                }, $class );
+        #$this->parse( $_[0]->{string} );
+        return $this;
+    }
+    
+    my %opts = @_;
+    
     if ( $opts{string} ) {
         ASSERT( not $opts{topic} or ( $opts{webpath} and $opts{topic} ) )
           if DEBUG;
@@ -1003,6 +1020,11 @@ The output of =stringify()= is understood by =parse()=, and vice versa.
 =cut
 
 sub stringify {
+        return getPath(@_);
+}
+
+
+sub getPath {
     my ( $this, %opts ) = @_;
 
     ASSERT( $this->{web} or ref( $this->{webpath} ) eq 'ARRAY' ) if DEBUG;
@@ -1116,14 +1138,14 @@ Get/set by web string
 sub web {
     my ( $this, $web ) = @_;
 
-    ASSERT( $this->{web} or ref( $this->{webpath} ) eq 'ARRAY' ) if DEBUG;
-    if ( scalar(@_) == 2 ) {
+    ASSERT( scalar(@_) == 2  or (defined($this->{webpath}) and ref( $this->{webpath} ) eq 'ARRAY') ) if DEBUG;
+    if ( scalar(@_) == 2  ) {
         $this->webpath( [ split( /[\/\.]/, $web ) ] );
     }
-    if ( not $this->{web} ) {
+    if ( not $this->{web} and defined($this->{webpath} )) {
         $this->{web} = join( '/', @{ $this->{webpath} } );
     }
-
+    ASSERT($this->{web}) if DEBUG;
     return $this->{web};
 }
 

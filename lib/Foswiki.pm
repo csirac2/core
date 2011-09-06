@@ -1862,9 +1862,12 @@ sub new {
 
     #Monitor::MARK("Loaded default prefs");
 
+	#pre-cache the admin user membership before we foswiki-setuid to session user
+    $this->{users}->eachGroupMember($Foswiki::cfg{SuperAdminGroup});
+
     # SMELL: what happens if we move this into the Foswiki::Users::new?
     $this->{user} = $this->{users}->initialiseUser( $this->{remoteUser} );
-    $this->store->changeDefaultUser($this->{user});
+    $this->{store}->changeDefaultUser($this->{user});
 
     #Monitor::MARK("Initialised user");
 
@@ -3662,7 +3665,7 @@ sub webExists {
     my ( $this, $web ) = @_;
 
     ASSERT( UNTAINTED($web), 'web is tainted' ) if DEBUG;
-    return $this->{store}->webExists($web);
+    return $this->{store}->exists( address=>{web=>$web});
 }
 
 =begin TML
@@ -3679,7 +3682,7 @@ sub topicExists {
     my ( $this, $web, $topic ) = @_;
     ASSERT( UNTAINTED($web),   'web is tainted' )   if DEBUG;
     ASSERT( UNTAINTED($topic), 'topic is tainted' ) if DEBUG;
-    return $this->{store}->topicExists( $web, $topic );
+    return $this->{store}->exists( address=>{web=>$web, topic=>$topic});
 }
 
 =begin TML
@@ -3724,7 +3727,7 @@ sub getApproxRevTime {
 __END__
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-Copyright (C) 2008-2010 Foswiki Contributors. Foswiki Contributors
+Copyright (C) 2008-2011 Foswiki Contributors. Foswiki Contributors
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
 
