@@ -211,6 +211,10 @@ sub validateAttachmentName {
 
             # Filter nasty characters
             $component =~ s/$Foswiki::cfg{NameFilter}//g;
+            if ($Foswiki::cfg{Site}{CharSet} =~ /^utf-?8$/) {
+                # Eliminiate unicode control characters
+                $component =~ s/[\x7f-\x9f]//g;
+            }
             push( @result, $component );
         }
     }
@@ -234,7 +238,9 @@ sub _cleanUpFilePath {
         if ( $component eq '..' ) {
             throw Error::Simple( 'relative path in filename ' . $string );
         }
-        elsif ( $component =~ /$Foswiki::cfg{NameFilter}/ ) {
+        elsif ( $component =~ /$Foswiki::cfg{NameFilter}/
+                || ($Foswiki::cfg{Site}{CharSet} =~ /^utf-?8$/
+                && $component =~ /[\x7f-\x9f]/) ) {
             throw Error::Simple( 'illegal characters in file name component "'
                   . $component
                   . '" of filename '
@@ -313,6 +319,8 @@ sub sanitizeAttachmentName {
 
         # Filter out only if using locales.
         $fileName =~ s/$Foswiki::cfg{NameFilter}//go;
+        # Eradicate unicode control characters
+        $fileName =~ s/[\x7f-\x9f]//g;
     }
     else {
 

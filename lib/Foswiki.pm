@@ -1283,6 +1283,8 @@ sub isValidTopicName {
     return 1 if ( $name =~ m/^$regex{topicNameRegex}$/o );
     return 0 unless $nonww;
     return 0 if $name =~ /$cfg{NameFilter}/o;
+    # Eliminate unicode control characters
+    return 0 if ($Foswiki::cfg{Site}{CharSet} =~ /^utf-?8$/ && $name =~ /[\x7f-\x9f]/);
     return 1;
 }
 
