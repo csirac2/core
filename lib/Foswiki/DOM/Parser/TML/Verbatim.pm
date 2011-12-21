@@ -2,20 +2,22 @@
 
 =begin TML
 
----+ package Foswiki::DOM::Scanner::TML::Verbatim
+---+ package Foswiki::DOM::Parser::TML::Verbatim
 
 =cut
 
-package Foswiki::DOM::Scanner::TML::Verbatim;
+package Foswiki::DOM::Parser::TML::Verbatim;
 use strict;
 use warnings;
 
 use Assert;
 use English qw(-no_match_vars);
-use Foswiki::DOM::Scanner::TML();
-our @ISA = ('Foswiki::DOM::Scanner::TML');
+use Foswiki::DOM::Parser::TML();
+our @ISA = ('Foswiki::DOM::Parser::TML');
 
 sub TRACE { 1 }
+
+sub WARN { 1 }
 
 sub priority { return 1000; }
 
@@ -23,14 +25,10 @@ sub scan {
     my ( $class, $dom ) = @_;
     my %state = ( verbatim_count => 0 );
 
-    ASSERT( $dom->isa('Foswiki::DOM') );
-    while (
-        $dom->{input} =~ s/(<(\/)?verbatim\s*([^>]*?)>)/
-            $class->_try_claim($dom, \%state, $1, $2, $3)
-            /gemx
-      )
-    {
-    }
+    ASSERT( $dom->isa('Foswiki::DOM') ) if DEBUG;
+    $dom->{input} =~ s/(<(\/)?verbatim\s*([^>]*?)>)/
+        $class->_try_claim($dom, \%state, $1, $2, $3)
+        /gemx;
 
     return;
 }
@@ -64,8 +62,8 @@ sub _try_claim {
             my $taglength = length($tag);
             my $end       = pos( $dom->{input} );
 
-            $class->trace("</verbatim> without any matching start :-(")
-              if TRACE;
+            $class->warn("</verbatim> without any matching start :-(")
+              if WARN;
             ASSERT( !$state->{begin} )      if DEBUG;
             ASSERT( !$state->{begin_stop} ) if DEBUG;
             ASSERT( !$state->{end_start} )  if DEBUG;
@@ -73,8 +71,7 @@ sub _try_claim {
             $vanished =
               $class->vanish( $dom, begin => $end - $taglength, end => $end );
         }
-    }
-    elsif ( $state->{verbatim_count} > 0 ) {
+    } elsif ( $state->{verbatim_count} > 0 ) {
         $class->trace("  <verbatim ...> inside a verbatim") if TRACE;
         $state->{verbatim_count} += 1;
     }
@@ -92,6 +89,15 @@ sub _try_claim {
     }
 
     return $vanished || $tag;
+}
+
+sub claim {
+    my ($class, $dom, %opts) = @_;
+
+    require Data::Dumper;
+    print Data::Dumper->Dump([$dom, %opts]);
+
+    return;
 }
 
 1;

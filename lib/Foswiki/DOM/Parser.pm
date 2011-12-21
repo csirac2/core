@@ -2,41 +2,39 @@
 
 =begin TML
 
----+ package Foswiki::DOM::Scanner
+---+ package Foswiki::DOM::Parser
 
-A facade which calls upon the scanner class appropriate for the given
-=$dom->{input_markup}=
+A facade which calls upon the parser class appropriate for the given
+=$dom->{input_content_type}= to build the DOM tree of Foswiki::DOM::Node objects
 
-Scanners don't necessarily modify =$dom->{input}=; their main purpose is to
-claim regions of this input string. Regions, like the input string are
-one-dimensional, having simply a start and end point.
-
-Scanners which want to claim a region exclusively (prevent any further scanning)
-may do so by nulling out claimed regions (i.e. chr(0))
-
-These excluded regions must be restored before returning to this facade
+Parsers don't necessarily modify =$dom->{input}=.
 
 =cut
 
-package Foswiki::DOM::Scanner;
+package Foswiki::DOM::Parser;
 use strict;
 use warnings;
 
 use Assert;
 use English qw(-no_match_vars);
-use Foswiki::DOM::Scanner::TML();
+use Foswiki::DOM::Parser::TML();
 
-my %markups = (
-    tml => 'Foswiki::DOM::Scanner::TML'
+my %content_types = (
+    'text/vnd.foswiki.wiki' => 'Foswiki::DOM::Parser::TML'
 );
 
-sub scan {
-    my ( $class, $dom ) = @_;
-    my $markup = $dom->{input_markup};
+sub parse {
+    my ($class, $dom, %opts) = @_;
 
-    ASSERT(exists $markups{$markup});
+    ASSERT(exists $content_types{$dom->{input_content_type}}) if DEBUG;
 
-    return $markups{$markup}->scan($dom);
+    return $content_types{$dom->{input_content_type}}->parse($dom, %opts);
+}
+
+sub warn {
+    my ($class, $msg, $level, $callershift) = @_;
+
+    return Foswiki::DOM->warn($msg, $level, $callershift || 1);
 }
 
 sub trace {

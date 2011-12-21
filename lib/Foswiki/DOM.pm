@@ -6,17 +6,21 @@
 
 A TML (Topic Markup Language) DOM (Document Object Model) for Foswiki.
 
-Foswiki::DOM's mission is to create a tree of Foswiki::DOM::Nodes from TML text
-strings. Foswiki::DOM::Transform may then evaluate this structure to produce
-reliable, well-formed markup in various formats (Eg. HTML5, XHTML, XML, JSON).
+The mission is to present a tree of Foswiki::DOM::Node objects from some input
+(normally TML string). Evaluators such as Foswiki::DOM::Writer::XHTML then use
+this to produce reliable, well-formed output markup (HTML5, XMLs, JSON, etc.).
 
-Separately to this, the TOM - Topic Object Model - is concerned with managing
-structured data. Merging TOM/DOM architectures may be possible, however, their
-specialisations may prove useful: a special (simplified) 'TOM' DOM might be
-presented for any TOM data member's TML content when that content is accessed
-via the TOM.
+---++ Discussion
 
-Rationale for a DOM:
+Separately, the TOM - Topic Object Model - is concerned with managing structured
+data. Merging TOM & DOM architectures may be possible; on the other hand, it
+might prove more useful to retain their specialisations. We could build a special
+(simplified) 'TOM' DOM view for any TOM data member's TML content when that
+content is accessed via the TOM; eg. the ideal DOM for QuerySearching might look
+quite different to one ideal for XHTML rendering; but this remains to be seen.
+
+---++ Rationale for a DOM
+
    * We've been debugging a large pile of regex spaghetti for too long
    * We want TML to be easier to extend in a less bug-prone manner. Especially
      for plugins.
@@ -34,49 +38,86 @@ use warnings;
 use Assert;
 use English qw(-no_match_vars);
 use Scalar::Util qw(blessed);
+use File::Spec();
 use Foswiki::Func();
-use Foswiki::DOM::Scanner();
-#use Foswiki::DOM::Transform();
+use Foswiki::Address();
+use Foswiki::DOM::Parser();
+
+#use Foswiki::DOM::Writer();
 
 =begin TML
 
----++ ClassMethod new ($input, $base_addrObj, $markup) -> $domObj
+---++ ClassMethod new ($input, %opts) -> $domObj
 
-Return a Foswiki::DOM object built by parsing =$input=, which may be:
-   * A text string containing TML markup
-   * A Foswiki::Address to some resource or part thereof containing TML markup
+Return a Foswiki::DOM object built by processing =$input=, which may be:
+   * A text string containing some markup to be parsed (usually TML)
+   * A Foswiki::Address to some resource or part thereof containing markup
+   * Something else which one of the registered parsers will know how to handle
 
-Foswiki::DOM::Scanner is used to call each of the various syntax scanners which
-claim (possibly nested or even overlapping) regions of =$input=.
+=%opts=:
+   * =base_addr= - =Foswiki::Address= context in which the rendering is assumed
+     to be in. Optional, unless the markup cannot be parsed without this
+     information (Eg. to expand =%<nop>BASETOPIC%= macro).
+   * =input_addr= - =Foswiki::Address= signifying where the =$input= text came
+     from. Optional, unless the markup cannot be parsed without this information
+     (Eg. to expand =%<nop>TOPIC%= macro). Overrides =$input= if =$input= was a
+     =Foswiki::Address=.
+   * =input_content_type= - The MIME type of =$input=; one of the registered
+     parsers is expected to be able to process it. Defaults to
+     =text/vnd.foswiki.wiki= see
+     http://foswiki.org/Development/MIMETypeForWikiSyntax
 
-The result, =$domObj=, an instance of Foswiki::DOM, may be passed to a transform
-class such as Foswiki::DOM::Transform::XHTML for evaluation.
+Foswiki::DOM::Parser is used to call the appropriate registered parser for the
+=input_content_type= (usually Foswiki::DOM::Parser::TML for TML text string
+input) to build the DOM tree.
+
+The result, =$domObj=, an instance of Foswiki::DOM, may then be passed on for
+evaluation to Eg. Foswiki::DOM::Writer::XHTML.
 
 =cut
 
 sub new {
-    my ( $class, $input, $base_addrObj, $markup ) = @_;
-    my $this = {};
+    my ( $class, $input, %opts ) = @_;
+    my $this = \%opts;
 
-    if ( blessed($input) ) {
-        ASSERT($input->isa('Foswiki::Address') );
-        $this->{input_addrObj} = $input;
-        ASSERT( $input->type() eq 'topic',
-            'input address types other than topic not yet supported' );
-        ( $this->{input} ) =
-          Foswiki::Func::readTopic( $input->web(), $input->topic() );
+    if ( !$this->{input_addr} && blessed($input) ) {
+        $this->{input_addr} = $input;
+        $input = undef;
+    }
+    if ( !defined $input && $this->{input_addr} ) {
+        ASSERT(
+            (
+                blessed( $this->{input_addr} )
+                  && $this->{input_addr}->isa('Foswiki::Address')
+            ),
+            'input_addr is a Foswiki::Address ' . ref( $this->{input_addr} )
+        ) if DEBUG;
+        ASSERT( $this->{input_addr}->isA('topic'),
+            'Foswiki::Address types other than topic aren\'t implemented yet: '
+              . $this->{input_addr}->type() )
+          if DEBUG;
+        ( undef, $this->{input} ) =
+          Foswiki::Func::readTopic( $this->{input_addr}->web(),
+            $this->{input_addr}->topic() );
     }
     else {
         $this->{input} = $input;
     }
     $this->{input_orig} = $this->{input};
-    if ( blessed($base_addrObj) ) {
-        ASSERT($base_addrObj->isa('Foswiki::Address') );
-        $this->{base_addrObj} = $base_addrObj;
+    if ( defined $this->{base_addr} && blessed( $this->{base_addr} ) ) {
+        ASSERT( $this->{base_addr}->isa('Foswiki::Address'),
+            'base_addr is a Foswiki::Address: ' . ref($this->{base_addr}) )
+          if DEBUG;
     }
-    $this->{input_markup} = $markup || 'tml';
+    elsif (DEBUG) {
+        ASSERT(
+            ( !defined $this->{base_addr} ),
+            'base_addr is a Foswiki::Address'
+        ) if DEBUG;
+    }
+    $this->{input_content_type} ||= 'text/vnd.foswiki.wiki';
     bless( $this, $class );
-    Foswiki::DOM::Scanner->scan( $this );
+    Foswiki::DOM::Parser->parse($this);
 
     return $this;
 }
@@ -96,11 +137,11 @@ informative documentation for what data members instances of this class contain.
 sub finish {
     my ($this) = @_;
 
-    $this->{input}         = undef;
-    $this->{input_orig}    = undef;
-    $this->{input_markup}  = undef;
-    $this->{input_addrObj} = undef;
-    $this->{base_addrObj}  = undef;
+    $this->{input}              = undef;
+    $this->{input_orig}         = undef;
+    $this->{input_content_type} = undef;
+    $this->{input_addr}         = undef;
+    $this->{base_addr}          = undef;
 
     return;
 }
@@ -108,8 +149,8 @@ sub finish {
 sub trace {
     my ( $class, $msg, $level, $callershift ) = @_;
     $callershift ||= 0;
-    my ( $package, $filename, undef, $subroutine ) = caller(1 + $callershift);
-    my ( undef, undef, $line ) = caller(0 + $callershift);
+    my ( $package, $filename, undef, $subroutine ) = caller( 1 + $callershift );
+    my ( undef, undef, $line ) = caller( 0 + $callershift );
     ( undef, undef, $filename ) = File::Spec->splitpath($filename);
     my @pack       = split( '::', $subroutine );
     my $abbr       = '';
@@ -148,6 +189,15 @@ sub trace {
     }
 
     return;
+}
+
+sub warn {
+    my ( $class, $msg, $level, $callershift ) = @_;
+
+    $callershift ||= 0;
+    $callershift += 1;
+
+    return $class->trace($msg, $level, $callershift);
 }
 
 1;
