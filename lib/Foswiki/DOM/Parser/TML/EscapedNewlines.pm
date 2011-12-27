@@ -2,28 +2,51 @@
 
 =begin TML
 
----+ package Foswiki::DOM::Parser::Scanner
-
-Foswiki::DOM::Parser::Scanner parsers are multi-pass things which treat the
-=$input= as a one-dimensional landscape in which to mark various regions with
-syntax. During this process, =$input= may be modified - for example, to expand
-a %MACRO (replacing its occurence with its result) or to exclude some <verbatim>
-content from being processed (by zeroing/null'ing it out).
-
-=$input=
+---+ package Foswiki::DOM::Parser::TML::EscapedNewlines
 
 =cut
 
-package Foswiki::DOM::Parser::Scanner;
+package Foswiki::DOM::Parser::TML::EscapedNewlines;
 use strict;
 use warnings;
 
 use Assert;
 use English qw(-no_match_vars);
-use Foswiki::DOM();
-use Foswiki::DOM::Parser();
-our @ISA = ('Foswiki::DOM::Parser');
-our $EXCLUDE_CHAR = "\x1F";
+use Foswiki::DOM::Parser::TML();
+our @ISA = ('Foswiki::DOM::Parser::TML');
+
+sub TRACE { 0 }
+
+sub priority { return 990; }
+
+=begin TML
+
+---++ ClassMethod scan ( $dom )
+
+Remove escaped newlines from the input buffer, but add them to the DOM as zero-
+width nodes.
+
+=cut
+
+sub scan {
+    my ( $class, $dom ) = @_;
+    my $removed = 0;
+
+    ASSERT( $dom->isa('Foswiki::DOM') ) if DEBUG;
+    $dom->{input} =~ s/\\\n/
+        my $begin = pos($dom->{input}) - $removed;
+        $removed += 2;
+        $class->replace_input($dom,
+            node_class => 'Foswiki::DOM::Node::EscapedNewLine',
+            begin => $begin,
+            length => 0,
+            do_replace => 0,
+            replacement => ''
+        );
+        /gemx;
+
+    return;
+}
 
 1;
 

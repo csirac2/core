@@ -169,7 +169,21 @@ sub trace {
     if ( $filename !~ /^$pack[-2]\.pm$/ ) {
         $abbr .= " in $filename";
     }
-    $msg = "$abbr:\t$msg";
+    if (ref($msg) eq 'ARRAY') {
+        my $string = "$abbr:\t";
+
+        require Data::Dumper;
+        foreach my $part (@{$msg}) {
+            if (ref($part)) {
+                $string .= Data::Dumper->Dump([$part]);
+            }
+            $string .= $part;
+        }
+        $msg = $string;
+    }
+    else {
+        $msg = "$abbr:\t$msg";
+    }
     if (   !defined $context
         || $requestObj->isa('Unit::Request')
         || $context->{command_line} )

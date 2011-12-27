@@ -31,16 +31,16 @@ sub parse {
     return $content_types{$dom->{input_content_type}}->parse($dom, %opts);
 }
 
-sub warn {
-    my ($class, $msg, $level, $callershift) = @_;
+sub trace {
+       my ($class, $msg, $level, $callershift) = @_;
 
-    return Foswiki::DOM->warn($msg, $level, $callershift || 1);
+          return Foswiki::DOM->trace($msg, $level, ($callershift || 0) + 1);
 }
 
-sub trace {
-    my ($class, $msg, $level, $callershift) = @_;
+sub warn {
+       my ($class, $msg, $level, $callershift) = @_;
 
-    return Foswiki::DOM->trace($msg, $level, $callershift || 1);
+          return Foswiki::DOM->warn($msg, $level, ($callershift || 0) + 1);
 }
 
 1;

@@ -15,22 +15,35 @@ use Foswiki::Func ();    # The plugins API
 use Foswiki::Plugins();
 
 sub new {
-    my ($class, $string, $parent, $tree) = @_;
-    my $this = {
-        parent => $parent,
-        tree => $tree,
-        kids => [$string]
-    };
+    my ( $class, %opts ) = @_;
+    my $this = \%opts;
 
-    return $this;
+    return bless( $this, $class );
+}
+
+sub finish {
+    my ($this) = @_;
+
+    $this->{parent} = undef;
+    ASSERT( !defined $this->{kids} || ref( $this->{kids} ) eq 'ARRAY' )
+      if DEBUG;
+    if ( $this->{kids} ) {
+        foreach my $kid ( @{$kids} ) {
+            $kid->finish();
+        }
+    }
+    $this->{kids} = undef;
+
+    return;
 }
 
 1;
 
 __END__
+Author: Paul.W.Harvey@csiro.au, http://trin.org.au
+
 Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 
-Copyright (C) 2010-2011 Paul.W.Harvey@csiro.au, http://trin.org.au
 Copyright (C) 2010-2011 Foswiki Contributors. Foswiki Contributors
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.

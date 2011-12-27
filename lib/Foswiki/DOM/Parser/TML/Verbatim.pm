@@ -15,87 +15,115 @@ use English qw(-no_match_vars);
 use Foswiki::DOM::Parser::TML();
 our @ISA = ('Foswiki::DOM::Parser::TML');
 
-sub TRACE { 1 }
-
-sub WARN { 1 }
+sub TRACE { 0 }
 
 sub priority { return 1000; }
 
 sub scan {
     my ( $class, $dom ) = @_;
     my %state = ( verbatim_count => 0 );
-
     ASSERT( $dom->isa('Foswiki::DOM') ) if DEBUG;
-    $dom->{input} =~ s/(<(\/)?verbatim\s*([^>]*?)>)/
-        $class->_try_claim($dom, \%state, $1, $2, $3)
-        /gemx;
+    my $input_length = length( $dom->{input} ) if DEBUG;
+
+    while ( $dom->{input} =~ /(<(\/)?verbatim\s*([^>]*?)>)/g ) {
+        $class->_try_exclude( $dom, \%state, $1, $2, $3 );
+    }
+    if ( $state{verbatim_count} ) {
+        my $input_length = length( $dom->{input} );
+        my $begin = $state{begin};
+
+        $dom->warn(
+"<verbatim> $state{verbatim_count} tag(s) remain open at end of input"
+        );
+        ASSERT( defined $begin ) if DEBUG;
+        $class->exclude(
+            $dom,
+            node_class => 'Foswiki::DOM::Node::Verbatim',
+            do_replace => 1,
+            begin      => $begin,
+            end        => $input_length,
+            length     => $input_length - $begin
+        );
+    }
+    $dom->trace( [ "DOM INPUT: ", $dom->{input} ] ) if TRACE;
+    ASSERT( length( $dom->{input} ) == $input_length ) if DEBUG;
 
     return;
 }
 
-sub _try_claim {
+sub _try_exclude {
     my ( $class, $dom, $state, $tag, $slash, $tagattrs ) = @_;
-    my $vanished;
 
     if ($slash) {
         if ( $state->{verbatim_count} ) {
             $state->{verbatim_count} -= 1;
             if ( !$state->{verbatim_count} ) {
-                my $taglength = length($tag);
+                my $begin = $state->{begin};
 
                 $class->trace("</verbatim>, final closing tag") if TRACE;
-                $state->{end}       = pos( $dom->{input} );
-                $state->{end_start} = $state->{end} - $taglength;
-                ASSERT( $state->{begin} )      if DEBUG;
-                ASSERT( $state->{begin_stop} ) if DEBUG;
-                $class->claim( $dom, %{$state} );
+                $state->{end} = pos( $dom->{input} );
+
+                #$state->{end}       = $state->{end_start} + length($tag);
+                #ASSERT( defined $state->{end_start} )             if DEBUG;
+                ASSERT( defined $begin ) if DEBUG;
+
+                #ASSERT( $state->{end} >= $state->{end_start} )    if DEBUG;
+                ASSERT( $state->{end} >= $begin ) if DEBUG;
+                $state->{length} = $state->{end} - $begin;
+                $class->exclude(
+                    $dom,
+                    node_class => 'Foswiki::DOM::Node::Verbatim',
+                    do_replace => 1,
+                    %{$state}
+                );
                 delete $state->{begin};
-                delete $state->{begin_stop};
-                delete $state->{end_start};
+
+                #delete $state->{end_start};
                 delete $state->{end};
             }
             else {
-                $class->trace("  </verbatim> inside a verbatim") if TRACE;
+                $class->trace(
+"  </verbatim> was nested, $state->{verbatim_count} <verbatim> tags remain open"
+                ) if TRACE;
             }
         }
         else {
-            my $taglength = length($tag);
             my $end       = pos( $dom->{input} );
+            my $end_start = $end - length($tag);
 
-            $class->warn("</verbatim> without any matching start :-(")
-              if WARN;
-            ASSERT( !$state->{begin} )      if DEBUG;
-            ASSERT( !$state->{begin_stop} ) if DEBUG;
-            ASSERT( !$state->{end_start} )  if DEBUG;
-            ASSERT( !$state->{end} )        if DEBUG;
-            $vanished =
-              $class->vanish( $dom, begin => $end - $taglength, end => $end );
+            ASSERT( defined $end_start ) if DEBUG;
+            $class->warn(
+                "</verbatim> encountered but no <verbatim> tags are open");
+            ASSERT( !defined $state->{begin} )     if DEBUG;
+            ASSERT( !defined $state->{end_start} ) if DEBUG;
+            ASSERT( !defined $state->{end} )       if DEBUG;
+            $class->exclude(
+                $dom,
+                node_class => 'Foswiki::DOM::Node::Verbatim',
+                do_replace => 1,
+                begin      => $end_start,
+                end        => $end,
+                length     => $end - $end_start
+            );
         }
-    } elsif ( $state->{verbatim_count} > 0 ) {
-        $class->trace("  <verbatim ...> inside a verbatim") if TRACE;
+    }
+    elsif ( $state->{verbatim_count} > 0 ) {
         $state->{verbatim_count} += 1;
+        $class->trace(
+"  <verbatim> was nested, $state->{verbatim_count} <verbatim> tags now open"
+        ) if TRACE;
     }
     else {
-        my $taglength = length($tag);
-
-        $class->trace("<verbatim ...>, start") if TRACE;
-        ASSERT( !$state->{begin} )             if DEBUG;
-        ASSERT( !$state->{begin_stop} )        if DEBUG;
-        ASSERT( !$state->{end_start} )         if DEBUG;
-        ASSERT( !$state->{end} )               if DEBUG;
-        $state->{begin_stop} = pos( $dom->{input} );
-        $state->{begin}      = $state->{begin_stop} - $taglength;
+        $class->trace("<verbatim> start")      if TRACE;
+        ASSERT( !defined $state->{begin} )     if DEBUG;
+        ASSERT( !defined $state->{end_start} ) if DEBUG;
+        ASSERT( !defined $state->{end} )       if DEBUG;
+        ASSERT( defined pos( $dom->{input} ) ) if DEBUG;
+        $state->{begin} = pos( $dom->{input} ) - length($tag);
         $state->{verbatim_count} += 1;
     }
-
-    return $vanished || $tag;
-}
-
-sub claim {
-    my ($class, $dom, %opts) = @_;
-
-    require Data::Dumper;
-    print Data::Dumper->Dump([$dom, %opts]);
+    ASSERT( !defined $state->{end} || $state->{end} <= length( $dom->{input} ) )
+      if DEBUG;
 
     return;
 }
