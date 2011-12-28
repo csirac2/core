@@ -158,35 +158,38 @@ Foswiki::DOM code uses =$foo->trace(...) if TRACE;= instead of =print STDERR
 ... if TRACE;=
 
 It decorates the output with caller information automatically, adding context
-to the debug messages. It strips =Foswiki= from the front of the namespace, and
-also truncates all namespace elements but the last three (if the namespace is
-deeper than 4). For example, this call to =->trace= from
-Foswiki::DOM::Parser::TML::parse():
+to the debug messages.
+
+It strips =Foswiki= from the front of the namespace, and also truncates all
+namespace elements but the last three (if the namespace is deeper than 4). For
+example, this call to =->trace= from Foswiki::DOM::Parser::TML::parse():
 <verbatim class="perl">Foswiki::DOM->trace('hello')</verbatim>
 
 Might print something like this:
 <verbatim>::DOM::Parser::TML::parse():67:  hello</verbatim>
 
    * =$thing= - scalar text string OR an array ref of stuff to emit with
-   Data::Dumper. Things in the array ref are Data::Dumper->Dump'd separately;
-   except scalar text strings which get special formatting.
-   * =$level= - 'debug level' - starting from 1 (running debuglevel 0 is
-   supposed to squelch all debug/trace messages; debuglevel 1 squelches all but
-   level 1 debug messages, and so on). The higher this number, the less
-   important (more noisy) the debug message.
+   Data::Dumper. Things in the array which are refs are Data::Dumper->Dump'd
+   separately; everything else (normal text strings) are printed directly.
+   * =$level= - 'debug level' - starting from 1 (which might be squelched if
+   running debuglevel 0) or -1 (negative levels are never squelched). The bigger
+   this number, the less important (more noisy) the message.
    * =$callershift= - because this method prints (part of) the namespace, sub &
    line number from which the =->trace= call is made, packages which wrap calls
    to Foswiki::DOM->trace() need to add 1 to the =$callershift= value (which
    starts at zero) so that debug messages are showing calls from the outermost
    =->trace()= call rather than in the wrapper's call.
 
-See also: =Foswiki::DOM->debug()=
+See also: =Foswiki::DOM->warn()=
 
 =cut
 
 sub trace {
-    my ( $class, $msg, $level, $callershift ) = @_;
+    my ( $class, $msg, $level, $callershift, @junk ) = @_;
     $callershift ||= 0;
+    ASSERT( !defined $level || $level =~ /^[-\+]?\d+$/ ) if DEBUG;
+    ASSERT( $callershift =~ /^\d+$/ ) if DEBUG;
+    ASSERT( !scalar(@junk) ) if DEBUG;
     my ( $package, undef, undef, $subroutine ) = caller( 1 + $callershift );
     my ( undef, $filename, $line ) = caller( 0 + $callershift );
     my @pack       = split( '::', $subroutine );
@@ -253,17 +256,23 @@ sub trace {
 
 Wrapper to Foswiki::DOM->trace()
 
-Defaults to =$level= of =-1=, which means messages are usually emitted
-regardless of any global =$level= which normally squelch some or all =trace()=
-messages.
+Ensures =$level= is always negative, defaulting to =$level= of =-1=, which means
+messages are usually emitted regardless of any global debug =$level= which would
+normall squelch some or all =trace()= messages.
 
 =cut
 
 sub warn {
-    my ( $class, $msg, $level, $callershift ) = @_;
+    my ( $class, $msg, $level, $callershift, @junk ) = @_;
 
+    ASSERT( !defined $callershift || $callershift =~ /^\d+$/ )       if DEBUG;
+    ASSERT( !defined $level       || $level       =~ /^[-\+]?\d+$/ ) if DEBUG;
+    ASSERT( !scalar(@junk) ) if DEBUG;
     if ( !defined $level ) {
         $level = -1;
+    }
+    elsif ( $level > 0 ) {
+        $level = -$level;
     }
     $callershift ||= 0;
     $callershift += 1;
