@@ -4,7 +4,8 @@
 
 ---+ package Foswiki::DOM
 
-A TML (Topic Markup Language) DOM (Document Object Model) for Foswiki.
+A DOM (Document Object Model) for Foswiki, optimized for holding TML (Topic
+Markup Language).
 
 The mission is to present a tree of Foswiki::DOM::Node objects from some input
 (normally TML string). Evaluators such as Foswiki::DOM::Writer::XHTML then use
@@ -45,6 +46,9 @@ use Foswiki::DOM::Parser();
 
 #use Foswiki::DOM::Writer();
 
+my $default_debug_level = 5;
+my $debug_level         = 5;
+
 =begin TML
 
 ---++ ClassMethod new ($input, %opts) -> $domObj
@@ -55,17 +59,15 @@ Return a Foswiki::DOM object built by processing =$input=, which may be:
    * Something else which one of the registered parsers will know how to handle
 
 =%opts=:
-   * =base_addr= - =Foswiki::Address= context in which the rendering is assumed
-     to be in. Optional, unless the markup cannot be parsed without this
-     information (Eg. to expand =%<nop>BASETOPIC%= macro).
-   * =input_addr= - =Foswiki::Address= signifying where the =$input= text came
-     from. Optional, unless the markup cannot be parsed without this information
-     (Eg. to expand =%<nop>TOPIC%= macro). Overrides =$input= if =$input= was a
-     =Foswiki::Address=.
+   * =base_addr= - =Foswiki::Address= context in which the DOM will be
+     evaluated. Optional, unless the markup cannot be parsed without it
+   * =input_addr= - =Foswiki::Address= signifying where the =$input= string came
+     from. Optional, unless the markup cannot be parsed without it. Overrides
+     =$input= if =$input= was a =Foswiki::Address=.
    * =input_content_type= - The MIME type of =$input=; one of the registered
-     parsers is expected to be able to process it. Defaults to
-     =text/vnd.foswiki.wiki= see
-     http://foswiki.org/Development/MIMETypeForWikiSyntax
+     parsers is expected to be compatible with it. Defaults to
+     =text/vnd.foswiki.wiki= ( see
+     http://foswiki.org/Development/MIMETypeForWikiSyntax )
 
 Foswiki::DOM::Parser is used to call the appropriate registered parser for the
 =input_content_type= (usually Foswiki::DOM::Parser::TML for TML text string
@@ -90,7 +92,7 @@ sub new {
                 blessed( $this->{input_addr} )
                   && $this->{input_addr}->isa('Foswiki::Address')
             ),
-            'input_addr is a Foswiki::Address ' . ref( $this->{input_addr} )
+            'input_addr is a Foswiki::Address: ' . ref( $this->{input_addr} )
         ) if DEBUG;
         ASSERT( $this->{input_addr}->isA('topic'),
             'Foswiki::Address types other than topic aren\'t implemented yet: '
@@ -106,7 +108,7 @@ sub new {
     $this->{input_orig} = $this->{input};
     if ( defined $this->{base_addr} && blessed( $this->{base_addr} ) ) {
         ASSERT( $this->{base_addr}->isa('Foswiki::Address'),
-            'base_addr is a Foswiki::Address: ' . ref($this->{base_addr}) )
+            'base_addr is a Foswiki::Address: ' . ref( $this->{base_addr} ) )
           if DEBUG;
     }
     elsif (DEBUG) {
@@ -129,8 +131,8 @@ sub new {
 undef and finish all data members. ->finish() helps avoid circular references
 which cause perl to leak memory.
 
-Developers should undef all data members to ensure the =finish()= method remains
-informative documentation for what data members instances of this class contain.
+Additionally, developers should ensure all data members are undef'd here to
+maintain documentation for what data members instances of this class use.
 
 =cut
 
@@ -140,23 +142,59 @@ sub finish {
     $this->{input}              = undef;
     $this->{input_orig}         = undef;
     $this->{input_content_type} = undef;
-    $this->{input_addr}         = undef;
-    $this->{base_addr}          = undef;
+    $this->{input_addr}->finish() if defined $this->{input_addr};
+    $this->{input_addr} = undef;
+    $this->{base_addr}->finish() if defined $this->{base_addr};
+    $this->{base_addr} = undef;
 
     return;
 }
 
+=begin TML
+
+---++ ClassMethod trace($thing, $level, $callershift) = @_;
+
+Foswiki::DOM code uses =$foo->trace(...) if TRACE;= instead of =print STDERR
+... if TRACE;=
+
+It decorates the output with caller information automatically, adding context
+to the debug messages. It strips =Foswiki= from the front of the namespace, and
+also truncates all namespace elements but the last three (if the namespace is
+deeper than 4). For example, this call to =->trace= from
+Foswiki::DOM::Parser::TML::parse():
+<verbatim class="perl">Foswiki::DOM->trace('hello')</verbatim>
+
+Might print something like this:
+<verbatim>::DOM::Parser::TML::parse():67:  hello</verbatim>
+
+   * =$thing= - scalar text string OR an array ref of stuff to emit with
+   Data::Dumper. Things in the array ref are Data::Dumper->Dump'd separately;
+   except scalar text strings which get special formatting.
+   * =$level= - 'debug level' - starting from 1 (running debuglevel 0 is
+   supposed to squelch all debug/trace messages; debuglevel 1 squelches all but
+   level 1 debug messages, and so on). The higher this number, the less
+   important (more noisy) the debug message.
+   * =$callershift= - because this method prints (part of) the namespace, sub &
+   line number from which the =->trace= call is made, packages which wrap calls
+   to Foswiki::DOM->trace() need to add 1 to the =$callershift= value (which
+   starts at zero) so that debug messages are showing calls from the outermost
+   =->trace()= call rather than in the wrapper's call.
+
+See also: =Foswiki::DOM->debug()=
+
+=cut
+
 sub trace {
     my ( $class, $msg, $level, $callershift ) = @_;
     $callershift ||= 0;
-    my ( $package, $filename, undef, $subroutine ) = caller( 1 + $callershift );
-    my ( undef, undef, $line ) = caller( 0 + $callershift );
-    ( undef, undef, $filename ) = File::Spec->splitpath($filename);
+    my ( $package, undef, undef, $subroutine ) = caller( 1 + $callershift );
+    my ( undef, $filename, $line ) = caller( 0 + $callershift );
     my @pack       = split( '::', $subroutine );
     my $abbr       = '';
     my $context    = Foswiki::Func::getContext();
     my $requestObj = Foswiki::Func::getRequestObject();
 
+    $level ||= $default_debug_level;
     ( undef, undef, $filename ) = File::Spec->splitpath($filename);
     if ( $pack[0] eq 'Foswiki' ) {
         $abbr = '::';
@@ -165,53 +203,72 @@ sub trace {
             shift(@pack);
         }
     }
+    if ( scalar(@pack) > 4 ) {
+        @pack = @pack[ -4 .. -1 ];
+    }
     $abbr .= join( '::', @pack ) . '():' . $line;
     if ( $filename !~ /^$pack[-2]\.pm$/ ) {
         $abbr .= " in $filename";
     }
-    if (ref($msg) eq 'ARRAY') {
+    if ( ref($msg) eq 'ARRAY' ) {
         my $string = "$abbr:\t";
 
         require Data::Dumper;
-        foreach my $part (@{$msg}) {
-            if (ref($part)) {
-                $string .= Data::Dumper->Dump([$part]);
+        foreach my $part ( @{$msg} ) {
+            if ( ref($part) ) {
+                $string .= Data::Dumper->Dump( [$part] );
             }
-            $string .= $part;
+            else {
+                $string .= $part . "\n";
+            }
         }
         $msg = $string;
     }
     else {
         $msg = "$abbr:\t$msg";
     }
-    if (   !defined $context
-        || $requestObj->isa('Unit::Request')
-        || $context->{command_line} )
-    {
+    ASSERT( !defined $level || $level =~ /^[-]?\d+$/ ) if DEBUG;
+    if ( defined $level && $level < 0 ) {
         print STDERR $msg . "\n";
-        ASSERT( !defined $level || $level =~ /^[-]?\d+$/ ) if DEBUG;
-    }
-    else {
         Foswiki::Func::writeDebug($msg);
-        print STDERR $msg . "\n";
-        if ( defined $level ) {
-            ASSERT( $level =~ /^[-]?\d+$/ ) if DEBUG;
-            if ( $level == -1 ) {
-                print STDERR $msg . "\n";
-            }
+    }
+    elsif ( ( defined $level ? $level : 5 ) <= $debug_level ) {
+        if (   !defined $context
+            || $requestObj->isa('Unit::Request')
+            || $context->{command_line} )
+        {
+            print STDERR $msg . "\n";
+        }
+        else {
+            Foswiki::Func::writeDebug($msg);
         }
     }
 
     return;
 }
 
+=begin TML
+
+---++ ClassMethod warn($thing, $level, $callershift)
+
+Wrapper to Foswiki::DOM->trace()
+
+Defaults to =$level= of =-1=, which means messages are usually emitted
+regardless of any global =$level= which normally squelch some or all =trace()=
+messages.
+
+=cut
+
 sub warn {
     my ( $class, $msg, $level, $callershift ) = @_;
 
+    if ( !defined $level ) {
+        $level = -1;
+    }
     $callershift ||= 0;
     $callershift += 1;
 
-    return $class->trace($msg, $level, $callershift);
+    return $class->trace( $msg, $level, $callershift );
 }
 
 1;
