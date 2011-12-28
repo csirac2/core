@@ -19,28 +19,26 @@ use Assert;
 use English qw(-no_match_vars);
 use Foswiki::DOM::Parser::TML();
 
-my %content_types = (
-    'text/vnd.foswiki.wiki' => 'Foswiki::DOM::Parser::TML'
-);
+my %content_types = ( 'text/vnd.foswiki.wiki' => 'Foswiki::DOM::Parser::TML' );
 
 sub parse {
-    my ($class, $dom, %opts) = @_;
+    my ( $class, $dom, %opts ) = @_;
 
-    ASSERT(exists $content_types{$dom->{input_content_type}}) if DEBUG;
+    ASSERT( exists $content_types{ $dom->{input_content_type} } ) if DEBUG;
 
-    return $content_types{$dom->{input_content_type}}->parse($dom, %opts);
+    return $content_types{ $dom->{input_content_type} }->parse( $dom, %opts );
 }
 
 sub trace {
-       my ($class, $msg, $level, $callershift) = @_;
+    my ( $class, $msg, $level, $callershift ) = @_;
 
-          return Foswiki::DOM->trace($msg, $level, ($callershift || 0) + 1);
+    return Foswiki::DOM->trace( $msg, $level, ( $callershift || 0 ) + 1 );
 }
 
 sub warn {
-       my ($class, $msg, $level, $callershift) = @_;
+    my ( $class, $msg, $level, $callershift ) = @_;
 
-          return Foswiki::DOM->warn($msg, $level, ($callershift || 0) + 1);
+    return Foswiki::DOM->warn( $msg, $level, ( $callershift || 0 ) + 1 );
 }
 
 1;

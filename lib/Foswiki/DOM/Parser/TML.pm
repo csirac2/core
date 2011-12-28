@@ -26,6 +26,7 @@ use Foswiki::DOM::Parser::TML::Verbatim();
 use Foswiki::DOM::Parser::TML::EscapedNewlines();
 
 use Foswiki::DOM::Parser::TML::Macro();
+
 #use Foswiki::DOM::Parser::TML::XMLExclusive();
 #use Foswiki::DOM::Parser::TML::LineHogs();
 #use Foswiki::DOM::Parser::TML::XML();

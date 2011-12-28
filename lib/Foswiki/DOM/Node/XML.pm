@@ -20,7 +20,7 @@ sub new {
     my ( $class, $parent, $root, %opts ) = @_;
 
     $opts{parent} = $parent;
-    $opts{root} = $root;
+    $opts{root}   = $root;
 
     return bless( \%opts, $class );
 }
@@ -28,11 +28,11 @@ sub new {
 sub finish {
     my ($this) = @_;
 
-    $this->{kids} = undef;
-    $this->{tree} = undef;
+    $this->{kids}   = undef;
+    $this->{tree}   = undef;
     $this->{parent} = undef;
-    $this->{root} = undef;
-    $this->{tag} = undef;
+    $this->{root}   = undef;
+    $this->{tag}    = undef;
 
     return;
 }
@@ -44,7 +44,7 @@ sub protected {
 }
 
 sub parse {
-    my ($class, $string, $parent, $root) = @_;
+    my ( $class, $string, $parent, $root ) = @_;
     my $depth = 0;
     my $scoop;
 
@@ -92,16 +92,17 @@ sub parse {
 
 sub parseTree {
     my ( $class, $parent, $root ) = @_;
-    my $siblings = $parent->kids();
+    my $siblings  = $parent->kids();
     my $nsiblings = scalar( @{$siblings} );
     my $isibling  = 0;
 
     while ( $nsiblings < $isibling ) {
-        my $node  = $siblings->[$isibling];
+        my $node = $siblings->[$isibling];
 
-        if (ref($node)) {
-            $class->parseTree($node, $root);
-        } else {
+        if ( ref($node) ) {
+            $class->parseTree( $node, $root );
+        }
+        else {
             $class->parse( $node, $parent, $root );
         }
         $isibling += 1;

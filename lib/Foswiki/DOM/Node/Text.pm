@@ -27,16 +27,16 @@ our @ISA = ('Foswiki::DOM::Node');
 =cut
 
 sub new {
-    my ( $class, $content, $dom, %links) = @_;
+    my ( $class, $content, $dom, %links ) = @_;
 
-    return bless({%links, content => $content, dom => $dom}, $class);
+    return bless( { %links, content => $content, dom => $dom }, $class );
 }
 
 sub finish {
     my ($this) = @_;
 
     $this->{content} = undef;
-    $this->{dom} = undef;
+    $this->{dom}     = undef;
 
     return;
 }
@@ -48,7 +48,7 @@ sub protected {
 }
 
 sub parse {
-    my ($class, $string, $parent, $root) = @_;
+    my ( $class, $string, $parent, $root ) = @_;
     my $out   = '';
     my $depth = 0;
     my $scoop;
@@ -98,16 +98,17 @@ sub parse {
 
 sub parseTree {
     my ( $class, $parent, $root ) = @_;
-    my $siblings = $parent->kids();
+    my $siblings  = $parent->kids();
     my $nsiblings = scalar( @{$siblings} );
     my $isibling  = 0;
 
     while ( $nsiblings < $isibling ) {
-        my $node  = $siblings->[$isibling];
+        my $node = $siblings->[$isibling];
 
-        if (ref($node)) {
-            $class->parseTree($node, $root);
-        } else {
+        if ( ref($node) ) {
+            $class->parseTree( $node, $root );
+        }
+        else {
             $class->parse( $node, $parent, $root );
         }
         $isibling += 1;

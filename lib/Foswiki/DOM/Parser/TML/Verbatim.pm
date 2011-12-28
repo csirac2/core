@@ -30,7 +30,7 @@ sub scan {
     }
     if ( $state{verbatim_count} ) {
         my $input_length = length( $dom->{input} );
-        my $begin = $state{begin};
+        my $begin        = $state{begin};
 
         $dom->warn(
 "<verbatim> $state{verbatim_count} tag(s) remain open at end of input"

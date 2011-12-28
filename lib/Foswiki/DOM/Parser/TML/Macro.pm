@@ -12,6 +12,7 @@ use warnings;
 
 use Assert;
 use English qw(-no_match_vars);
+use Foswiki();
 use Foswiki::DOM::Parser::TML();
 our @ISA = ('Foswiki::DOM::Parser::TML');
 
@@ -19,145 +20,130 @@ sub TRACE { 1 }
 
 sub priority { return 950; }
 
-sub scan {
-    my ( $class, $dom ) = @_;
-    my %state;
-    ASSERT( $dom->isa('Foswiki::DOM') ) if DEBUG;
-
-    $dom->trace( [ "DOM INPUT: ", $dom->{input} ] ) if TRACE;
-    ASSERT( length( $dom->{input} ) == $input_length ) if DEBUG;
-
-    return;
-}
-
 =begin TML
 
----++ PRIVATE ClassMethod _process($dom, $tagf, $depth)
+---++ ClassMethod scan($dom)
 
-Process Foswiki %TAGS{}% by parsing the input tokenised into
-% separated sections. The parser is a simple stack-based parse,
-sufficient to ensure nesting of tags is correct, but no more
-than that.
+Identify potential =%<nop>MACRO{}%= syntax in the =$dom->{input}= buffer by
+tokenising it into % separated sections. The parser is a simple stack-based
+parse, modified from the traditional Foswiki::_processMacros() code.
 
-$depth limits the number of recursive expansion steps that
-can be performed on expanded tags.
+Unlike the traditional =_processMacros()= code, macros aren't actually expanded
+here - that is done from a Foswiki::DOM evaluator such as Foswiki::DOM::Writer.
+
+It's best to think of these Foswiki::DOM::Parser::Scanner parsers as working
+very similarly to syntax highlighters.
+
+However, coming up with a repeatable parser algorithm to cater to any TML
+=%<nop>MACRO%= expression is almost impossible: the Foswiki::DOM we're building
+expects to be invariant and context-free (given a constant TML markup as input,
+the resulting DOM tree should always be the same) - but =%<nop>MACROs%= are
+notoriously non-deterministic, context-sensitive things.
+
+So, figuring out where valid macro syntax actually begins and ends is difficult.
+Macros _could_ be expanded to help figure out what actually contribute to valid
+macro syntax, but that result would depend on the context in which the
+expansions are done.
+
+To clarify, ordinary exploitation of inside-out, left-to-right recursive
+expansion behaviour isn't a problem when an inner (nested) macro is used to
+build some or all of the outer macro's arguments (i.e. anywhere within the
+={...}=). The difficult is when any other part of the outer macro is built
+dynamically; such as the TAGNAME and/or its argument braces ={...}=.
+
+For example, this is a "normal" nested macro expression, easy to figure out
+where macros begin and end:
+<verbatim class="tml">%SEARCH{
+    format="%INCLUDE{"MyFormat" section="some-section" foo="bar"}%"
+}%</verbatim>
+
+But the parser can't tell from the markup alone that the following expands out
+as a simple =%<nop>SEARCH=:
+<verbatim class="tml">   * Set FOO = SEA
+%%FOO%RCH%{
+    ...
+}%</verbatim>
+
+Depending on the values (which may in turn contain their own macros requiring
+recursive expansion) of =%<nop>FOO%= and =%<nop>RCH%=, any of the following
+text regions could contribute to active macro syntax:<verbatim class="tml">
+   %FOO%
+   %%FOO%
+   %RCH%
+   %RCH%{...}%
+   %FOO%RCH%
+   %%FOO%RCH%
+   %%FOO%RCH%{...}%
+</verbatim>
 
 =cut
 
-sub _process {
-    my ( $class, $dom, $text, $tagf, $depth ) = @_;
-    my $indentlevel = 0;
+sub scan {
+    my ( $class, $dom ) = @_;
+    ASSERT( $dom->isa('Foswiki::DOM') ) if DEBUG;
+    $dom->trace( [ "DOM INPUT: ", $dom->{input} ] ) if TRACE;
 
-    unless ($depth) {
-        $class->warn("Max recursive depth reached: $text");
-
-        # prevent recursive expansion that just has been detected
-        # from happening in the error message
-        $text =~ s/%(.*?)%/$1/go;
-        return $text;
-    }
-
-    # Assume dirtyareas & verbatim have been removed
-    my @queue = split( /(%)/, $text );
+    # Assume verbatim has been removed. TODO: Consider <dirtyareas>
+    my @queue = split( /(%)/, $dom->{input} );
     my @stack;
     my $stackTop = '';    # the top stack entry. Done this way instead of
          # referring to the top of the stack for efficiency. This var
          # should be considered to be $stack[$#stack]
+    my $indent = 0 if TRACE;
 
     while ( scalar(@queue) ) {
 
-        #print STDERR "QUEUE:".join("\n      ", map { "'$_'" } @queue)."\n";
+        $class->trace( [ 'QUEUE:', @queue ] );
         my $token = shift(@queue);
 
-        #print STDERR ' ' x $indentlevel,"PROCESSING $token \n";
+        $class->trace( ' ' x $indent . "PROCESSING $token" ) if TRACE;
 
         # each % sign either closes an existing stacked context, or
         # opens a new context.
         if ( $token eq '%' ) {
+            $class->trace( ' ' x $indent . "CONSIDER $stackTop" ) if TRACE;
 
-            #print STDERR ' ' x $indentlevel,"CONSIDER $stackTop\n";
             # If this is a closing }%, try to rejoin the previous
             # tokens until we get to a valid tag construct. This is
             # a bit of a hack, but it's hard to think of a better
             # way to do this without a full parse that takes % signs
             # in tag parameters into account.
-            if ( $stackTop =~ /}$/s ) {
+            if ( $stackTop =~ /\}$/s ) {
                 while ( scalar(@stack)
-                    && $stackTop !~ /^%$regex{tagNameRegex}\{.*}$/so )
+                    && $stackTop !~ /^%$Foswiki::regex{tagNameRegex}\{.*\}$/so )
                 {
                     my $top = $stackTop;
 
-                    #print STDERR ' ' x $indentlevel,"COLLAPSE $top \n";
+                    $class->trace( ' ' x $indent . "  COLLAPSE $top" ) if TRACE;
                     $stackTop = pop(@stack) . $top;
                 }
             }
 
             # /s so you can have newlines in parameters
-            if ( $stackTop =~ m/^%(($regex{tagNameRegex})(?:{(.*)})?)$/so ) {
+            if ( $stackTop =~ m/^%($Foswiki::regex{tagNameRegex})$/o ) {
 
                 # SMELL: unchecked implicit untaint?
+                my $tag = $1;
+
+                $class->trace( ' ' x $indent . "POP-SIMPLE $tag" ) if TRACE;
+                $stackTop = pop(@stack);
+                $stackTop .= "%$tag%";
+            }
+            elsif (
+                $stackTop =~ m/^%(($Foswiki::regex{tagNameRegex})\{(.*)\})$/so
+
+                #m/^%(($Foswiki::regex{tagNameRegex})(?:\{(.*)\})?)$/so )
+              )
+            {
                 my ( $expr, $tag, $args ) = ( $1, $2, $3 );
 
-                #print STDERR ' ' x $indentlevel,"POP $tag\n";
-                #Monitor::MARK("Before $tag");
-                my $e = &$tagf( $this, $tag, $args, $topicObject );
-
-                #Monitor::MARK("After $tag");
-
-                if ( defined($e) ) {
-
-                    #print STDERR ' ' x $indentlevel--,"EXPANDED $tag -> $e\n";
-                    $stackTop = pop(@stack);
-
-                    # Don't bother recursively expanding unless there are
-                    # unexpanded tags in the result.
-                    unless ( $e =~ /%$regex{tagNameRegex}(?:{.*})?%/so ) {
-                        $stackTop .= $e;
-                        next;
-                    }
-
-                    # Recursively expand tags in the expansion of $tag
-                    $stackTop .=
-                      $this->_processMacros( $e, $tagf, $topicObject,
-                        $depth - 1 );
-                }
-                else {
-
-                    #print STDERR ' ' x $indentlevel++,"EXPAND $tag FAILED\n";
-                    # To handle %NOP
-                    # correctly, we have to handle the %VAR% case differently
-                    # to the %VAR{}% case when a variable expansion fails.
-                    # This is so that recursively define variables e.g.
-                    # %A%B%D% expand correctly, but at the same time we ensure
-                    # that a mismatched }% can't accidentally close a context
-                    # that was left open when a tag expansion failed.
-                    # However TWiki didn't do this, so for compatibility
-                    # we have to accept that %NOP can never be fixed. if it
-                    # could, then we could uncomment the following:
-
-                    #if( $stackTop =~ /}$/ ) {
-                    #    # %VAR{...}% case
-                    #    # We need to push the unexpanded expression back
-                    #    # onto the stack, but we don't want it to match the
-                    #    # tag expression again. So we protect the %'s
-                    #    $stackTop = "&#37;$expr&#37;";
-                    #} else
-                    #{
-
-                    # %VAR% case.
-                    # In this case we *do* want to match the tag expression
-                    # again, as an embedded %VAR% may have expanded to
-                    # create a valid outer expression. This is directly
-                    # at odds with the %VAR{...}% case.
-                    push( @stack, $stackTop );
-                    $stackTop = '%';    # open new context
-                                        #}
-                }
+                $stackTop = pop(@stack);
+                $stackTop .= "%$expr%";
             }
             else {
                 push( @stack, $stackTop );
-                $stackTop = '%';        # push a new context
-                                        #$indentlevel++;
+                $stackTop = '%';    # push a new context
+                $indent += 1 if TRACE;
             }
         }
         else {
@@ -168,11 +154,12 @@ sub _process {
     # Run out of input. Gather up everything in the stack.
     while ( scalar(@stack) ) {
         my $expr = $stackTop;
+
         $stackTop = pop(@stack);
         $stackTop .= $expr;
     }
 
-    #print STDERR "FINAL $stackTop\n";
+    $class->trace("FINAL $stackTop") if TRACE;
 
     return $stackTop;
 }
