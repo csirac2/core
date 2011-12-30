@@ -23,7 +23,7 @@ use English qw(-no_match_vars);
 use Foswiki::DOM();
 use Foswiki::DOM::Parser();
 our @ISA          = ('Foswiki::DOM::Parser');
-our $EXCLUDE_CHAR = "\x1F";
+our $EXCLUDE_CHAR = ' ';
 
 1;
 

@@ -1,6 +1,6 @@
 # See bottom of file for default license and copyright insyntaxion
 
-=begin TML
+=begin_markup TML
 
 ---+ package Foswiki::DOM::Parser::TML::Verbatim
 
@@ -30,19 +30,22 @@ sub scan {
     }
     if ( $state{verbatim_count} ) {
         my $input_length = length( $dom->{input} );
-        my $begin        = $state{begin};
+        my $begin_markup = $state{begin_markup};
 
         $dom->warn(
-"<verbatim> $state{verbatim_count} tag(s) remain open at end of input"
+"<verbatim> $state{verbatim_count} tag(s) remain open at end_markup of input"
         );
-        ASSERT( defined $begin ) if DEBUG;
+        ASSERT( defined $begin_markup ) if DEBUG;
+        ASSERT( defined $state{begin_content} ) if DEBUG;
         $class->exclude(
             $dom,
-            node_class => 'Foswiki::DOM::Node::Verbatim',
-            do_replace => 1,
-            begin      => $begin,
-            end        => $input_length,
-            length     => $input_length - $begin
+            node_class    => 'Foswiki::DOM::Node::Verbatim',
+            do_replace    => 1,
+            begin_markup  => $begin_markup,
+            begin_content => $state{begin_content},
+            end_markup    => $input_length,
+            end_content   => $input_length,
+            length        => $input_length - $begin_markup
         );
     }
     $dom->trace( [ "DOM INPUT: ", $dom->{input} ] ) if TRACE;
@@ -58,28 +61,30 @@ sub _try_exclude {
         if ( $state->{verbatim_count} ) {
             $state->{verbatim_count} -= 1;
             if ( !$state->{verbatim_count} ) {
-                my $begin = $state->{begin};
+                my $begin_markup = $state->{begin_markup};
 
                 $class->trace("</verbatim>, final closing tag") if TRACE;
-                $state->{end} = pos( $dom->{input} );
-
-                #$state->{end}       = $state->{end_start} + length($tag);
-                #ASSERT( defined $state->{end_start} )             if DEBUG;
-                ASSERT( defined $begin ) if DEBUG;
-
-                #ASSERT( $state->{end} >= $state->{end_start} )    if DEBUG;
-                ASSERT( $state->{end} >= $begin ) if DEBUG;
-                $state->{length} = $state->{end} - $begin;
+                $state->{end_markup}  = pos( $dom->{input} );
+                $state->{end_content} = pos( $dom->{input} ) - length($tag);
+                ASSERT( defined $state->{begin_content} ) if DEBUG;
+                ASSERT( defined $state->{begin_markup} )  if DEBUG;
+                ASSERT( $state->{end_markup} >= $state->{begin_markup} )
+                  if DEBUG;
+                ASSERT( $state->{end_markup} >= $state->{end_content} )
+                  if DEBUG;
+                ASSERT( $state->{begin_markup} <= $state->{begin_content} )
+                  if DEBUG;
+                $state->{length} = $state->{end_markup} - $begin_markup;
                 $class->exclude(
                     $dom,
                     node_class => 'Foswiki::DOM::Node::Verbatim',
                     do_replace => 1,
                     %{$state}
                 );
-                delete $state->{begin};
-
-                #delete $state->{end_start};
-                delete $state->{end};
+                delete $state->{begin_markup};
+                delete $state->{begin_content};
+                delete $state->{end_content};
+                delete $state->{end_markup};
             }
             else {
                 $class->trace(
@@ -88,22 +93,26 @@ sub _try_exclude {
             }
         }
         else {
-            my $end       = pos( $dom->{input} );
-            my $end_start = $end - length($tag);
+            my $tag_length  = length($tag);
+            my $end_markup  = pos( $dom->{input} );
+            my $end_content = $end_markup - $tag_length;
 
-            ASSERT( defined $end_start ) if DEBUG;
+            ASSERT( defined $end_content ) if DEBUG;
             $class->warn(
                 "</verbatim> encountered but no <verbatim> tags are open");
-            ASSERT( !defined $state->{begin} )     if DEBUG;
-            ASSERT( !defined $state->{end_start} ) if DEBUG;
-            ASSERT( !defined $state->{end} )       if DEBUG;
+            ASSERT( !defined $state->{begin_markup} )  if DEBUG;
+            ASSERT( !defined $state->{begin_content} ) if DEBUG;
+            ASSERT( !defined $state->{end_content} )   if DEBUG;
+            ASSERT( !defined $state->{end_markup} )    if DEBUG;
             $class->exclude(
                 $dom,
-                node_class => 'Foswiki::DOM::Node::Verbatim',
-                do_replace => 1,
-                begin      => $end_start,
-                end        => $end,
-                length     => $end - $end_start
+                node_class    => 'Foswiki::DOM::Node::Verbatim',
+                do_replace    => 1,
+                begin_markup  => $end_content,
+                begin_content => $end_content,
+                end_markup    => $end_markup,
+                end_content   => $end_content,
+                length        => $tag_length
             );
         }
     }
@@ -114,15 +123,18 @@ sub _try_exclude {
         ) if TRACE;
     }
     else {
-        $class->trace("<verbatim> start")      if TRACE;
-        ASSERT( !defined $state->{begin} )     if DEBUG;
-        ASSERT( !defined $state->{end_start} ) if DEBUG;
-        ASSERT( !defined $state->{end} )       if DEBUG;
-        ASSERT( defined pos( $dom->{input} ) ) if DEBUG;
-        $state->{begin} = pos( $dom->{input} ) - length($tag);
+        $class->trace("<verbatim> start")          if TRACE;
+        ASSERT( !defined $state->{begin_markup} )  if DEBUG;
+        ASSERT( !defined $state->{begin_content} ) if DEBUG;
+        ASSERT( !defined $state->{end_content} )   if DEBUG;
+        ASSERT( !defined $state->{end_markup} )    if DEBUG;
+        ASSERT( defined pos( $dom->{input} ) )     if DEBUG;
+        $state->{begin_markup}  = pos( $dom->{input} ) - length($tag);
+        $state->{begin_content} = pos( $dom->{input} );
         $state->{verbatim_count} += 1;
     }
-    ASSERT( !defined $state->{end} || $state->{end} <= length( $dom->{input} ) )
+    ASSERT( !defined $state->{end_markup}
+          || $state->{end_markup} <= length( $dom->{input} ) )
       if DEBUG;
 
     return;

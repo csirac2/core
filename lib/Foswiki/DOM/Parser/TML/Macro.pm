@@ -1,6 +1,6 @@
 # See bottom of file for default license and copyright insyntaxion
 
-=begin TML
+=begin_markup TML
 
 ---+ package Foswiki::DOM::Parser::TML::Macro
 
@@ -20,7 +20,7 @@ sub TRACE { 1 }
 
 sub priority { return 950; }
 
-=begin TML
+=begin_markup TML
 
 ---++ ClassMethod scan($dom)
 
@@ -52,7 +52,7 @@ build some or all of the outer macro's arguments (i.e. anywhere within the
 dynamically; such as the TAGNAME and/or its argument braces ={...}=.
 
 For example, this is a "normal" nested macro expression, easy to figure out
-where macros begin and end:
+where macros begin_markup and end_markup:
 <verbatim class="tml">%SEARCH{
     format="%INCLUDE{"MyFormat" section="some-section" foo="bar"}%"
 }%</verbatim>
@@ -162,83 +162,6 @@ sub scan {
     $class->trace("FINAL $stackTop") if TRACE;
 
     return $stackTop;
-}
-
-sub _try_exclude {
-    my ( $class, $dom, $state, $tag, $slash, $tagattrs ) = @_;
-
-    if ($slash) {
-        if ( $state->{verbatim_count} ) {
-            $state->{verbatim_count} -= 1;
-            if ( !$state->{verbatim_count} ) {
-                my $begin = $state->{begin};
-
-                $class->trace("</verbatim>, final closing tag") if TRACE;
-                $state->{end} = pos( $dom->{input} );
-
-                #$state->{end}       = $state->{end_start} + length($tag);
-                #ASSERT( defined $state->{end_start} )             if DEBUG;
-                ASSERT( defined $begin ) if DEBUG;
-
-                #ASSERT( $state->{end} >= $state->{end_start} )    if DEBUG;
-                ASSERT( $state->{end} >= $begin ) if DEBUG;
-                $state->{length} = $state->{end} - $begin;
-                $class->exclude(
-                    $dom,
-                    node_class => 'Foswiki::DOM::Node::Macro',
-                    do_replace => 1,
-                    %{$state}
-                );
-                delete $state->{begin};
-
-                #delete $state->{end_start};
-                delete $state->{end};
-            }
-            else {
-                $class->trace(
-"  </verbatim> was nested, $state->{verbatim_count} <verbatim> tags remain open"
-                ) if TRACE;
-            }
-        }
-        else {
-            my $end       = pos( $dom->{input} );
-            my $end_start = $end - length($tag);
-
-            ASSERT( defined $end_start ) if DEBUG;
-            $class->warn(
-                "</verbatim> encountered but no <verbatim> tags are open");
-            ASSERT( !defined $state->{begin} )     if DEBUG;
-            ASSERT( !defined $state->{end_start} ) if DEBUG;
-            ASSERT( !defined $state->{end} )       if DEBUG;
-            $class->exclude(
-                $dom,
-                node_class => 'Foswiki::DOM::Node::Macro',
-                do_replace => 1,
-                begin      => $end_start,
-                end        => $end,
-                length     => $end - $end_start
-            );
-        }
-    }
-    elsif ( $state->{verbatim_count} > 0 ) {
-        $state->{verbatim_count} += 1;
-        $class->trace(
-"  <verbatim> was nested, $state->{verbatim_count} <verbatim> tags now open"
-        ) if TRACE;
-    }
-    else {
-        $class->trace("<verbatim> start")      if TRACE;
-        ASSERT( !defined $state->{begin} )     if DEBUG;
-        ASSERT( !defined $state->{end_start} ) if DEBUG;
-        ASSERT( !defined $state->{end} )       if DEBUG;
-        ASSERT( defined pos( $dom->{input} ) ) if DEBUG;
-        $state->{begin} = pos( $dom->{input} ) - length($tag);
-        $state->{verbatim_count} += 1;
-    }
-    ASSERT( !defined $state->{end} || $state->{end} <= length( $dom->{input} ) )
-      if DEBUG;
-
-    return;
 }
 
 1;

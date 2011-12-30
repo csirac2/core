@@ -38,7 +38,7 @@ sub scan {
         $removed += 2;
         $class->replace_input($dom,
             node_class => 'Foswiki::DOM::Node::EscapedNewLine',
-            begin => $begin,
+            begin_markup => $begin,
             length => 0,
             do_replace => 0,
             replacement => ''

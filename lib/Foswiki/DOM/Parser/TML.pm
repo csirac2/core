@@ -1,6 +1,6 @@
 # See bottom of file for default license and copyright insyntaxion
 
-=begin TML
+=begin_markup TML
 
 ---+ package Foswiki::DOM::Parser::TML
 
@@ -72,22 +72,25 @@ sub parse {
 
 sub claim {
     my ( $class, $dom, %opts ) = @_;
-    ASSERT( defined $opts{begin} )  if DEBUG;
-    ASSERT( defined $opts{length} ) if DEBUG;
-    ASSERT( defined $opts{end} || $opts{length} == 0 )
+    ASSERT( defined $opts{begin_markup} ) if DEBUG;
+    ASSERT( defined $opts{length} )       if DEBUG;
+    ASSERT( defined $opts{end_markup} || $opts{length} == 0 )
       if DEBUG;
-    ASSERT( !defined $opts{end} || $opts{end} >= $opts{begin} ) if DEBUG;
-    ASSERT( !defined $opts{end} || $opts{end} - $opts{begin} == $opts{length} )
+    ASSERT( !defined $opts{end_markup}
+          || $opts{end_markup} >= $opts{begin_markup} )
+      if DEBUG;
+    ASSERT( !defined $opts{end_markup}
+          || $opts{end_markup} - $opts{begin_markup} == $opts{length} )
       if DEBUG;
 
-    $class->trace(
-        "CLAIMING $opts{length}; $opts{begin} - " . ( $opts{end} || 0 ) )
+    $class->trace( "CLAIMING $opts{length}; $opts{begin_markup} - "
+          . ( $opts{end_markup} || 0 ) )
       if TRACE;
 
     return;
 }
 
-=begin TML
+=begin_markup TML
 
 ---++ ClassMethod exclude($dom, %opts) -> $mask
 
@@ -105,34 +108,34 @@ claimed offsets/ranges within the =$dom->{input}= buffer
 added to the tree uses the normal range =%opts=:
    * =node_class=  - Foswiki::DOM node class to use in the DOM tree
    * =do_replace=  - boolean, true if we want the =$dom->{input}= buffer to be
-     modified with =$opts{replacement}= replacing =$opts{begin}..$opts{end}=
-   * =begin=  - start of =$dom->{input}= which the replaced value addresses
-   * =end=    - end of =$dom->{input}= which the replaced value addresses
-   * =length= - =end - begin=
+     modified with =$opts{replacement}= replacing =$opts{begin_markup}..$opts{end_markup}=
+   * =begin_markup=  - start of =$dom->{input}= which the replaced value addresses
+   * =end_markup=    - end_markup of =$dom->{input}= which the replaced value addresses
+   * =length= - =end_markup - begin_markup=
 
 =cut
 
 sub exclude {
     my ( $class, $dom, %opts ) = @_;
-    ASSERT( defined $opts{node_class} )                  if DEBUG;
-    ASSERT( defined $opts{do_replace} )                  if DEBUG;
-    ASSERT( defined $opts{begin} )                       if DEBUG;
-    ASSERT( defined $opts{length} )                      if DEBUG;
-    ASSERT( defined $opts{end} )                         if DEBUG;
-    ASSERT( $opts{end} >= $opts{begin} )                 if DEBUG;
-    ASSERT( $opts{length} > 0 )                          if DEBUG;
-    ASSERT( $opts{length} == $opts{end} - $opts{begin} ) if DEBUG;
+    ASSERT( defined $opts{node_class} )                                if DEBUG;
+    ASSERT( defined $opts{do_replace} )                                if DEBUG;
+    ASSERT( defined $opts{begin_markup} )                              if DEBUG;
+    ASSERT( defined $opts{length} )                                    if DEBUG;
+    ASSERT( defined $opts{end_markup} )                                if DEBUG;
+    ASSERT( $opts{end_markup} >= $opts{begin_markup} )                 if DEBUG;
+    ASSERT( $opts{length} > 0 )                                        if DEBUG;
+    ASSERT( $opts{length} == $opts{end_markup} - $opts{begin_markup} ) if DEBUG;
     my $mask = $Foswiki::DOM::Parser::Scanner::EXCLUDE_CHAR x ( $opts{length} );
 
     ASSERT( $opts{length} == length($mask) ) if DEBUG;
     $class->trace(
         [
-            "EXCLUDING $opts{length}; $opts{begin} - $opts{end}, before: ",
+"EXCLUDING $opts{length}; $opts{begin_markup} - $opts{end_markup}, before: ",
             $dom->{input}
         ]
     ) if TRACEEXCLUDE;
     if ( $opts{do_replace} ) {
-        substr( $dom->{input}, $opts{begin}, $opts{length}, $mask );
+        substr( $dom->{input}, $opts{begin_markup}, $opts{length}, $mask );
         $class->trace( [ 'EXCLUDE-REPLACE after: ', $dom->{input} ] )
           if TRACEEXCLUDE;
     }
@@ -148,7 +151,7 @@ sub exclude {
     return $mask;
 }
 
-=begin TML
+=begin_markup TML
 
 ---++ ClassMethod replace_input($dom, %opts) -> $opts{replace}
 
@@ -160,36 +163,41 @@ added to the tree uses the normal range =%opts=:
    * =node_class=  - Foswiki::DOM node class to use in the DOM tree
    * =replacement= - string to be inserted; also the return value
    * =do_replace=  - boolean, true if we want the =$dom->{input}= buffer to be
-     modified with =$opts{replacement}= replacing =$opts{begin}..$opts{end}=
-   * =begin=  - start of =$dom->{input}= which the replaced value addresses
-   * =end=    - end of =$dom->{input}= which the replaced value addresses
-   * =length= - =end - begin=
+     modified with =$opts{replacement}= replacing =$opts{begin_markup}..$opts{end_markup}=
+   * =begin_markup=  - start of =$dom->{input}= which the replaced value addresses
+   * =end_markup=    - end_markup of =$dom->{input}= which the replaced value addresses
+   * =length= - =end_markup - begin_markup=
 
 =cut
 
 sub replace_input {
     my ( $class, $dom, %opts ) = @_;
 
-    ASSERT( defined $opts{node_class} ) if DEBUG;
-    ASSERT( defined $opts{do_replace} ) if DEBUG;
-    ASSERT( defined $opts{begin} )      if DEBUG;
-    ASSERT( defined $opts{length} )     if DEBUG;
+    ASSERT( defined $opts{node_class} )   if DEBUG;
+    ASSERT( defined $opts{do_replace} )   if DEBUG;
+    ASSERT( defined $opts{begin_markup} ) if DEBUG;
+    ASSERT( defined $opts{length} )       if DEBUG;
     ASSERT( $opts{length} eq length( $opts{replacement} ) ) if DEBUG;
 
     # Zero-width replacement; optimization assumes replacement already done
-    if ( !defined $opts{end} ) {
+    if ( !defined $opts{end_markup} ) {
         ASSERT( $opts{length} == 0 ) if DEBUG;
         ASSERT( !$opts{do_replace} ) if DEBUG;
-        $class->trace("REMOVED into a zero-width token @ $opts{begin}")
+        $class->trace("REMOVED into a zero-width token @ $opts{begin_markup}")
           if TRACE;
     }
     else {
-        ASSERT( $opts{end} >= $opts{begin} ) if DEBUG;
-        ASSERT( $opts{end} - $opts{begin} == $opts{length} ) if DEBUG;
+        ASSERT( $opts{end_markup} >= $opts{begin_markup} ) if DEBUG;
+        ASSERT( $opts{end_markup} - $opts{begin_markup} == $opts{length} )
+          if DEBUG;
     }
     if ( $opts{do_replace} ) {
-        substr( $opts{input}, $opts{begin}, $opts{length}, $opts{replacement} );
-        $class->trace("REMOVING $opts{length}: $opts{begin} - $opts{end}")
+        substr(
+            $opts{input},  $opts{begin_markup},
+            $opts{length}, $opts{replacement}
+        );
+        $class->trace(
+            "REMOVING $opts{length}: $opts{begin_markup} - $opts{end_markup}")
           if TRACE;
     }
 
