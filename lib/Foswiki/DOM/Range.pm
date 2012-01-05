@@ -2,36 +2,23 @@
 
 =begin TML
 
----+ package Foswiki::DOM::Parser::Scanner
-
-Foswiki::DOM::Parser::Scanner parsers are multi-pass things which treat the
-=$input= as a one-dimensional landscape in which to mark various regions with
-syntax. During this process, =$input= may be modified - for example, to expand
-a %MACRO (replacing its occurence with its result) or to exclude some <verbatim>
-content from being processed (by zeroing/null'ing it out).
-
-It seemed interesting, but as it turns out must be obvious obvious - the idea to
-use an interval tree in parallel with the parse tree is apparently an old one:
-
-"A Web Browser and Editor" by Jason A. Wilson, an MIT thesis circa 1996
-http://dspace.mit.edu/bitstream/handle/1721.1/38137/35562181.pdf?sequence=1
-
-=$input=
+---+ package Foswiki::DOM::Range
 
 =cut
 
-package Foswiki::DOM::Parser::Scanner;
+package Foswiki::DOM::Range;
 use strict;
 use warnings;
 
 use Assert;
 use English qw(-no_match_vars);
-use Foswiki::DOM();
-use Foswiki::DOM::Parser();
-our @ISA          = ('Foswiki::DOM::Parser');
-our $EXCLUDE_CHAR = ' ';
+use Foswiki::DOM::Range::TML();
 
+sub new {
+    my ($class) = @_;
 
+    return;
+}
 
 1;
 

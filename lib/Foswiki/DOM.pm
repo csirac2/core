@@ -7,28 +7,48 @@
 A DOM (Document Object Model) for Foswiki, optimized for holding TML (Topic
 Markup Language).
 
+---++ Description
+
 The mission is to present a tree of Foswiki::DOM::Node objects from some input
 (normally TML string). Evaluators such as Foswiki::DOM::Writer::XHTML then use
 this to produce reliable, well-formed output markup (HTML5, XMLs, JSON, etc.).
 
----++ Discussion
+---+++ Discussion
 
 Separately, the TOM - Topic Object Model - is concerned with managing structured
-data. Merging TOM & DOM architectures may be possible; on the other hand, it
-might prove more useful to retain their specialisations. We could build a special
-(simplified) 'TOM' DOM view for any TOM data member's TML content when that
-content is accessed via the TOM; eg. the ideal DOM for QuerySearching might look
-quite different to one ideal for XHTML rendering; but this remains to be seen.
+data. Merging TOM & DOM architectures may be possible; on the other hand, their
+specialisations may prove useful. A special (simplified) 'TOM' DOM view might be
+possible for any TOM data member's TML content when that content is accessed via
+the TOM; eg. the ideal DOM for QuerySearching might look different to one ideal
+for (reversible) TML &lt;-&gt; XHTML rendering; but this remains to be proven.
 
----++ Rationale for a DOM
+---+++ Rationale for a DOM
 
-   * We've been debugging a large pile of regex spaghetti for too long
-   * We want TML to be easier to extend in a less bug-prone manner. Especially
-     for plugins.
-   * Use a common codebase for all TML applications: WYSIWYG, XHTML, HTML5, PDF,
-     RTF, XML, JSON etc. so we can fight bugs in one place.
-   * We want to avoid wasted effort spent trying to make parallel
-     implementations of TML rendering compatible with each other.
+   * The venerable Foswiki::Render has served well, but untangling and changing
+     this web of regex spaghetti is daunting
+   * Extending (and/or re-purposing) TML is full of surprises & edge cases,
+     opaque re-(de)-escaping/evaluation/takeout/putback tricks... A DOM should
+     make this easier, more consistent, less bug-prone. Especially for plugins.
+   * Use a common codebase for all TML applications: WYSIWYG, XHTML, HTML5, RTF,
+     XML, JSON etc. so we can fight bugs in one place.
+   * Avoid wasted effort in parallel TML rendering implementations of varying
+     completeness/bug-compatibility
+   * Most other wiki & CMS platforms have a DOM for their wikitext: Mediawiki,
+     Confluence, X-Wiki, etc.
+      * _But does using a DOM erode some of Foswiki's approachability,
+        hackability, 'charm'?_ - hopefully Foswiki::DOM::Parser::Scanner code
+        such as Foswiki::DOM::Parser::TML::Verbatim feels familiar to regex
+        hackers, given its approach of claiming regions of syntax first,
+        leaving the complexity of building/optimizing tree structures from these
+        ranges up to a separate, syntax/feature-agnostic step
+   * Could allow native storage of content in markups other than TML
+   * Could cache the Foswiki::DOM tree, possibly enabling performance
+     improvements (or making up for lost perf over Foswiki::Render)
+
+---+++ TODO
+   * What's the performance cost/benefit?
+   * Justify why Foswiki::DOM::Node isn't compatible with CPAN:XML::XPath::Node
+     which could allow us to easily make use of Eg. CPAN:XML::XPathEngine
 
 =cut
 
@@ -43,8 +63,6 @@ use File::Spec();
 use Foswiki::Func();
 use Foswiki::Address();
 use Foswiki::DOM::Parser();
-
-#use Foswiki::DOM::Writer();
 
 my $default_debug_level = 5;
 my $debug_level         = 5;

@@ -2,36 +2,59 @@
 
 =begin TML
 
----+ package Foswiki::DOM::Parser::Scanner
-
-Foswiki::DOM::Parser::Scanner parsers are multi-pass things which treat the
-=$input= as a one-dimensional landscape in which to mark various regions with
-syntax. During this process, =$input= may be modified - for example, to expand
-a %MACRO (replacing its occurence with its result) or to exclude some <verbatim>
-content from being processed (by zeroing/null'ing it out).
-
-It seemed interesting, but as it turns out must be obvious obvious - the idea to
-use an interval tree in parallel with the parse tree is apparently an old one:
-
-"A Web Browser and Editor" by Jason A. Wilson, an MIT thesis circa 1996
-http://dspace.mit.edu/bitstream/handle/1721.1/38137/35562181.pdf?sequence=1
-
-=$input=
+---+ package Foswiki::DOM::RangeTree
 
 =cut
 
-package Foswiki::DOM::Parser::Scanner;
+package Foswiki::DOM::RangeTree;
 use strict;
 use warnings;
 
 use Assert;
 use English qw(-no_match_vars);
-use Foswiki::DOM();
-use Foswiki::DOM::Parser();
-our @ISA          = ('Foswiki::DOM::Parser');
-our $EXCLUDE_CHAR = ' ';
+use Foswiki::DOM::Range();
 
+sub new {
+    my ($class) = @_;
+    my $this = {
+        AL => [], # Ascending low
+        DH => undef, # Descending high
+    }
 
+    return bless($this, $class);
+}
+
+sub _finish_list {
+    my ($this, $list) = @_;
+
+    if (defined $list) {
+        foreach my $item (@{$list}) {
+            $item->finish();
+        }
+    }
+
+    return;
+}
+
+sub finish {
+    my ($this) = @_;
+
+    if (DEBUG) {
+        if (defined $this->{AL}) {
+            ASSERT(ref($this->{AL}) eq 'ARRAY') if DEBUG;
+            ASSERT(ref($this->{DH}) eq 'ARRAY') if DEBUG;
+            ASSERT(scalar(@{$this->{AL}}) == scalar(@{$this->{DH}}) ) if DEBUG;
+        } else {
+            ASSERT(!defined $this->{DH}) if DEBUG;
+        }
+    }
+    $this->_finish_list($this->{AL});
+    $this->_finish_list($this->{DH});
+    $this->{AL} = undef;
+    $this->{DH} = undef;
+
+    return;
+}
 
 1;
 
