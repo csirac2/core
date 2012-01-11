@@ -85,6 +85,8 @@ our $CC      = "\0-->";
 # corrupting data spaces.
 our $inUnitTestMode = 0;
 
+sub SESSION_SANITY { 1 }
+
 # Returns the full path of the directory containing Foswiki.pm
 sub _getLibDir {
     return $foswikiLibDir if $foswikiLibDir;
@@ -1674,6 +1676,7 @@ sub new {
 
     # This is required in case we get an exception during
     # initialisation, so that we have a session to handle it with.
+    ASSERT(!$Foswiki::Plugins::SESSION) if SESSION_SANITY;
     $Foswiki::Plugins::SESSION = $this;
 
     # hash of zone records
@@ -2131,6 +2134,9 @@ sub finish {
     undef $this->{evaluatingEval};
 
     undef $this->{DebugVerificationCode};    # from Foswiki::UI::Register
+    ASSERT($Foswiki::Plugins::SESSION) if SESSION_SANITY;
+    ASSERT($Foswiki::Plugins::SESSION == $this) if SESSION_SANITY;
+    undef $Foswiki::Plugins::SESSION;
 
     if (DEBUG) {
         my $remaining = join ',', grep { defined $this->{$_} } keys %$this;
@@ -2398,8 +2404,14 @@ the topic object.
 sub expandMacrosOnTopicCreation {
     my ( $this, $topicObject ) = @_;
 
-    # Make sure func works, for registered tag handlers
-    local $Foswiki::Plugins::SESSION = $this;
+    if (SESSION_SANITY) {
+        ASSERT($Foswiki::Plugins::SESSION);
+        ASSERT($Foswiki::Plugins::SESSION == $this);
+    }
+    else {
+        # Make sure func works, for registered tag handlers
+        local $Foswiki::Plugins::SESSION = $this;
+    }
 
     my $text = $topicObject->text();
     if ($text) {
@@ -2728,7 +2740,9 @@ sub innerExpandMacros {
     $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
 
     # Make sure func works, for registered tag handlers
-    $Foswiki::Plugins::SESSION = $this;
+    ASSERT($Foswiki::Plugins::SESSION) if SESSION_SANITY;
+    ASSERT($Foswiki::Plugins::SESSION == $this) if SESSION_SANITY;
+    #$Foswiki::Plugins::SESSION = $this;
 
     # NOTE TO DEBUGGERS
     # The depth parameter in the following call controls the maximum number
