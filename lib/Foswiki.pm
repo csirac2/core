@@ -2134,8 +2134,7 @@ sub finish {
     undef $this->{evaluatingEval};
 
     undef $this->{DebugVerificationCode};    # from Foswiki::UI::Register
-    ASSERT($Foswiki::Plugins::SESSION) if SESSION_SANITY;
-    ASSERT($Foswiki::Plugins::SESSION == $this) if SESSION_SANITY;
+    ASSERT(defined $Foswiki::Plugins::SESSION && $Foswiki::Plugins::SESSION == $this) if SESSION_SANITY;
     undef $Foswiki::Plugins::SESSION;
 
     if (DEBUG) {
