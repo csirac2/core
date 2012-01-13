@@ -85,7 +85,7 @@ our $CC      = "\0-->";
 # corrupting data spaces.
 our $inUnitTestMode = 0;
 
-sub SESSION_SANITY       { 1 }
+sub SESSION_SANITY       { 0 }
 sub SESSION_SANITY_TRACE { 0 }
 
 # Returns the full path of the directory containing Foswiki.pm
