@@ -504,6 +504,7 @@ which may have surprising effects on other code that shares the object.
 
 sub unload {
     my $this = shift;
+    $this->{_session}->search->metacache->removeMeta( $this->web, $this->topic );
     $this->{_loadedRev}      = undef;
     $this->{_latestIsLoaded} = undef;
     $this->{_text}           = undef;
