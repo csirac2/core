@@ -122,7 +122,7 @@ sub removeMeta {
             delete $this->{cache}->{$user}{$web}{$topic};
         }
     }
-    else {
+    elsif (defined $web) {
         foreach my $topic ( keys( %{ $this->{cache}->{$user}{$web} } ) ) {
             $this->removeMeta( $web, $topic );
         }
