@@ -85,8 +85,8 @@ our $CC      = "\0-->";
 # corrupting data spaces.
 our $inUnitTestMode = 0;
 
-sub SESSION_SANITY       { 0 }
-sub SESSION_SANITY_TRACE { 0 }
+sub SINGLE_SINGLETONS       { 0 }
+sub SINGLE_SINGLETONS_TRACE { 0 }
 
 # Returns the full path of the directory containing Foswiki.pm
 sub _getLibDir {
@@ -1667,7 +1667,7 @@ sub new {
     $query ||= new Foswiki::Request();
     my $this = bless( { sandbox => 'Foswiki::Sandbox' }, $class );
 
-    if (SESSION_SANITY_TRACE) {
+    if (SINGLE_SINGLETONS_TRACE) {
         require Data::Dumper;
         print STDERR "new $this: "
           . Data::Dumper->Dump( [ [caller], [ caller(1) ] ] );
@@ -1683,7 +1683,7 @@ sub new {
 
     # This is required in case we get an exception during
     # initialisation, so that we have a session to handle it with.
-    ASSERT( !$Foswiki::Plugins::SESSION ) if SESSION_SANITY;
+    ASSERT( !$Foswiki::Plugins::SESSION ) if SINGLE_SINGLETONS;
     $Foswiki::Plugins::SESSION = $this;
     ASSERT( $Foswiki::Plugins::SESSION->isa('Foswiki') ) if DEBUG;
 
@@ -2142,8 +2142,8 @@ sub finish {
     undef $this->{evaluatingEval};
 
     undef $this->{DebugVerificationCode};    # from Foswiki::UI::Register
-    ASSERT( defined $Foswiki::Plugins::SESSION ) if SESSION_SANITY;
-    if (SESSION_SANITY_TRACE) {
+    ASSERT( defined $Foswiki::Plugins::SESSION ) if SINGLE_SINGLETONS;
+    if (SINGLE_SINGLETONS_TRACE) {
         require Data::Dumper;
         print STDERR "finish $this: "
           . Data::Dumper->Dump( [ [caller], [ caller(1) ] ] );
@@ -2152,7 +2152,7 @@ sub finish {
     ASSERT(
         $Foswiki::Plugins::SESSION == $this,
         "$Foswiki::Plugins::SESSION eq $this"
-    ) if SESSION_SANITY;
+    ) if SINGLE_SINGLETONS;
     undef $Foswiki::Plugins::SESSION;
 
     if (DEBUG) {
@@ -2421,7 +2421,7 @@ the topic object.
 sub expandMacrosOnTopicCreation {
     my ( $this, $topicObject ) = @_;
 
-    if (SESSION_SANITY) {
+    if (SINGLE_SINGLETONS) {
         ASSERT( defined $Foswiki::Plugins::SESSION );
         ASSERT( $Foswiki::Plugins::SESSION->isa('Foswiki') ) if DEBUG;
         ASSERT( $Foswiki::Plugins::SESSION == $this );
@@ -2760,8 +2760,8 @@ sub innerExpandMacros {
     $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
 
     # Make sure func works, for registered tag handlers
-    ASSERT( defined $Foswiki::Plugins::SESSION )         if SESSION_SANITY;
-    ASSERT( $Foswiki::Plugins::SESSION == $this )        if SESSION_SANITY;
+    ASSERT( defined $Foswiki::Plugins::SESSION )         if SINGLE_SINGLETONS;
+    ASSERT( $Foswiki::Plugins::SESSION == $this )        if SINGLE_SINGLETONS;
     ASSERT( $Foswiki::Plugins::SESSION->isa('Foswiki') ) if DEBUG;
 
     #$Foswiki::Plugins::SESSION = $this;
