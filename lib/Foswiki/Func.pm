@@ -589,8 +589,6 @@ sub registerTagHandler {
         $tag,
         sub {
             my ( $session, $params, $topicObject ) = @_;
-
-            #my $record = $Foswiki::Plugins::SESSION;
             local $Foswiki::Plugins::SESSION = $session;
 
             # $pluginContext is defined for all plugins
@@ -608,12 +606,8 @@ sub registerTagHandler {
             }
 
             # Compatibility; expand $topicObject to the topic and web
-            my $result =
-              &$function( $session, $params, $topicObject->topic,
+            return &$function( $session, $params, $topicObject->topic,
                 $topicObject->web, $topicObject );
-
-            #$Foswiki::Plugins::SESSION = $record;
-            return $result;
         },
         $syntax
     );

@@ -2423,15 +2423,14 @@ sub expandMacrosOnTopicCreation {
 
     if (SINGLE_SINGLETONS) {
         ASSERT( defined $Foswiki::Plugins::SESSION );
-        ASSERT( $Foswiki::Plugins::SESSION->isa('Foswiki') ) if DEBUG;
         ASSERT( $Foswiki::Plugins::SESSION == $this );
     }
     else {
 
         # Make sure func works, for registered tag handlers
-        local $Foswiki::Plugins::SESSION = $this;
-        ASSERT( $Foswiki::Plugins::SESSION->isa('Foswiki') ) if DEBUG;
+        $Foswiki::Plugins::SESSION = $this;
     }
+    ASSERT( $Foswiki::Plugins::SESSION->isa('Foswiki') ) if DEBUG;
 
     my $text = $topicObject->text();
     if ($text) {
