@@ -815,10 +815,9 @@ sub installFromMANIFEST {
     if ( $installing && $autoconf ) {
 
         # Read current LocalSite.cfg to see if the current module is enabled
-        my $localSiteCfg =
-          File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' );
-        open my $lsc, '<', $localSiteCfg
-          or die "Cannot open $localSiteCfg for reading: $!";
+        my $lsc_fname = File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' );
+        open my $lsc, '<', $lsc_fname
+          or die "Cannot open $lsc_fname for reading: $!";
         my $enabled = 0;
         my $spec;
         my $localConfiguration = '';
@@ -855,13 +854,13 @@ sub installFromMANIFEST {
                 }
                 close $pluginSpec;
                 $localConfiguration .= "1;\n";
-                if ( open( my $lsc, '>', $localSiteCfg ) ) {
+                if ( open( my $lsc, '>', $lsc_fname ) ) {
                     print $lsc $localConfiguration;
                     close $lsc;
-                    warn "Added ${module}'s Config.spec to $localSiteCfg\n";
+                    warn "Added ${module}'s Config.spec to $lsc_fname\n";
                 }
                 else {
-                    warn "Could not write new $localSiteCfg: $!\n";
+                    warn "Could not write new $lsc_fname: $!\n";
                 }
             }
             else {
@@ -1289,49 +1288,52 @@ sub enablePlugin {
     return;
 }
 
-# Applies all the named <foo>.cfg's queued up for the $module to LocalSite.cfg
-sub applyExtraConfig {
-    my ( $module, $libDir ) = @_;
-    my @configs = @{ $extensions_extra_config{$module} };
+# NB: Trashes %Foswiki::cfg
+sub applyCfgFile {
+    my ($cfg_fname) = @_;
+    my %NewCfg = %Foswiki::cfg;
+    local %Foswiki::cfg = ();
     local @INC = ( @INC, File::Spec->catfile( $basedir, 'lib' ) );
-    my $LocalSitecfg = File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' );
-    die "'$LocalSitecfg' not exist" unless -f $LocalSitecfg;
     require Foswiki::Configure::Load;
+    require Foswiki::Configure::FoswikiCfg;
     require Foswiki::Configure::Valuer;
     require Foswiki::Configure::Root;
-    require Foswiki::Configure::FoswikiCfg;
+    my $lsc_fname =
+      untaint( File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' ) );
 
-    foreach my $conf (@configs) {
-        my $what = ( $module =~ /Plugin$/ ) ? 'Plugins' : 'Contrib';
-        my $cfg =
-          File::Spec->catfile( $basedir, 'lib', 'Foswiki', $what, $module,
-            "$conf.cfg" );
-        die "'$cfg' not found" unless -f $cfg;
-        no re 'taint';
-        $cfg =~ /^(.*)$/;
-        use re 'taint';
-        do $1;
-    }
-    my %NewCfg = %Foswiki::cfg;
-    %Foswiki::cfg = ();
-    do $LocalSitecfg;
+    die "'$lsc_fname' not exist" unless -f $lsc_fname;
+
+    do $lsc_fname;
     my $valuer =
       Foswiki::Configure::Valuer->new( {}, { %Foswiki::cfg, %NewCfg } );
     my $root = Foswiki::Configure::Root->new();
-    Foswiki::Configure::FoswikiCfg::_parse( $LocalSitecfg, $root, 1 );
-    foreach my $conf (@configs) {
-        my $what = ( $conf =~ /Plugin$/ ) ? 'Plugins' : 'Contrib';
-        my $cfg =
-          File::Spec->catfile( $basedir, 'lib', 'Foswiki', $what, $module,
-            "$conf.cfg" );
-        print "Parsing '$cfg' into LocalSite.cfg\n";
-        Foswiki::Configure::FoswikiCfg::_parse( $cfg, $root, 1 );
-    }
+    Foswiki::Configure::FoswikiCfg::_parse( $lsc_fname, $root, 1 );
+
+    print "Parsing '$cfg_fname' into LocalSite.cfg\n";
+    Foswiki::Configure::FoswikiCfg::_parse( $cfg_fname, $root, 1 );
     my $saver = Foswiki::Configure::FoswikiCfg->new();
     $saver->{valuer}  = $valuer;
     $saver->{root}    = $root;
     $saver->{content} = '';
     updateLocalSite( $saver->_save() );
+
+    return;
+}
+
+# Applies all the named <foo>.cfg's queued up for the $module to LocalSite.cfg
+sub applyModuleCfgs {
+    my ( $module, $libDir ) = @_;
+    my @configs = @{ $extensions_extra_config{$module} };
+    my $what = ( $module =~ /Plugin$/ ) ? 'Plugins' : 'Contrib';
+
+    foreach my $conf (@configs) {
+        print "Applying $module/$conf...\n";
+        my $cfg_fname =
+          File::Spec->catfile( $basedir, 'lib', 'Foswiki', $what, $module,
+            "$conf.cfg" );
+        die "'$cfg_fname' not found" unless -f $cfg_fname;
+        applyCfgFile( untaint($cfg_fname) );
+    }
 
     return;
 }
@@ -1400,7 +1402,7 @@ sub run {
         if ($libDir) {
             push( @installedModules, $module );
             if ( exists $extensions_extra_config{$module} && $installing ) {
-                applyExtraConfig( $module, $libDir ) if $installing;
+                applyModuleCfgs( $module, $libDir ) if $installing;
                 enablePlugin( $module, $installing, $libDir )
                   if $module =~ /Plugin$/;
             }
