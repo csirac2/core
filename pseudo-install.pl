@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use re 'taint';
+use File::Temp();
 use File::Path();
 use File::Copy();
 use File::Spec();
@@ -1284,6 +1285,29 @@ sub enablePlugin {
             "abled $module in LocalSite.cfg\n"
         );
     }
+
+    return;
+}
+
+# SMELL: Foswiki::Configure::FoswikiCfg->_parse() takes filenames only, and we
+# can't refactor core with a nice API & use it here because pseudo-install.pl
+# must work with older Foswikis.
+#
+# A future version of this function should lean on a new FoswikiCfg API if
+# available, and fall-back to the File::Temp approach otherwise.
+sub applyCfgString {
+    my ($cfg_string) = @_;
+    my ($fh, $tmpfile) = File::Temp::tempfile('applyCfgStringXXXXXXX', SUFFIX => '.cfg');
+
+    print $fh $cfg_string;
+    applyCfgFile($tmpfile);
+    close($fh);
+
+    return;
+}
+
+sub getCfgValue {
+    my ($key) = @_;
 
     return;
 }
