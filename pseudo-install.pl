@@ -1289,8 +1289,9 @@ sub enablePlugin {
     return;
 }
 
-# SMELL: Foswiki::Configure::FoswikiCfg->_parse() takes filenames only, and we
-# can't refactor core with a nice API & use it here because pseudo-install.pl
+# SMELL: up until 2013, Foswiki::Configure::FoswikiCfg->_parse() was the only
+# half-way decent way to parse spec/cfg and took filenames only, and we can't
+# rely on a new core with nicer API & use it here because pseudo-install.pl
 # must work with older Foswikis.
 #
 # A future version of this function should lean on a new FoswikiCfg API if
@@ -1302,12 +1303,6 @@ sub applyCfgString {
     print $fh $cfg_string;
     applyCfgFile($tmpfile);
     close($fh);
-
-    return;
-}
-
-sub getCfgValue {
-    my ($key) = @_;
 
     return;
 }
