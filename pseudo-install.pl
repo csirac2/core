@@ -69,8 +69,8 @@ Examples:
   lib/Foswiki/Contrib/UnitTestContrib/AutoBuildSelenium.cfg
       ./pseudo-install.pl -EAutoBuildSelenium UnitTestContrib
 
-  * When using git clean, add the -x modifier to clean ignored files.  See [1]
-  * Each module's root has a .gitignore maintained w/list of derived files [1]
+  * git clean: use git clean -fx. -x modifier removes .gitignore files. See [1]
+  * Each module's root has a .gitignore maintained w/list of derived files  [1]
   * [1] http://foswiki.org/Development/GitAndPseudoInstall
 EOM
 my %generated_files;
@@ -813,60 +813,15 @@ sub installFromMANIFEST {
         }
     }
 
-    if ( $installing && $autoconf ) {
-
-        # Read current LocalSite.cfg to see if the current module is enabled
-        my $lsc_fname = File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' );
-        open my $lsc, '<', $lsc_fname
-          or die "Cannot open $lsc_fname for reading: $!";
-        my $enabled = 0;
-        my $spec;
-        my $localConfiguration = '';
-        while (<$lsc>) {
-
-            # Can't $_ eq '1;' because /^1;$/ is less picky about newlines
-            next if /^1;$/;
-            $localConfiguration .= $_;
-            if (m/^\$Foswiki::cfg{Plugins}{$module}{(\S+)}\s+=\s+(\S+);/) {
-                if ( $1 eq 'Enabled' ) {
-                    $enabled = $2;
-                }
-                elsif ( $1 eq 'Module' ) {
-                    my $moduleName = $2;
-                    $moduleName =~ s#'##g;
-                    $spec =
-                      File::Spec->catfile( $basedir, 'lib',
-                        split( '::', $moduleName ),
-                        'Config.spec' );
-                }
-            }
-        }
-        close $lsc;
-        if ( !$spec && isContrib($module) ) {
-            $spec = File::Spec->catfile( $basedir, 'lib', 'Foswiki', 'Contrib',
-                $module, 'Config.spec' );
-        }
-        if ( ( $enabled || isContrib($module) ) && $spec && -f $spec ) {
-            if ( open( my $pluginSpec, '<', $spec ) ) {
-                $localConfiguration .= "# $module specific configuration\n";
-                while (<$pluginSpec>) {
-                    next if /^(?:1;|\s*|#.*)$/;
-                    $localConfiguration .= $_;
-                }
-                close $pluginSpec;
-                $localConfiguration .= "1;\n";
-                if ( open( my $lsc, '>', $lsc_fname ) ) {
-                    print $lsc $localConfiguration;
-                    close $lsc;
-                    warn "Added ${module}'s Config.spec to $lsc_fname\n";
-                }
-                else {
-                    warn "Could not write new $lsc_fname: $!\n";
-                }
-            }
-            else {
-                warn "Could not open spec file $spec for $module: $!\n";
-            }
+    if ($installing) {
+        my $spec_fname =
+          File::Spec->catfile( $basedir, 'lib', 'Foswiki',
+            isContrib($module) ? 'Contrib' : 'Plugins',
+            $module, 'Config.spec' );
+        if ( ( isPluginEnabled($module) || isContrib($module) )
+            && -f $spec_fname )
+        {
+            applyCfgFile($spec_fname);
         }
     }
 
@@ -1259,34 +1214,33 @@ sub updateLocalSite {
 }
 
 sub enablePlugin {
-    my ( $module, $installingModule, $libDir ) = @_;
+    my ( $module, $installing, $module_ns ) = @_;
     my $cfg     = getLocalSite();
-    my $changed = 0;
+    my $enabled = isPluginEnabled($module);
 
-    if ( $cfg =~
-        s/\$Foswiki::cfg{Plugins}{$module}{Enabled}\s*=\s*(\d+)[\s;]+//sg )
-    {
-        $cfg =~ s/\$Foswiki::cfg{Plugins}{$module}{Module}\s*=.*?;\s*//sg;
-
-        # Removed old setting
-        $changed = 1;
+    if ( $installing && !$enabled ) {
+        applyCfgString(<<"HERE");
+{Plugins}{$module}{Enabled} = 1;
+{Plugins}{$module}{Module} = '${module_ns}::Plugins::$module';
+HERE
+        print "Enabled $module in LocalSite.cfg\n";
     }
-    if ($installingModule) {
-        $cfg =
-            "\$Foswiki::cfg{Plugins}{$module}{Enabled} = 1;\n"
-          . "\$Foswiki::cfg{Plugins}{$module}{Module} = '${libDir}::Plugins::$module';\n"
-          . $cfg;
-        $changed = 1;
-    }
-    if ($changed) {
-        updateLocalSite($cfg);
-        print(
-            ( $installingModule ? 'En' : 'Dis' ),
-            "abled $module in LocalSite.cfg\n"
-        );
+    elsif ( !$installing && $enabled ) {
+        applyCfgString("{Plugins}{$module}{Enabled} = 0;");
+        print "Disabled $module in LocalSite.cfg\n";
     }
 
     return;
+}
+
+sub isPluginEnabled {
+    my ( $module, $libDir ) = @_;
+    _requireFoswikiConfigure();
+    my $root = Foswiki::Configure::Root->new();
+
+    Foswiki::Configure::FoswikiCfg::_parse( _getLSCFName(), $root );
+
+    return $root->getValueObject("{Plugins}{$module}{Enabled}");
 }
 
 # SMELL: up until 2013, Foswiki::Configure::FoswikiCfg->_parse() was the only
@@ -1298,37 +1252,57 @@ sub enablePlugin {
 # available, and fall-back to the File::Temp approach otherwise.
 sub applyCfgString {
     my ($cfg_string) = @_;
-    my ($fh, $tmpfile) = File::Temp::tempfile('applyCfgStringXXXXXXX', SUFFIX => '.cfg');
+    $File::Temp::KEEP_ALL = 0;
+    my $fh = File::Temp->new( SUFFIX => '.cfg', UNLINK => 0 );
 
+    $cfg_string =~ s/^/\$Foswiki::cfg/g;
     print $fh $cfg_string;
-    applyCfgFile($tmpfile);
-    close($fh);
+    close($fh) or die $!;
+    applyCfgFile( $fh->filename(), "Setting $cfg_string in LocalSite.cfg" );
 
     return;
 }
 
-# NB: Trashes %Foswiki::cfg
-sub applyCfgFile {
-    my ($cfg_fname) = @_;
-    my %NewCfg = %Foswiki::cfg;
-    local %Foswiki::cfg = ();
+sub _requireFoswikiConfigure {
     local @INC = ( @INC, File::Spec->catfile( $basedir, 'lib' ) );
     require Foswiki::Configure::Load;
     require Foswiki::Configure::FoswikiCfg;
     require Foswiki::Configure::Valuer;
     require Foswiki::Configure::Root;
-    my $lsc_fname =
-      untaint( File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' ) );
 
-    die "'$lsc_fname' not exist" unless -f $lsc_fname;
+    return;
+}
 
-    do $lsc_fname;
-    my $valuer =
-      Foswiki::Configure::Valuer->new( {}, { %Foswiki::cfg, %NewCfg } );
+sub _getLSCFName {
+    return untaint( File::Spec->catfile( $basedir, 'lib', 'LocalSite.cfg' ) );
+}
+
+sub _getCFGData {
+    my ($cfg_fname) = @_;
+    my %cfg;
+    my %old_cfg = %Foswiki::cfg;
+
+    die "'$cfg_fname' not exist" unless -f $cfg_fname;
+    local %Foswiki::cfg = ();
+    do $cfg_fname;
+    %cfg          = %Foswiki::cfg;
+    %Foswiki::cfg = %old_cfg;
+
+    return %cfg;
+}
+
+# NB: Trashes %Foswiki::cfg
+sub applyCfgFile {
+    my ( $cfg_fname, $msg ) = @_;
+    my $lsc_fname = _getLSCFName();
+    _requireFoswikiConfigure();
+    my %new = ( _getCFGData($lsc_fname), _getCFGData($cfg_fname) );
+    my $valuer = Foswiki::Configure::Valuer->new( {}, \%new );
     my $root = Foswiki::Configure::Root->new();
     Foswiki::Configure::FoswikiCfg::_parse( $lsc_fname, $root, 1 );
 
-    print "Parsing '$cfg_fname' into LocalSite.cfg\n";
+    $msg = defined $msg ? $msg : "Parsing '$cfg_fname' into LocalSite.cfg";
+    print $msg . "\n";
     Foswiki::Configure::FoswikiCfg::_parse( $cfg_fname, $root, 1 );
     my $saver = Foswiki::Configure::FoswikiCfg->new();
     $saver->{valuer}  = $valuer;
@@ -1422,11 +1396,11 @@ sub run {
             push( @installedModules, $module );
             if ( exists $extensions_extra_config{$module} && $installing ) {
                 applyModuleCfgs( $module, $libDir ) if $installing;
-                enablePlugin( $module, $installing, $libDir )
+                enablePlugin( $module, $installing )
                   if $module =~ /Plugin$/;
             }
             if ( ( !$installing || $autoenable ) && $module =~ /Plugin$/ ) {
-                enablePlugin( $module, $installing, $libDir );
+                enablePlugin( $module, $installing );
             }
         }
     }
